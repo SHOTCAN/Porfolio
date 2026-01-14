@@ -3,12 +3,13 @@ const navbar = document.getElementById('navbar');
 const navToggle = document.getElementById('nav-toggle');
 const navMenu = document.getElementById('nav-menu');
 const navLinks = document.querySelectorAll('.nav-link');
-const filterBtns = document.querySelectorAll('.works-nav-btn');
-const projectShowcases = document.querySelectorAll('.project-showcase, .project-grid-section');
 const lightbox = document.getElementById('lightbox');
 const lightboxImg = document.getElementById('lightbox-img');
 const lightboxClose = document.querySelector('.lightbox-close');
 const gridItems = document.querySelectorAll('.project-grid-item, .gallery-item');
+const video = document.getElementById('portfolio-video');
+const videoOverlay = document.getElementById('video-overlay');
+const playButton = document.getElementById('play-button');
 
 // ===== Mobile Navigation =====
 navToggle.addEventListener('click', () => {
@@ -61,27 +62,33 @@ function updateActiveNavLink() {
 
 window.addEventListener('scroll', updateActiveNavLink);
 
-// ===== Portfolio Filtering =====
-filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        // Update active button
-        filterBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-
-        const filterValue = btn.dataset.filter;
-
-        projectShowcases.forEach(project => {
-            const categories = project.dataset.category ? project.dataset.category.split(' ') : [];
-
-            if (filterValue === 'all' || categories.includes(filterValue)) {
-                project.classList.remove('hidden');
-                project.style.animation = 'fadeInUp 0.5s ease forwards';
-            } else {
-                project.classList.add('hidden');
-            }
-        });
+// ===== Video Player =====
+if (video && videoOverlay && playButton) {
+    playButton.addEventListener('click', () => {
+        videoOverlay.classList.add('hidden');
+        video.play();
     });
-});
+
+    video.addEventListener('click', () => {
+        if (video.paused) {
+            video.play();
+            videoOverlay.classList.add('hidden');
+        } else {
+            video.pause();
+        }
+    });
+
+    video.addEventListener('ended', () => {
+        videoOverlay.classList.remove('hidden');
+    });
+
+    video.addEventListener('pause', () => {
+        // Show overlay only if video ended or user paused
+        if (video.currentTime === video.duration || video.currentTime === 0) {
+            videoOverlay.classList.remove('hidden');
+        }
+    });
+}
 
 // ===== Lightbox Functionality =====
 gridItems.forEach(item => {
@@ -99,30 +106,37 @@ gridItems.forEach(item => {
 const projectImages = document.querySelectorAll('.project-image img, .gallery-item img');
 projectImages.forEach(img => {
     img.style.cursor = 'pointer';
-    img.addEventListener('click', () => {
+    img.addEventListener('click', (e) => {
+        e.stopPropagation();
         lightboxImg.src = img.src;
         lightbox.classList.add('active');
         document.body.style.overflow = 'hidden';
     });
 });
 
-lightboxClose.addEventListener('click', closeLightbox);
+if (lightboxClose) {
+    lightboxClose.addEventListener('click', closeLightbox);
+}
 
-lightbox.addEventListener('click', (e) => {
-    if (e.target === lightbox) {
-        closeLightbox();
-    }
-});
+if (lightbox) {
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+            closeLightbox();
+        }
+    });
+}
 
 document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+    if (e.key === 'Escape' && lightbox && lightbox.classList.contains('active')) {
         closeLightbox();
     }
 });
 
 function closeLightbox() {
-    lightbox.classList.remove('active');
-    document.body.style.overflow = '';
+    if (lightbox) {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+    }
 }
 
 // ===== Smooth Scroll =====
@@ -156,25 +170,61 @@ const observer = new IntersectionObserver((entries) => {
 }, observerOptions);
 
 // Apply reveal animation
-const revealElements = document.querySelectorAll('.project-showcase, .project-grid-section, .skill-card, .about-intro');
-revealElements.forEach(el => {
+const revealElements = document.querySelectorAll('.project-showcase, .project-grid-section, .skill-item-new, .about-left, .about-right');
+revealElements.forEach((el, index) => {
     el.style.opacity = '0';
     el.style.transform = 'translateY(30px)';
-    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    el.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+    observer.observe(el);
+});
+
+// Grid items stagger animation
+const gridItemsAll = document.querySelectorAll('.project-grid-item');
+gridItemsAll.forEach((el, index) => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = `opacity 0.5s ease ${index * 0.05}s, transform 0.5s ease ${index * 0.05}s`;
     observer.observe(el);
 });
 
 // ===== Parallax Effect on Hero =====
 const heroImage = document.querySelector('.hero-image');
+const floatingCards = document.querySelectorAll('.floating-card');
+
 if (heroImage) {
     window.addEventListener('scroll', () => {
         const scrolled = window.pageYOffset;
         if (scrolled < window.innerHeight) {
             heroImage.style.transform = `translateY(${scrolled * 0.1}px)`;
+
+            floatingCards.forEach((card, index) => {
+                const speed = 0.05 + (index * 0.02);
+                card.style.transform = `translateY(${scrolled * speed}px)`;
+            });
         }
     });
 }
 
+// ===== Mouse Move Effect on Hero =====
+const hero = document.querySelector('.hero');
+const shapes = document.querySelectorAll('.shape');
+
+if (hero && shapes.length > 0) {
+    hero.addEventListener('mousemove', (e) => {
+        const { clientX, clientY } = e;
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+
+        shapes.forEach((shape, index) => {
+            const speed = 0.02 + (index * 0.01);
+            const x = (clientX - centerX) * speed;
+            const y = (clientY - centerY) * speed;
+            shape.style.transform = `translate(${x}px, ${y}px)`;
+        });
+    });
+}
+
 // ===== Console Welcome =====
-console.log('%c👋 Welcome to Baldyas Satrio Albani Portfolio!', 'font-size: 16px; font-weight: bold; color: #7C9885;');
-console.log('%c🎨 Graphic Designer | DKV Jakarta', 'font-size: 12px; color: #636E72;');
+console.log('%c👋 Welcome to Baldyas Satrio Albani Portfolio!', 'font-size: 18px; font-weight: bold; color: #7C9885;');
+console.log('%c🎨 Graphic Designer | Visual Communication Design', 'font-size: 14px; color: #636E72;');
+console.log('%c📍 Based in Jakarta, Indonesia', 'font-size: 12px; color: #B2BEC3;');
