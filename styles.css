@@ -567,6 +567,18 @@ h6 {
     padding: var(--space-md);
     background: var(--gradient-primary);
     border-radius: var(--radius-md);
+    margin-bottom: var(--space-sm);
+    width: 100%;
+}
+
+.education-badge.experience {
+    background: linear-gradient(135deg, rgba(212, 165, 116, 0.3) 0%, rgba(212, 165, 116, 0.15) 100%);
+    border: 1px solid rgba(212, 165, 116, 0.3);
+}
+
+.education-badge.current {
+    background: linear-gradient(135deg, rgba(124, 152, 133, 0.3) 0%, rgba(124, 152, 133, 0.15) 100%);
+    border: 1px solid rgba(124, 152, 133, 0.3);
 }
 
 .edu-icon {
