@@ -156,8 +156,8 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
 // ===== Scroll Reveal Animation =====
 const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
+    threshold: 0.05,
+    rootMargin: '0px 0px -20px 0px'
 };
 
 const observer = new IntersectionObserver((entries) => {
@@ -169,21 +169,30 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, observerOptions);
 
-// Apply reveal animation
-const revealElements = document.querySelectorAll('.project-showcase, .project-grid-section, .skill-item-new, .about-left, .about-right');
-revealElements.forEach((el, index) => {
+// Apply reveal animation - faster with no stagger delay for main sections
+const revealElements = document.querySelectorAll('.project-showcase, .project-grid-section, .about-left, .about-right');
+revealElements.forEach((el) => {
     el.style.opacity = '0';
-    el.style.transform = 'translateY(30px)';
-    el.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
     observer.observe(el);
 });
 
-// Grid items stagger animation
+// Skill items - minimal stagger
+const skillItems = document.querySelectorAll('.skill-item-new');
+skillItems.forEach((el, index) => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(15px)';
+    el.style.transition = `opacity 0.25s ease ${Math.min(index * 0.03, 0.15)}s, transform 0.25s ease ${Math.min(index * 0.03, 0.15)}s`;
+    observer.observe(el);
+});
+
+// Grid items - very fast stagger, capped at 0.2s max delay
 const gridItemsAll = document.querySelectorAll('.project-grid-item');
 gridItemsAll.forEach((el, index) => {
     el.style.opacity = '0';
-    el.style.transform = 'translateY(20px)';
-    el.style.transition = `opacity 0.5s ease ${index * 0.05}s, transform 0.5s ease ${index * 0.05}s`;
+    el.style.transform = 'translateY(10px)';
+    el.style.transition = `opacity 0.2s ease ${Math.min(index * 0.02, 0.2)}s, transform 0.2s ease ${Math.min(index * 0.02, 0.2)}s`;
     observer.observe(el);
 });
 
