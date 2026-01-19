@@ -585,6 +585,13 @@ h6 {
     font-size: 2rem;
 }
 
+.edu-icon-img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
 .edu-text {
     display: flex;
     flex-direction: column;
