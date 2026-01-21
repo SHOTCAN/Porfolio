@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fotobooth Pro - Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #1a1a1a;
+            --bg-card: #2d2d2d;
+            --bg-card-hover: #3a3a3a;
+            --gold: #D4A84B;
+            --gold-light: #E5C97A;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid #333;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            height: 40px;
+        }
+
+        .nav-logo img {
+            height: 100%;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        /* Sections */
+        section {
+            min-height: 100vh;
+            padding: 120px 40px 80px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 42px;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 18px;
+            margin-bottom: 50px;
+            max-width: 700px;
+        }
+
+        /* Hero */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+        }
+
+        .hero-logo {
+            margin-bottom: 20px;
+        }
+
+        .hero-logo img {
+            height: 100px;
+        }
+
+        .hero-tagline {
+            font-size: 24px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+
+        .hero-badge {
+            background: var(--gold);
+            color: var(--bg-dark);
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* Cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 30px;
+            border-left: 4px solid var(--gold);
+            transition: transform 0.3s, background 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            background: var(--bg-card-hover);
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 20px;
+        }
+
+        .card h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Image containers */
+        .image-showcase {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .image-container {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .image-container img {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        .image-container.portrait {
+            max-width: 350px;
+            margin: 0 auto;
+        }
+
+        /* Gallery */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 16px;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .gallery-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+            padding: 30px 20px 20px;
+            color: white;
+        }
+
+        .gallery-caption h4 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .gallery-caption p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Workflow */
+        .workflow {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+            position: relative;
+        }
+
+        .workflow::before {
+            content: '';
+            position: absolute;
+            top: 50px;
+            left: 10%;
+            right: 10%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold), var(--gold-light));
+            z-index: 0;
+        }
+
+        .workflow-step {
+            text-align: center;
+            flex: 1;
+            z-index: 1;
+        }
+
+        .workflow-icon {
+            width: 100px;
+            height: 100px;
+            background: var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            border: 4px solid var(--bg-dark);
+            padding: 20px;
+        }
+
+        .workflow-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: brightness(0) invert(0.1);
+        }
+
+        .workflow-step h4 {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .workflow-step p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Tech Stack */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .tech-item {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .tech-item:hover {
+            background: var(--bg-card-hover);
+            transform: translateY(-3px);
+        }
+
+        .tech-icon {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 15px;
+        }
+
+        .tech-item h4 {
+            font-size: 14px;
+            color: var(--gold);
+            margin-bottom: 5px;
+        }
+
+        .tech-item p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Stats */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--bg-card) 0%, #3a3a3a 100%);
+            border-radius: 16px;
+            padding: 35px 25px;
+            text-align: center;
+            border: 1px solid rgba(212, 168, 75, 0.2);
+        }
+
+        .stat-number {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--gold);
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 8px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-card);
+            padding: 60px 40px;
+            text-align: center;
+            border-top: 1px solid #333;
+        }
+
+        .footer-logo {
+            margin-bottom: 20px;
+        }
+
+        .footer-logo img {
+            height: 50px;
+        }
+
+        .footer-info {
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+
+        .footer-info strong {
+            color: var(--gold);
+        }
+
+        @media (max-width: 768px) {
+
+            .image-showcase,
+            .gallery,
+            .tech-grid,
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+
+            .workflow {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .workflow::before {
+                display: none;
+            }
+
+            .hero-logo {
+                font-size: 48px;
+            }
+
+            .section-title {
+                font-size: 32px;
+            }
+        }
+
+        @media print {
+            nav {
+                display: none;
+            }
+
+            section {
+                page-break-after: always;
+                padding: 40px;
+                min-height: auto;
+            }
+
+            .hero {
+                min-height: 100vh;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <div class="nav-logo"><img src="logo.png" alt="Photobooth Pro"></div>
+            <ul class="nav-links">
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#features">Fitur</a></li>
+                <li><a href="#output">Output</a></li>
+                <li><a href="#dokumentasi">Dokumentasi</a></li>
+                <li><a href="#tech">Tech Stack</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero" id="home">
+        <div class="hero-logo"><img src="logo.png" alt="Photobooth Pro"></div>
+        <p class="hero-tagline">Solusi Fotobooth All-in-One untuk Event Profesional</p>
+        <div class="hero-badge">Portfolio Project 2025</div>
+        <p style="margin-top: 60px; color: var(--text-secondary);">Dibuat oleh <strong style="color: var(--gold);">Baldy
+                Asalbani</strong></p>
+    </section>
+
+    <!-- Overview -->
+    <section id="overview">
+        <h2 class="section-title">Overview</h2>
+        <p class="section-subtitle">Aplikasi desktop fotobooth profesional yang dirancang untuk kebutuhan event seperti
+            pernikahan, ulang tahun, wisuda, dan acara korporat.</p>
+
+        <div class="image-showcase">
+            <div>
+                <h3 style="font-size: 24px; margin-bottom: 20px;">Modern & Elegan</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 30px;">
+                    Dibangun dengan <strong style="color: var(--gold);">Python + PyQt6</strong>, aplikasi ini menawarkan
+                    antarmuka yang modern dengan tema gelap dan aksen emas yang premium.
+                </p>
+                <div class="card" style="margin-bottom: 15px;">
+                    <h3>Dark Theme</h3>
+                    <p>Nyaman digunakan di venue dengan pencahayaan rendah</p>
+                </div>
+                <div class="card">
+                    <h3>Gold Accent</h3>
+                    <p>Tampilan premium dan profesional untuk branding</p>
+                </div>
+            </div>
+            <div class="image-container">
+                <img src="screenshot_app.png" alt="Photobooth Pro Interface">
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features">
+        <h2 class="section-title">Fitur Utama</h2>
+        <p class="section-subtitle">Semua yang Anda butuhkan untuk menjalankan fotobooth profesional dalam satu aplikasi
+            terintegrasi.</p>
+
+        <div class="card-grid">
+            <div class="card">
+                <img src="icons/icon_camera.png" alt="Camera" class="card-icon">
+                <h3>Multi-Camera Support</h3>
+                <p>Integrasi dengan Canon DSLR via digiCamControl dan dukungan webcam sebagai fallback.</p>
+            </div>
+            <div class="card">
+                <img src="icons/icon_template.png" alt="Template" class="card-icon">
+                <h3>Template System</h3>
+                <p>Terapkan frame template PNG dengan transparansi pada foto secara otomatis.</p>
+            </div>
+            <div class="card">
+                <img src="icons/icon_layout.png" alt="Layout" class="card-icon">
+                <h3>A4 Canvas Editor</h3>
+                <p>Susun hingga 5 foto dalam layout A4 dengan drag-and-drop yang intuitif.</p>
+            </div>
+            <div class="card">
+                <img src="icons/icon_cloud.png" alt="Cloud" class="card-icon">
+                <h3>Google Drive Integration</h3>
+                <p>Upload otomatis ke Google Drive dengan autentikasi OAuth2 yang aman.</p>
+            </div>
+            <div class="card">
+                <img src="icons/icon_qrcode.png" alt="QR Code" class="card-icon">
+                <h3>QR Code Generator</h3>
+                <p>Generate QR code untuk link download, tamu bisa unduh foto langsung dari HP.</p>
+            </div>
+            <div class="card">
+                <img src="icons/icon_print.png" alt="Print" class="card-icon">
+                <h3>Print Ready Export</h3>
+                <p>Export langsung ke format A4 yang siap cetak dengan kualitas tinggi.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sample Output -->
+    <section id="output">
+        <h2 class="section-title">Contoh Hasil Output</h2>
+        <p class="section-subtitle">Template dapat dikustomisasi sesuai tema event. Berikut contoh output dengan frame
+            template custom.</p>
+
+        <div class="image-showcase">
+            <div class="image-container portrait">
+                <img src="sample_output.png" alt="Sample Frame Output">
+            </div>
+            <div>
+                <div class="card" style="margin-bottom: 20px;">
+                    <img src="icons/icon_template.png" alt="Template" class="card-icon">
+                    <h3>Custom Frame Design</h3>
+                    <p>Template dikustomisasi sesuai tema event. Contoh: tema "KOMIK 2025" dengan layout photostrip 3
+                        foto.</p>
+                </div>
+                <div class="card" style="margin-bottom: 20px;">
+                    <h3>Transparent PNG Support</h3>
+                    <p>Mendukung template PNG dengan transparansi untuk overlay yang sempurna.</p>
+                </div>
+                <div class="card">
+                    <h3>High Resolution</h3>
+                    <p>Output berkualitas tinggi, siap untuk cetak maupun share digital.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dokumentasi Lapangan -->
+    <section id="dokumentasi">
+        <h2 class="section-title">Dokumentasi Praktik Lapangan</h2>
+        <p class="section-subtitle">Fotobooth Pro telah digunakan di berbagai event nyata. Berikut dokumentasi
+            penggunaan di lapangan.</p>
+
+        <div class="gallery">
+            <div class="gallery-item">
+                <img src="foto_praktek_1.jpg" alt="Praktik Lapangan 1">
+                <div class="gallery-caption">
+                    <h4>Setup Booth Event</h4>
+                    <p>Operator menjalankan sistem fotobooth dengan laptop dan printer</p>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="foto_praktek_2.jpg" alt="Praktik Lapangan 2">
+                <div class="gallery-caption">
+                    <h4>Live Event Operation</h4>
+                    <p>Sistem berjalan lancar dengan QR code untuk tamu download foto</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow -->
+    <section id="workflow">
+        <h2 class="section-title">Alur Kerja</h2>
+        <p class="section-subtitle">Proses yang streamlined dari capture hingga share dalam hitungan detik.</p>
+
+        <div class="workflow">
+            <div class="workflow-step">
+                <div class="workflow-icon"><img src="icons/icon_camera.png" alt="Capture"></div>
+                <h4>Capture</h4>
+                <p>Ambil foto dari kamera</p>
+            </div>
+            <div class="workflow-step">
+                <div class="workflow-icon"><img src="icons/icon_select.png" alt="Select"></div>
+                <h4>Select</h4>
+                <p>Pilih foto terbaik</p>
+            </div>
+            <div class="workflow-step">
+                <div class="workflow-icon"><img src="icons/icon_template.png" alt="Template"></div>
+                <h4>Template</h4>
+                <p>Apply frame template</p>
+            </div>
+            <div class="workflow-step">
+                <div class="workflow-icon"><img src="icons/icon_layout.png" alt="Layout"></div>
+                <h4>Layout</h4>
+                <p>Susun canvas A4</p>
+            </div>
+            <div class="workflow-step">
+                <div class="workflow-icon"><img src="icons/icon_cloud.png" alt="Share"></div>
+                <h4>Share</h4>
+                <p>Upload & QR code</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Stack -->
+    <section id="tech">
+        <h2 class="section-title">Tech Stack</h2>
+        <p class="section-subtitle">Dibangun dengan teknologi modern dan library yang teruji.</p>
+
+        <div class="tech-grid">
+            <div class="tech-item">
+                <img src="icons/icon_python.png" alt="Python" class="tech-icon">
+                <h4>Python 3.12</h4>
+                <p>Backend Logic</p>
+            </div>
+            <div class="tech-item">
+                <img src="icons/icon_layout.png" alt="PyQt" class="tech-icon">
+                <h4>PyQt6</h4>
+                <p>Desktop UI</p>
+            </div>
+            <div class="tech-item">
+                <img src="icons/icon_template.png" alt="Pillow" class="tech-icon">
+                <h4>Pillow</h4>
+                <p>Image Processing</p>
+            </div>
+            <div class="tech-item">
+                <img src="icons/icon_camera.png" alt="OpenCV" class="tech-icon">
+                <h4>OpenCV</h4>
+                <p>Camera Capture</p>
+            </div>
+            <div class="tech-item">
+                <img src="icons/icon_cloud.png" alt="Google API" class="tech-icon">
+                <h4>Google API</h4>
+                <p>Cloud Upload</p>
+            </div>
+            <div class="tech-item">
+                <img src="icons/icon_qrcode.png" alt="qrcode" class="tech-icon">
+                <h4>qrcode</h4>
+                <p>QR Generation</p>
+            </div>
+            <div class="tech-item">
+                <img src="icons/icon_camera.png" alt="digiCamControl" class="tech-icon">
+                <h4>digiCamControl</h4>
+                <p>DSLR Integration</p>
+            </div>
+            <div class="tech-item">
+                <img src="icons/icon_cloud.png" alt="Requests" class="tech-icon">
+                <h4>Requests</h4>
+                <p>HTTP Client</p>
+            </div>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-number">10+</div>
+                <div class="stat-label">Modul Python</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">3000+</div>
+                <div class="stat-label">Lines of Code</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">8+</div>
+                <div class="stat-label">Libraries</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">2+</div>
+                <div class="stat-label">Events Tested</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo"><img src="logo.png" alt="Photobooth Pro"></div>
+        <p class="footer-info">Email: <strong>baldyasalbani9@gmail.com</strong></p>
+        <p class="footer-info">Project: <strong>Photobooth Pro</strong></p>
+        <p class="footer-info">Year: <strong>2025</strong></p>
+        <p style="margin-top: 30px; color: #666; font-size: 13px;">Portfolio Project by Baldy Asalbani</p>
+    </footer>
+
+</body>
+
+</html>
