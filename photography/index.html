@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photography Portfolio - Baldyas Satrio</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0a0a;
+            --bg-card: #1a1a1a;
+            --accent: #c9a87c;
+            --accent-light: #e5d4b5;
+            --text-primary: #ffffff;
+            --text-secondary: #888888;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid #222;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .back-btn {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 150px 40px 80px;
+            background: linear-gradient(180deg, var(--bg-dark) 0%, #111 100%);
+        }
+
+        .hero-subtitle {
+            font-size: 14px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(48px, 8vw, 80px);
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+
+        .hero-desc {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: 40px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 12px 30px;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            font-size: 13px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* Section */
+        section {
+            padding: 100px 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-label {
+            font-size: 13px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 42px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .section-desc {
+            color: var(--text-secondary);
+            font-size: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Gallery Grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 4/3;
+            cursor: pointer;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.08);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            display: flex;
+            align-items: flex-end;
+            padding: 25px;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-caption {
+            color: white;
+        }
+
+        .gallery-caption h4 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .gallery-caption p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Angle Categories */
+        .angle-section {
+            padding: 80px 0;
+            border-bottom: 1px solid #222;
+        }
+
+        .angle-section:last-child {
+            border-bottom: none;
+        }
+
+        .angle-header {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .angle-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 64px;
+            font-weight: 700;
+            color: var(--accent);
+            opacity: 0.3;
+        }
+
+        .angle-info h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .angle-info p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-card);
+            padding: 60px 40px;
+            text-align: center;
+            border-top: 1px solid #222;
+        }
+
+        .footer-text {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .footer-text strong {
+            color: var(--accent);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .angle-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .angle-number {
+                font-size: 48px;
+            }
+        }
+
+        /* Lightbox */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90vh;
+            object-fit: contain;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 40px;
+            color: white;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="../index.html" class="back-btn">← Back to Portfolio</a>
+            <div class="nav-logo">BSA Photography</div>
+            <ul class="nav-links">
+                <li><a href="#bird-eye">Bird Eye</a></li>
+                <li><a href="#eye-level">Eye Level</a></li>
+                <li><a href="#frog-eye">Frog Eye</a></li>
+                <li><a href="#high-angle">High Angle</a></li>
+                <li><a href="#low-angle">Low Angle</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <p class="hero-subtitle">Photography Portfolio</p>
+        <h1 class="hero-title">Camera Angles<br>& Composition</h1>
+        <p class="hero-desc">Eksplorasi berbagai sudut pengambilan gambar dalam fotografi. Karya tugas kuliah Fotografi
+            di Politeknik Negeri Media Kreatif.</p>
+        <div class="hero-badge">5 Angle Techniques • 15 Photos</div>
+    </section>
+
+    <!-- Bird Eye View -->
+    <section id="bird-eye">
+        <div class="angle-section">
+            <div class="angle-header">
+                <span class="angle-number">01</span>
+                <div class="angle-info">
+                    <h3>Bird Eye View</h3>
+                    <p>Sudut pengambilan gambar dari atas objek, seperti pandangan burung terbang</p>
+                </div>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item" onclick="openLightbox(this)">
+                    <img src="images/IMG_2007.JPG" alt="Bird Eye Photo 1" loading="lazy">
+                    <div class="gallery-overlay">
+                        <div class="gallery-caption">
+                            <h4>Aerial Perspective</h4>
+                            <p>Bird Eye View</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox(this)">
+                    <img src="images/IMG_2094.JPG" alt="Bird Eye Photo 2" loading="lazy">
+                    <div class="gallery-overlay">
+                        <div class="gallery-caption">
+                            <h4>Top Down Shot</h4>
+                            <p>Bird Eye View</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox(this)">
+                    <img src="images/IMG_2097.JPG" alt="Bird Eye Photo 3" loading="lazy">
+                    <div class="gallery-overlay">
+                        <div class="gallery-caption">
+                            <h4>Overhead Composition</h4>
+                            <p>Bird Eye View</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Eye Level -->
+    <section id="eye-level">
+        <div class="angle-section">
+            <div class="angle-header">
+                <span class="angle-number">02</span>
+                <div class="angle-info">
+                    <h3>Eye Level</h3>
+                    <p>Sudut pengambilan sejajar dengan mata subjek, menciptakan perspektif natural</p>
+                </div>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item" onclick="openLightbox(this)">
+                    <img src="images/IMG_1818.JPG" alt="Eye Level Photo 1" loading="lazy">
+                    <div class="gallery-overlay">
+                        <div class="gallery-caption">
+                            <h4>Natural Perspective</h4>
+                            <p>Eye Level</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox(this)">
+                    <img src="images/IMG_2198.JPG" alt="Eye Level Photo 2" loading="lazy">
+                    <div class="gallery-overlay">
+                        <div class="gallery-caption">
+                            <h4>Straight On</h4>
+                            <p>Eye Level</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox(this)">
+                    <img src="images/IMG_2244.JPG" alt="Eye Level Photo 3" loading="lazy">
+                    <div class="gallery-overlay">
+                        <div class="gallery-caption">
+                            <h4>Direct View</h4>
+                            <p>Eye Level</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Frog Eye -->
+    <section id="frog-eye">
+        <div class="angle-section">
+            <div class="angle-header">
+                <span class="angle-number">03</span>
+                <div class="angle-info">
+                    <h3>Frog Eye View</h3>
+                    <p>Sudut pengambilan dari bawah sangat rendah, seperti pandangan katak</p>
+                </div>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item" onclick="openLightbox(this)">
+                    <img src="images/IMG_1732.JPG" alt="Frog Eye Photo 1" loading="lazy">
+                    <div class="gallery-overlay">
+                        <div class="gallery-caption">
+                            <h4>Ground Level</h4>
+                            <p>Frog Eye View</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox(this)">
+                    <img src="images/IMG_2573.JPG" alt="Frog Eye Photo 2" loading="lazy">
+                    <div class="gallery-overlay">
+                        <div class="gallery-caption">
+                            <h4>Worm's Eye</h4>
+                            <p>Frog Eye View</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox(this)">
+                    <img src="images/IMG_2635.JPG" alt="Frog Eye Photo 3" loading="lazy">
+                    <div class="gallery-overlay">
+                        <div class="gallery-caption">
+                            <h4>Ultra Low Angle</h4>
+                            <p>Frog Eye View</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- High Angle -->
+    <section id="high-angle">
+        <div class="angle-section">
+            <div class="angle-header">
+                <span class="angle-number">04</span>
+                <div class="angle-info">
+                    <h3>High Angle</h3>
+                    <p>Sudut pengambilan dari atas dengan kemiringan, membuat subjek terlihat lebih kecil</p>
+                </div>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item" onclick="openLightbox(this)">
+                    <img src="images/IMG_0847.JPG" alt="High Angle Photo 1" loading="lazy">
+                    <div class="gallery-overlay">
+                        <div class="gallery-caption">
+                            <h4>Elevated View</h4>
+                            <p>High Angle</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox(this)">
+                    <img src="images/IMG_1771.JPG" alt="High Angle Photo 2" loading="lazy">
+                    <div class="gallery-overlay">
+                        <div class="gallery-caption">
+                            <h4>Looking Down</h4>
+                            <p>High Angle</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox(this)">
+                    <img src="images/IMG_2612.JPG" alt="High Angle Photo 3" loading="lazy">
+                    <div class="gallery-overlay">
+                        <div class="gallery-caption">
+                            <h4>Above Subject</h4>
+                            <p>High Angle</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Low Angle -->
+    <section id="low-angle">
+        <div class="angle-section">
+            <div class="angle-header">
+                <span class="angle-number">05</span>
+                <div class="angle-info">
+                    <h3>Low Angle</h3>
+                    <p>Sudut pengambilan dari bawah, membuat subjek terlihat lebih dominan dan powerful</p>
+                </div>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item" onclick="openLightbox(this)">
+                    <img src="images/IMG_1701.JPG" alt="Low Angle Photo 1" loading="lazy">
+                    <div class="gallery-overlay">
+                        <div class="gallery-caption">
+                            <h4>Heroic Shot</h4>
+                            <p>Low Angle</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox(this)">
+                    <img src="images/IMG_2125.JPG" alt="Low Angle Photo 2" loading="lazy">
+                    <div class="gallery-overlay">
+                        <div class="gallery-caption">
+                            <h4>Power Angle</h4>
+                            <p>Low Angle</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item" onclick="openLightbox(this)">
+                    <img src="images/IMG_2223.JPG" alt="Low Angle Photo 3" loading="lazy">
+                    <div class="gallery-overlay">
+                        <div class="gallery-caption">
+                            <h4>Looking Up</h4>
+                            <p>Low Angle</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p class="footer-text">Photography by <strong>Baldyas Satrio Albani</strong></p>
+        <p class="footer-text" style="margin-top: 10px;">Politeknik Negeri Media Kreatif • 2024</p>
+    </footer>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <button class="lightbox-close">&times;</button>
+        <img src="" alt="Full size photo" id="lightbox-img">
+    </div>
+
+    <script>
+        function openLightbox(element) {
+            const img = element.querySelector('img');
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            lightboxImg.src = img.src;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeLightbox();
+        });
+    </script>
+
+</body>
+
+</html>
