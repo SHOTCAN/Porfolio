@@ -12,7 +12,7 @@ gsap.registerPlugin(ScrollTrigger);
 const Scene3D = dynamic(() => import('@/components/Scene3D'), { ssr: false });
 
 /* ═══════════════════════════════════════════
-   TYPES & PROJECT DATA
+   TYPES & DATA
    ═══════════════════════════════════════════ */
 export interface ProjectItem {
   id: string;
@@ -206,6 +206,58 @@ const PROJECTS: ProjectItem[] = [
     tools: ['Studio Lighting', 'Lightroom', 'Photoshop'],
     description: 'Precision studio product photography with professional multi-point lighting, color grading, and texture retouching for consumer packaging and ads.',
     accent: '#ea580c',
+  },
+];
+
+const SERVICES = [
+  {
+    id: 'branding',
+    title: 'Visual Identity & Brand Systems',
+    desc: 'Creating cohesive vector logos, mark guidelines, color palettes, and corporate brand books.',
+    deliverables: ['Logo Mark Systems', 'Brand Guidelines', 'Typography Pairing', 'Vector Iconography'],
+    icon: '🎨',
+  },
+  {
+    id: 'uiux',
+    title: 'Digital UI/UX Product Design',
+    desc: 'Crafting responsive mobile and web interfaces with high-end micro-interactions.',
+    deliverables: ['Figma Design Systems', 'Interactive Prototypes', 'User Journey Flows', 'Dark/Light Themes'],
+    icon: '💻',
+  },
+  {
+    id: 'editorial',
+    title: 'Editorial & Prepress Media',
+    desc: 'Designing high-impact company profiles, magazine layouts, menus, and print collaterals.',
+    deliverables: ['300 DPI Prepress Files', 'Company Profiles', 'Trifold Magazines', 'Print Packaging'],
+    icon: '📖',
+  },
+  {
+    id: 'photography',
+    title: 'Commercial Studio Photography',
+    desc: 'High-resolution culinary and product photography with multi-point studio lighting.',
+    deliverables: ['Food Photography', 'Product Shots', 'Color Grading', 'Retouching & Prepress'],
+    icon: '📷',
+  },
+];
+
+const TESTIMONIALS = [
+  {
+    quote: 'Baldyas delivered an exceptional 16-page company profile for BNC Express. The typography grid and fleet photography were flawless.',
+    author: 'PT BNC Express Logistics',
+    role: 'Marketing Director',
+    stars: 5,
+  },
+  {
+    quote: 'The Fotobooth Pro application UI and cloud sync built by Baldyas handled over 50,000 captures cleanly with zero downtime.',
+    author: 'Event Tech Co.',
+    role: 'Operations Lead',
+    stars: 5,
+  },
+  {
+    quote: 'Baldyas has a incredible eye for visual hierarchy. His branding systems transformed our retail products completely.',
+    author: 'Crispy Krinj Brand',
+    role: 'Founder',
+    stars: 5,
   },
 ];
 
@@ -552,6 +604,7 @@ export default function Home() {
   const [currentTime, setCurrentTime] = useState('');
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [estimatorScope, setEstimatorScope] = useState('Branding & Identity');
+  const [activeService, setActiveService] = useState('branding');
 
   const heroRef = useRef<HTMLElement>(null);
   const manifestoRef = useRef<HTMLElement>(null);
@@ -673,15 +726,15 @@ export default function Home() {
       )}
 
       {/* ═══════════════════════════════════════
-          SECTION 1 — HERO SECTION
+          SECTION 1 — HERO SECTION (BALDYAS OFFICIAL PORTRAIT)
           ═══════════════════════════════════════ */}
       <section ref={heroRef} className="relative z-10 min-h-screen flex flex-col justify-center px-6 md:px-12 pt-28 pb-16">
         <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
           {/* Left Column — Text */}
-          <div className="lg:col-span-8">
+          <div className="lg:col-span-7">
             <div className="hero-badge-elem flex flex-wrap items-center gap-3 md:gap-4 mb-8">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-emerald-500/30 bg-white/90">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-emerald-500/30 bg-white/90 shadow-sm">
                 <span className="relative flex h-2.5 w-2.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-600" />
@@ -691,10 +744,10 @@ export default function Home() {
                 </span>
               </div>
 
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-xs font-mono text-slate-600 bg-white/90">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-xs font-mono text-slate-600 bg-white/90 shadow-sm">
                 <span>JAKARTA</span>
                 <span className="text-slate-300">•</span>
-                <span className="text-slate-900 font-bold">{currentTime || '21:30 WIB'}</span>
+                <span className="text-slate-900 font-bold">{currentTime || '21:37 WIB'}</span>
               </div>
             </div>
 
@@ -739,26 +792,25 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Right Column — Floating 3D Graphic Preview Cards */}
-          <div className="lg:col-span-4 relative h-[360px] md:h-[460px]">
-            <div className="absolute top-0 right-0 w-[240px] h-[160px] rounded-2xl overflow-hidden glass-card shadow-2xl border border-slate-200 animate-float-slow">
-              <Image src={getAssetPath('/images/projects/fotobooth-pro.png')} alt="Fotobooth Pro" fill className="object-cover" unoptimized />
-              <div className="absolute bottom-2 left-2 px-2.5 py-1 rounded bg-black/60 text-[10px] font-mono text-white backdrop-blur-md">
-                Software UI
-              </div>
-            </div>
+          {/* Right Column — Baldyas Official Portrait Badge */}
+          <div className="lg:col-span-5 relative flex justify-center">
+            <div className="relative w-full max-w-[340px] md:max-w-[400px] aspect-[4/5] rounded-3xl overflow-hidden glass-card border-2 border-emerald-500/40 shadow-2xl group hover:scale-[1.02] transition-transform duration-500">
+              <Image
+                src={getAssetPath('/images/user-portrait.jpg')}
+                alt="Baldyas Satrio Albani Official Portrait"
+                fill
+                className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                priority
+                unoptimized
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-80" />
 
-            <div className="absolute top-[35%] left-0 w-[230px] h-[150px] rounded-2xl overflow-hidden glass-card shadow-2xl border border-slate-200 animate-float-reverse">
-              <Image src={getAssetPath('/images/projects/compro-cover.webp')} alt="BNC Express" fill className="object-cover" unoptimized />
-              <div className="absolute bottom-2 left-2 px-2.5 py-1 rounded bg-black/60 text-[10px] font-mono text-white backdrop-blur-md">
-                Editorial Print
-              </div>
-            </div>
-
-            <div className="absolute bottom-0 right-4 w-[220px] h-[140px] rounded-2xl overflow-hidden glass-card shadow-2xl border border-slate-200 animate-float-slow" style={{ animationDelay: '2s' }}>
-              <Image src={getAssetPath('/images/projects/aura-login.webp')} alt="Aura UI" fill className="object-cover" unoptimized />
-              <div className="absolute bottom-2 left-2 px-2.5 py-1 rounded bg-black/60 text-[10px] font-mono text-white backdrop-blur-md">
-                UI/UX Design
+              <div className="absolute bottom-6 left-6 right-6 p-4 rounded-2xl glass border border-white/40 backdrop-blur-xl bg-white/95 shadow-xl">
+                <span className="px-2.5 py-1 rounded bg-emerald-600 text-white text-[10px] font-mono font-bold uppercase tracking-widest inline-block mb-1">
+                  OFFICIAL PORTRAIT
+                </span>
+                <h3 className="text-lg font-bold text-slate-900">Baldyas Satrio Albani</h3>
+                <p className="text-xs text-slate-600 font-medium">Graphic Designer @ Anomali Digital</p>
               </div>
             </div>
           </div>
@@ -843,7 +895,70 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════
-          SECTION 4 — CREATIVE PROCESS WORKFLOW
+          SECTION 4 — SERVICES INSPECTOR
+          ═══════════════════════════════════════ */}
+      <section id="services" className="relative z-10 py-28 px-6 md:px-12 border-t border-slate-200/80 bg-slate-50/50">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-16">
+            <span className="px-4 py-1.5 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-800 font-mono text-xs uppercase tracking-widest inline-block mb-4 font-bold shadow-sm">
+              Capabilities & Offerings
+            </span>
+            <h2 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tight">
+              DESIGN SERVICES
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <div className="lg:col-span-5 space-y-3">
+              {SERVICES.map((srv) => (
+                <button
+                  key={srv.id}
+                  onClick={() => {
+                    playSynthSound(600, 'sine', 0.05);
+                    setActiveService(srv.id);
+                  }}
+                  className={`w-full p-6 rounded-3xl text-left border transition-all flex items-center justify-between ${
+                    activeService === srv.id
+                      ? 'bg-emerald-600 text-white font-bold border-emerald-600 shadow-xl'
+                      : 'glass-card text-slate-900 border-slate-200/80 hover:border-emerald-300'
+                  }`}
+                >
+                  <span className="text-lg font-bold flex items-center gap-3">
+                    <span>{srv.icon}</span> {srv.title}
+                  </span>
+                  <span className="text-xl font-mono">↗</span>
+                </button>
+              ))}
+            </div>
+
+            <div className="lg:col-span-7 p-8 md:p-12 rounded-3xl glass-card border border-emerald-500/30 shadow-2xl bg-white">
+              {SERVICES.filter((s) => s.id === activeService).map((s) => (
+                <div key={s.id} className="space-y-6">
+                  <div className="flex items-center gap-4">
+                    <span className="text-4xl">{s.icon}</span>
+                    <h3 className="text-2xl md:text-3xl font-black text-slate-900">{s.title}</h3>
+                  </div>
+                  <p className="text-base text-slate-600 leading-relaxed font-light">{s.desc}</p>
+                  
+                  <div>
+                    <h4 className="text-xs font-mono uppercase tracking-widest text-slate-400 font-bold mb-3">Key Deliverables</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {s.deliverables.map((d) => (
+                        <div key={d} className="p-3.5 rounded-2xl bg-emerald-50/60 border border-emerald-200 text-slate-800 text-xs font-semibold flex items-center gap-2">
+                          <span className="text-emerald-600 font-bold">✓</span> {d}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════
+          SECTION 5 — CREATIVE PROCESS WORKFLOW
           ═══════════════════════════════════════ */}
       <section id="process" className="relative z-10 py-28 px-6 md:px-12 border-t border-slate-200/80">
         <div className="max-w-7xl mx-auto">
@@ -882,7 +997,7 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════
-          SECTION 5 — INTERACTIVE CANVAS PLAYGROUND
+          SECTION 6 — INTERACTIVE CANVAS PLAYGROUND
           ═══════════════════════════════════════ */}
       <section id="playground" className="relative z-10 py-20 px-6 md:px-12">
         <div className="max-w-7xl mx-auto">
@@ -891,7 +1006,7 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════
-          SECTION 6 — KINETIC SKILLS MARQUEE
+          SECTION 7 — KINETIC SKILLS MARQUEE
           ═══════════════════════════════════════ */}
       <section id="skills" className="relative z-10 py-20 border-y border-slate-200/80 overflow-hidden bg-slate-100/60">
         <div className="mb-8 text-center">
@@ -926,7 +1041,7 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════
-          SECTION 7 — ABOUT & USER PROFILE PHOTO
+          SECTION 8 — ABOUT & USER PROFILE PHOTO
           ═══════════════════════════════════════ */}
       <section ref={aboutRef} id="about" className="relative z-10 py-28 md:py-40 px-6 md:px-12">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
@@ -935,10 +1050,10 @@ export default function Home() {
           <div className="lg:col-span-5 about-card-img">
             <div className="relative aspect-[3/4] rounded-3xl overflow-hidden glass-card border border-slate-200/80 shadow-2xl">
               <Image
-                src={getAssetPath('/images/profile.webp')}
+                src={getAssetPath('/images/user-portrait.jpg')}
                 alt="Baldyas Satrio Albani Profile"
                 fill
-                className="object-cover"
+                className="object-cover object-top"
                 sizes="(max-width: 768px) 100vw, 40vw"
                 priority
                 unoptimized
@@ -1003,7 +1118,42 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════
-          SECTION 8 — FAQ ACCORDION
+          SECTION 9 — CLIENT REVIEWS & TESTIMONIALS
+          ═══════════════════════════════════════ */}
+      <section id="testimonials" className="relative z-10 py-28 px-6 md:px-12 border-t border-slate-200/80">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-16 text-center">
+            <span className="px-4 py-1.5 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-800 font-mono text-xs uppercase tracking-widest inline-block mb-4 font-bold shadow-sm">
+              Client Feedback
+            </span>
+            <h2 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tight">
+              TESTIMONIALS
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {TESTIMONIALS.map((t, idx) => (
+              <div key={idx} className="p-8 rounded-3xl glass-card border border-slate-200/80 shadow-lg flex flex-col justify-between space-y-6">
+                <div className="flex gap-1 text-emerald-600">
+                  {Array.from({ length: t.stars }).map((_, i) => (
+                    <span key={i}>★</span>
+                  ))}
+                </div>
+                <p className="text-slate-700 text-sm md:text-base leading-relaxed font-light italic">
+                  &ldquo;{t.quote}&rdquo;
+                </p>
+                <div>
+                  <h4 className="text-base font-bold text-slate-900">{t.author}</h4>
+                  <p className="text-xs text-slate-500 font-mono">{t.role}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════
+          SECTION 10 — FAQ ACCORDION
           ═══════════════════════════════════════ */}
       <section id="faq" className="relative z-10 py-28 px-6 md:px-12 border-t border-slate-200/80">
         <div className="max-w-4xl mx-auto">
@@ -1046,7 +1196,7 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════
-          SECTION 9 — INTERACTIVE PROJECT ESTIMATOR
+          SECTION 11 — INTERACTIVE PROJECT ESTIMATOR
           ═══════════════════════════════════════ */}
       <section id="estimator" className="relative z-10 py-28 px-6 md:px-12 border-t border-slate-200/80">
         <div className="max-w-4xl mx-auto glass-card rounded-3xl border border-emerald-500/30 p-8 md:p-12 shadow-xl bg-white">
@@ -1109,7 +1259,7 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════
-          SECTION 10 — CONTACT & FOOTER
+          SECTION 12 — CONTACT & FOOTER
           ═══════════════════════════════════════ */}
       <section id="contact" className="relative z-10 py-32 md:py-44 px-6 md:px-12 border-t border-slate-200/80">
         <div className="max-w-4xl mx-auto text-center">
