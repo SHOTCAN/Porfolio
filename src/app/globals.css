@@ -27,7 +27,7 @@
 html {
   scroll-behavior: smooth;
   scrollbar-width: thin;
-  scrollbar-color: rgba(5, 150, 105, 0.3) #fbfbfd;
+  scrollbar-color: rgba(5, 150, 105, 0.4) #fbfbfd;
 }
 
 body {
@@ -42,17 +42,25 @@ body {
   font-family: var(--font-heading), system-ui, sans-serif;
 }
 
+/* ──────────────────── Custom Architectural Background Grid ──────────────────── */
+.bg-grid-pattern {
+  background-size: 60px 60px;
+  background-image: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+}
+
 /* ──────────────────── Custom Scrollbar ──────────────────── */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #fbfbfd; }
-::-webkit-scrollbar-thumb { background: rgba(5, 150, 105, 0.25); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(5, 150, 105, 0.6); }
+::-webkit-scrollbar-thumb { background: rgba(5, 150, 105, 0.3); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(5, 150, 105, 0.7); }
 
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 
 /* ──────────────────── Selection ──────────────────── */
-::selection { background: rgba(16, 185, 129, 0.25); color: #0f172a; }
+::selection { background: rgba(16, 185, 129, 0.3); color: #0f172a; }
 
 /* ──────────────────── Animations & Keyframes ──────────────────── */
 @keyframes scrollLine {
@@ -64,6 +72,11 @@ body {
 @keyframes float-slow {
   0%, 100% { transform: translateY(0px) rotate(0deg); }
   50% { transform: translateY(-18px) rotate(2deg); }
+}
+
+@keyframes float-reverse {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(18px) rotate(-2deg); }
 }
 
 @keyframes pulse-glow {
@@ -79,29 +92,30 @@ body {
 /* ──────────────────── Utility Classes ──────────────────── */
 .animate-marquee { animation: marquee 25s linear infinite; }
 .animate-float-slow { animation: float-slow 8s ease-in-out infinite; }
+.animate-float-reverse { animation: float-reverse 9s ease-in-out infinite; }
 
 .glass {
-  background: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
 }
 
 .glass-strong {
-  background: rgba(251, 251, 253, 0.9);
+  background: rgba(251, 251, 253, 0.95);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.08);
 }
 
 .text-gradient-emerald {
@@ -111,7 +125,7 @@ body {
 }
 
 .text-gradient-silver {
-  background: linear-gradient(135deg, #0f172a 0%, #475569 50%, #94a3b8 100%);
+  background: linear-gradient(135deg, #0f172a 0%, #334155 50%, #64748b 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -121,8 +135,8 @@ body {
   content: '';
   position: fixed;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.025'/%3E%3C/svg%3E");
   pointer-events: none;
   z-index: 999;
-  opacity: 0.25;
+  opacity: 0.3;
 }

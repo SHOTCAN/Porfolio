@@ -316,7 +316,7 @@ function useTextScramble(text: string) {
 }
 
 /* ═══════════════════════════════════════════
-   INTERACTIVE CANVAS PLAYGROUND (LIGHT MODE)
+   INTERACTIVE CANVAS PLAYGROUND
    ═══════════════════════════════════════════ */
 function CanvasPlayground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -404,19 +404,19 @@ function CanvasPlayground() {
 
   return (
     <div
-      className="relative w-full h-[320px] md:h-[420px] rounded-3xl glass-card overflow-hidden border border-emerald-500/30 shadow-xl cursor-crosshair group"
+      className="relative w-full h-[320px] md:h-[420px] rounded-3xl glass-card overflow-hidden border border-emerald-500/30 shadow-xl cursor-crosshair group bg-gradient-to-br from-white via-emerald-50/20 to-teal-50/30"
       onMouseDown={() => setIsDrawing(true)}
       onMouseUp={() => setIsDrawing(false)}
     >
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full z-10" />
       <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-20 px-6 text-center">
-        <span className="px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 font-mono text-xs uppercase tracking-widest mb-3">
+        <span className="px-4 py-1.5 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-800 font-mono text-xs uppercase tracking-widest mb-3 font-semibold shadow-sm">
           Interactive WebGL Lab
         </span>
         <h3 className="text-2xl md:text-4xl font-bold text-slate-900 mb-2">
           Paint emerald energy on screen
         </h3>
-        <p className="text-xs md:text-sm text-slate-500 font-light">
+        <p className="text-xs md:text-sm text-slate-600 font-light">
           {isDrawing ? '✨ Generating particle sparks...' : 'Drag or move cursor anywhere inside this zone'}
         </p>
       </div>
@@ -425,7 +425,7 @@ function CanvasPlayground() {
 }
 
 /* ═══════════════════════════════════════════
-   3D TILT CARD COMPONENT (LIGHT MODE)
+   3D TILT CARD COMPONENT
    ═══════════════════════════════════════════ */
 function TiltProjectCard({ project, onClick }: { project: ProjectItem; onClick: () => void }) {
   const cardRef = useRef<HTMLDivElement>(null);
@@ -470,7 +470,7 @@ function TiltProjectCard({ project, onClick }: { project: ProjectItem; onClick: 
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onMouseEnter={() => playSynthSound(440, 'sine', 0.05)}
-      className="group relative rounded-3xl glass-card border border-slate-200/80 overflow-hidden cursor-pointer transition-all duration-300 ease-out shadow-lg hover:border-emerald-500/50 hover:shadow-emerald-500/10"
+      className="group relative rounded-3xl glass-card border border-slate-200/80 overflow-hidden cursor-pointer transition-all duration-300 ease-out shadow-lg hover:border-emerald-500/50 hover:shadow-emerald-500/15"
       style={{ transform, transformStyle: 'preserve-3d' }}
     >
       <div
@@ -490,23 +490,23 @@ function TiltProjectCard({ project, onClick }: { project: ProjectItem; onClick: 
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           unoptimized
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-60" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent opacity-70" />
 
         <div className="absolute top-4 left-4 z-20">
           <span
-            className="px-3.5 py-1 rounded-full text-xs font-mono font-medium backdrop-blur-md bg-white/90 border border-slate-200 text-slate-900 shadow-sm"
+            className="px-3.5 py-1 rounded-full text-xs font-mono font-semibold backdrop-blur-md bg-white/95 border border-slate-200 text-slate-900 shadow-md"
           >
             {project.category}
           </span>
         </div>
 
         <div className="absolute top-4 right-4 z-20">
-          <span className="px-3 py-1 rounded-full text-xs font-mono text-slate-800 bg-white/90 backdrop-blur-md shadow-sm">
+          <span className="px-3 py-1 rounded-full text-xs font-mono font-semibold text-slate-800 bg-white/95 backdrop-blur-md shadow-md">
             {project.year}
           </span>
         </div>
 
-        <div className="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-slate-900/30 backdrop-blur-[2px]">
+        <div className="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-slate-900/40 backdrop-blur-[2px]">
           <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-emerald-600 text-white font-semibold text-xs tracking-wider uppercase shadow-xl transform group-hover:scale-105 transition-transform">
             Explore Case Study
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -525,12 +525,12 @@ function TiltProjectCard({ project, onClick }: { project: ProjectItem; onClick: 
         </p>
         <div className="flex flex-wrap gap-2">
           {project.tools.slice(0, 3).map((tool) => (
-            <span key={tool} className="text-[10px] font-mono px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 border border-slate-200">
+            <span key={tool} className="text-[10px] font-mono px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 border border-slate-200 font-medium">
               {tool}
             </span>
           ))}
           {project.tools.length > 3 && (
-            <span className="text-[10px] font-mono px-2 py-1 rounded-md bg-slate-100 text-slate-500">
+            <span className="text-[10px] font-mono px-2 py-1 rounded-md bg-slate-100 text-slate-500 font-medium">
               +{project.tools.length - 3}
             </span>
           )}
@@ -541,7 +541,7 @@ function TiltProjectCard({ project, onClick }: { project: ProjectItem; onClick: 
 }
 
 /* ═══════════════════════════════════════════
-   MAIN PAGE COMPONENT (LIGHT RADIANT THEME)
+   MAIN PAGE COMPONENT
    ═══════════════════════════════════════════ */
 export default function Home() {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -560,7 +560,7 @@ export default function Home() {
 
   const emailScramble = useTextScramble('baldyas.albani@gmail.com');
 
-  // Realtime Jakarta Clock
+  // Realtime Clock
   useEffect(() => {
     const updateTime = () => {
       const now = new Date();
@@ -589,7 +589,7 @@ export default function Home() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Escape Key Listener
+  // Keyboard Escape
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setSelectedProject(null);
@@ -654,9 +654,13 @@ export default function Home() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#fbfbfd] text-[#0f172a] selection:bg-emerald-500/20 selection:text-emerald-900">
-      {/* 3D WebGL Background Canvas (Light Theme) */}
+    <div className="relative min-h-screen bg-[#fbfbfd] text-[#0f172a] selection:bg-emerald-500/20 selection:text-emerald-900 bg-grid-pattern overflow-x-hidden">
+      {/* 3D WebGL Background Canvas */}
       <Scene3D scrollProgress={scrollProgress} onSelectProject={handleSelect3DProject} />
+
+      {/* Floating Ambient Glowing Mesh Orbs */}
+      <div className="fixed top-20 right-[10%] w-[550px] h-[550px] rounded-full bg-emerald-200/35 blur-[120px] pointer-events-none z-0 animate-pulse-glow" />
+      <div className="fixed bottom-20 left-[5%] w-[450px] h-[450px] rounded-full bg-teal-100/40 blur-[100px] pointer-events-none z-0 animate-pulse-glow" style={{ animationDelay: '3s' }} />
 
       {/* Toast Notification */}
       {toastMessage && (
@@ -669,81 +673,102 @@ export default function Home() {
       )}
 
       {/* ═══════════════════════════════════════
-          SECTION 1 — HERO SECTION (LIGHT RADIANT)
+          SECTION 1 — HERO SECTION
           ═══════════════════════════════════════ */}
-      <section ref={heroRef} className="relative z-10 min-h-screen flex flex-col justify-center px-6 md:px-12 pt-28 pb-16 overflow-hidden">
-        <div className="max-w-7xl mx-auto w-full">
-          {/* Status Badges */}
-          <div className="hero-badge-elem flex flex-wrap items-center gap-3 md:gap-4 mb-8">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-emerald-500/20">
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
-              </span>
-              <span className="text-xs font-mono tracking-wider text-emerald-700 font-semibold">
-                Available for Senior Roles & Freelance
-              </span>
+      <section ref={heroRef} className="relative z-10 min-h-screen flex flex-col justify-center px-6 md:px-12 pt-28 pb-16">
+        <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          
+          {/* Left Column — Text */}
+          <div className="lg:col-span-8">
+            <div className="hero-badge-elem flex flex-wrap items-center gap-3 md:gap-4 mb-8">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-emerald-500/30 bg-white/90">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-600" />
+                </span>
+                <span className="text-xs font-mono tracking-wider text-emerald-800 font-bold">
+                  Available for Senior Roles & Freelance
+                </span>
+              </div>
+
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-xs font-mono text-slate-600 bg-white/90">
+                <span>JAKARTA</span>
+                <span className="text-slate-300">•</span>
+                <span className="text-slate-900 font-bold">{currentTime || '21:30 WIB'}</span>
+              </div>
             </div>
 
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-xs font-mono text-slate-500">
-              <span>JAKARTA</span>
-              <span className="text-slate-300">•</span>
-              <span className="text-slate-900 font-semibold">{currentTime || '21:24 WIB'}</span>
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[0.95] mb-8 select-none">
+              <span className="block hero-headline-word text-slate-900">BALDYAS</span>
+              <span className="block hero-headline-word text-gradient-emerald">SATRIO ALBANI</span>
+            </h1>
+
+            <p className="hero-sub-text text-lg md:text-2xl text-slate-600 font-light leading-relaxed max-w-2xl mb-10">
+              Creative Designer & Digital Craftsman merging high-end graphic design,
+              brand systems, UI/UX architecture, and studio photography.
+              Currently leading visual design at <span className="text-emerald-700 font-semibold">Anomali Digital</span>.
+            </p>
+
+            <div className="flex flex-wrap items-center gap-4">
+              <a
+                href="#works"
+                onMouseEnter={() => playSynthSound(523, 'sine', 0.05)}
+                className="hero-cta-btn group inline-flex items-center gap-3 px-8 py-4 rounded-full bg-emerald-600 text-white font-bold text-sm tracking-wider uppercase hover:bg-emerald-700 transition-all duration-300 shadow-xl shadow-emerald-500/25 hover:scale-105"
+              >
+                Explore Works Matrix
+                <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </a>
+
+              <a
+                href="#playground"
+                onMouseEnter={() => playSynthSound(659, 'sine', 0.05)}
+                className="hero-cta-btn inline-flex items-center gap-2 px-8 py-4 rounded-full glass border border-slate-300 text-slate-800 font-semibold text-sm tracking-wider uppercase hover:bg-white hover:border-emerald-500/50 transition-all duration-300 shadow-sm"
+              >
+                🎮 WebGL Lab
+              </a>
+
+              <button
+                onClick={handleCopyEmail}
+                onMouseEnter={() => playSynthSound(783, 'sine', 0.05)}
+                className="hero-cta-btn inline-flex items-center gap-2 px-6 py-4 rounded-full glass text-slate-600 hover:text-slate-900 text-xs font-mono tracking-wider transition-colors"
+              >
+                <span>✉ Copy Email</span>
+              </button>
             </div>
           </div>
 
-          {/* Kinetic Headline */}
-          <h1 className="text-4xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight leading-[0.95] mb-8 select-none">
-            <span className="block hero-headline-word text-slate-900">BALDYAS</span>
-            <span className="block hero-headline-word text-gradient-emerald">SATRIO ALBANI</span>
-          </h1>
+          {/* Right Column — Floating 3D Graphic Preview Cards */}
+          <div className="lg:col-span-4 relative h-[360px] md:h-[460px]">
+            <div className="absolute top-0 right-0 w-[240px] h-[160px] rounded-2xl overflow-hidden glass-card shadow-2xl border border-slate-200 animate-float-slow">
+              <Image src={getAssetPath('/images/projects/fotobooth-pro.png')} alt="Fotobooth Pro" fill className="object-cover" unoptimized />
+              <div className="absolute bottom-2 left-2 px-2.5 py-1 rounded bg-black/60 text-[10px] font-mono text-white backdrop-blur-md">
+                Software UI
+              </div>
+            </div>
 
-          {/* Subtitle & Role */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-end mb-12">
-            <div className="md:col-span-8 hero-sub-text">
-              <p className="text-lg md:text-2xl text-slate-600 font-light leading-relaxed max-w-3xl">
-                Creative Designer & Digital Craftsman merging high-end graphic design,
-                brand systems, UI/UX architecture, and studio photography.
-                Currently leading visual design at <span className="text-emerald-700 font-semibold">Anomali Digital</span>.
-              </p>
+            <div className="absolute top-[35%] left-0 w-[230px] h-[150px] rounded-2xl overflow-hidden glass-card shadow-2xl border border-slate-200 animate-float-reverse">
+              <Image src={getAssetPath('/images/projects/compro-cover.webp')} alt="BNC Express" fill className="object-cover" unoptimized />
+              <div className="absolute bottom-2 left-2 px-2.5 py-1 rounded bg-black/60 text-[10px] font-mono text-white backdrop-blur-md">
+                Editorial Print
+              </div>
+            </div>
+
+            <div className="absolute bottom-0 right-4 w-[220px] h-[140px] rounded-2xl overflow-hidden glass-card shadow-2xl border border-slate-200 animate-float-slow" style={{ animationDelay: '2s' }}>
+              <Image src={getAssetPath('/images/projects/aura-login.webp')} alt="Aura UI" fill className="object-cover" unoptimized />
+              <div className="absolute bottom-2 left-2 px-2.5 py-1 rounded bg-black/60 text-[10px] font-mono text-white backdrop-blur-md">
+                UI/UX Design
+              </div>
             </div>
           </div>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-wrap items-center gap-4">
-            <a
-              href="#works"
-              onMouseEnter={() => playSynthSound(523, 'sine', 0.05)}
-              className="hero-cta-btn group inline-flex items-center gap-3 px-8 py-4 rounded-full bg-emerald-600 text-white font-bold text-sm tracking-wider uppercase hover:bg-emerald-700 transition-all duration-300 shadow-xl shadow-emerald-500/20 hover:scale-105"
-            >
-              Explore Works Matrix
-              <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-              </svg>
-            </a>
-
-            <a
-              href="#playground"
-              onMouseEnter={() => playSynthSound(659, 'sine', 0.05)}
-              className="hero-cta-btn inline-flex items-center gap-2 px-8 py-4 rounded-full glass border border-slate-200 text-slate-800 font-semibold text-sm tracking-wider uppercase hover:bg-white hover:border-emerald-500/40 transition-all duration-300 shadow-sm"
-            >
-              🎮 WebGL Lab
-            </a>
-
-            <button
-              onClick={handleCopyEmail}
-              onMouseEnter={() => playSynthSound(783, 'sine', 0.05)}
-              className="hero-cta-btn inline-flex items-center gap-2 px-6 py-4 rounded-full glass text-slate-600 hover:text-slate-900 text-xs font-mono tracking-wider transition-colors"
-            >
-              <span>✉ Copy Email</span>
-            </button>
-          </div>
         </div>
 
         {/* Scroll Cue */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none">
-          <span className="text-[10px] font-mono uppercase tracking-[0.4em] text-slate-400 font-medium">SCROLL TO FLY THROUGH 3D WORLD</span>
-          <div className="w-[1px] h-10 bg-gradient-to-b from-emerald-500 to-transparent relative overflow-hidden">
+          <span className="text-[10px] font-mono uppercase tracking-[0.4em] text-slate-500 font-bold">SCROLL TO FLY THROUGH 3D WORLD</span>
+          <div className="w-[1px] h-10 bg-gradient-to-b from-emerald-600 to-transparent relative overflow-hidden">
             <div className="absolute w-full h-3 bg-emerald-500 animate-[scrollLine_2s_ease-in-out_infinite]" />
           </div>
         </div>
@@ -774,7 +799,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
             <div>
-              <span className="px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 font-mono text-xs uppercase tracking-widest block w-max mb-4 font-semibold">
+              <span className="px-4 py-1.5 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-800 font-mono text-xs uppercase tracking-widest block w-max mb-4 font-bold shadow-sm">
                 Selected Works Matrix
               </span>
               <h2 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tight">
@@ -820,10 +845,10 @@ export default function Home() {
       {/* ═══════════════════════════════════════
           SECTION 4 — CREATIVE PROCESS WORKFLOW
           ═══════════════════════════════════════ */}
-      <section id="process" className="relative z-10 py-28 px-6 md:px-12 border-t border-slate-200/60">
+      <section id="process" className="relative z-10 py-28 px-6 md:px-12 border-t border-slate-200/80">
         <div className="max-w-7xl mx-auto">
           <div className="mb-16">
-            <span className="px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 font-mono text-xs uppercase tracking-widest block w-max mb-4 font-semibold">
+            <span className="px-4 py-1.5 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-800 font-mono text-xs uppercase tracking-widest block w-max mb-4 font-bold shadow-sm">
               Methodology & Workflow
             </span>
             <h2 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tight">
@@ -839,7 +864,7 @@ export default function Home() {
                 className="group relative rounded-3xl glass-card border border-slate-200/80 p-8 hover:border-emerald-500/50 transition-all duration-300 shadow-sm hover:-translate-y-2 hover:shadow-xl"
               >
                 <div
-                  className="w-12 h-12 rounded-2xl flex items-center justify-center font-mono font-bold text-lg mb-6 border"
+                  className="w-12 h-12 rounded-2xl flex items-center justify-center font-mono font-bold text-lg mb-6 border shadow-sm"
                   style={{ backgroundColor: `${step.accent}15`, borderColor: `${step.accent}40`, color: step.accent }}
                 >
                   {step.step}
@@ -868,9 +893,9 @@ export default function Home() {
       {/* ═══════════════════════════════════════
           SECTION 6 — KINETIC SKILLS MARQUEE
           ═══════════════════════════════════════ */}
-      <section id="skills" className="relative z-10 py-20 border-y border-slate-200/60 overflow-hidden bg-slate-50/50">
+      <section id="skills" className="relative z-10 py-20 border-y border-slate-200/80 overflow-hidden bg-slate-100/60">
         <div className="mb-8 text-center">
-          <span className="text-xs font-mono uppercase tracking-[0.4em] text-slate-400 font-semibold">
+          <span className="text-xs font-mono uppercase tracking-[0.4em] text-slate-500 font-bold">
             TECHNOLOGIES & CREATIVE DISCIPLINES
           </span>
         </div>
@@ -891,7 +916,7 @@ export default function Home() {
           {[...SKILLS.reverse(), ...SKILLS].map((skill, idx) => (
             <span
               key={idx}
-              className="mx-6 text-2xl md:text-4xl font-light text-slate-300 hover:text-blue-600 transition-colors duration-300 cursor-pointer select-none"
+              className="mx-6 text-2xl md:text-4xl font-light text-slate-400 hover:text-blue-600 transition-colors duration-300 cursor-pointer select-none"
               onMouseEnter={() => playSynthSound(400 + (idx % 8) * 30, 'sine', 0.04)}
             >
               {skill} <span className="text-blue-500/30 mx-4">/</span>
@@ -901,25 +926,27 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════
-          SECTION 7 — ABOUT & CAREER TIMELINE
+          SECTION 7 — ABOUT & USER PROFILE PHOTO
           ═══════════════════════════════════════ */}
       <section ref={aboutRef} id="about" className="relative z-10 py-28 md:py-40 px-6 md:px-12">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+          
+          {/* Real User Profile Photo */}
           <div className="lg:col-span-5 about-card-img">
-            <div className="relative aspect-[3/4] rounded-3xl overflow-hidden glass-card border border-slate-200/80 shadow-xl">
+            <div className="relative aspect-[3/4] rounded-3xl overflow-hidden glass-card border border-slate-200/80 shadow-2xl">
               <Image
-                src={getAssetPath('/images/profile-new.png')}
-                alt="Baldyas Satrio Albani"
+                src={getAssetPath('/images/profile.webp')}
+                alt="Baldyas Satrio Albani Profile"
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 40vw"
                 priority
                 unoptimized
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-60" />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent opacity-60" />
 
-              <div className="absolute bottom-6 left-6 right-6 p-4 rounded-2xl glass border border-white/40 backdrop-blur-xl bg-white/80">
-                <p className="text-[10px] font-mono uppercase tracking-widest text-emerald-700 font-bold">Current Role</p>
+              <div className="absolute bottom-6 left-6 right-6 p-4 rounded-2xl glass border border-white/40 backdrop-blur-xl bg-white/90 shadow-md">
+                <p className="text-[10px] font-mono uppercase tracking-widest text-emerald-800 font-extrabold">Current Role</p>
                 <p className="text-lg font-bold text-slate-900">Graphic Designer</p>
                 <p className="text-xs text-slate-600">Anomali Digital (Feb 2025 – Present)</p>
               </div>
@@ -928,7 +955,7 @@ export default function Home() {
 
           <div className="lg:col-span-7 space-y-8">
             <div>
-              <span className="px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 font-mono text-xs uppercase tracking-widest inline-block mb-4 font-semibold">
+              <span className="px-4 py-1.5 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-800 font-mono text-xs uppercase tracking-widest inline-block mb-4 font-bold shadow-sm">
                 Biography & Experience
               </span>
               <h2 className="text-3xl md:text-5xl font-black text-slate-900 leading-tight">
@@ -943,20 +970,20 @@ export default function Home() {
             </p>
 
             <div className="space-y-4">
-              <h3 className="text-xs font-mono uppercase tracking-widest text-slate-400 font-semibold mb-4">Career Milestones</h3>
+              <h3 className="text-xs font-mono uppercase tracking-widest text-slate-500 font-bold mb-4">Career Milestones</h3>
               <div className="space-y-4">
-                <div className="p-4 rounded-2xl glass border border-emerald-500/30 flex items-start justify-between bg-emerald-50/40">
+                <div className="p-4 rounded-2xl glass border border-emerald-500/30 flex items-start justify-between bg-emerald-50/60 shadow-sm">
                   <div>
-                    <span className="text-xs font-mono text-emerald-700 font-bold">FEB 2025 — PRESENT</span>
+                    <span className="text-xs font-mono text-emerald-800 font-extrabold">FEB 2025 — PRESENT</span>
                     <h4 className="text-base font-bold text-slate-900">Graphic Designer</h4>
                     <p className="text-xs text-slate-600">Anomali Digital • Full-time</p>
                   </div>
-                  <span className="px-2.5 py-1 rounded-full bg-emerald-600 text-white text-[10px] font-mono font-bold">ACTIVE</span>
+                  <span className="px-2.5 py-1 rounded-full bg-emerald-600 text-white text-[10px] font-mono font-bold shadow-sm">ACTIVE</span>
                 </div>
 
                 <div className="p-4 rounded-2xl glass border border-slate-200/80 flex items-start justify-between">
                   <div>
-                    <span className="text-xs font-mono text-slate-400">2024</span>
+                    <span className="text-xs font-mono text-slate-500">2024</span>
                     <h4 className="text-base font-bold text-slate-900">Photography Student (1 Semester)</h4>
                     <p className="text-xs text-slate-600">Politeknik Negeri Media Kreatif (Polmed)</p>
                   </div>
@@ -964,7 +991,7 @@ export default function Home() {
 
                 <div className="p-4 rounded-2xl glass border border-slate-200/80 flex items-start justify-between">
                   <div>
-                    <span className="text-xs font-mono text-slate-400">2022 — 2025</span>
+                    <span className="text-xs font-mono text-slate-500">2022 — 2025</span>
                     <h4 className="text-base font-bold text-slate-900">Visual Communication Design (DKV)</h4>
                     <p className="text-xs text-slate-600">SMK Budhiwarman 1 Jakarta</p>
                   </div>
@@ -978,10 +1005,10 @@ export default function Home() {
       {/* ═══════════════════════════════════════
           SECTION 8 — FAQ ACCORDION
           ═══════════════════════════════════════ */}
-      <section id="faq" className="relative z-10 py-28 px-6 md:px-12 border-t border-slate-200/60">
+      <section id="faq" className="relative z-10 py-28 px-6 md:px-12 border-t border-slate-200/80">
         <div className="max-w-4xl mx-auto">
           <div className="mb-16 text-center">
-            <span className="px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 font-mono text-xs uppercase tracking-widest inline-block mb-4 font-semibold">
+            <span className="px-4 py-1.5 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-800 font-mono text-xs uppercase tracking-widest inline-block mb-4 font-bold shadow-sm">
               Clear Answers
             </span>
             <h2 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tight">
@@ -1003,7 +1030,7 @@ export default function Home() {
                   className="w-full p-6 text-left flex items-center justify-between font-bold text-base md:text-lg text-slate-900 hover:text-emerald-600 transition-colors"
                 >
                   <span>{faq.q}</span>
-                  <span className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-sm font-mono text-emerald-700 flex-shrink-0 ml-4 font-bold">
+                  <span className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-sm font-mono text-emerald-800 flex-shrink-0 ml-4 font-bold">
                     {openFaq === idx ? '−' : '+'}
                   </span>
                 </button>
@@ -1021,10 +1048,10 @@ export default function Home() {
       {/* ═══════════════════════════════════════
           SECTION 9 — INTERACTIVE PROJECT ESTIMATOR
           ═══════════════════════════════════════ */}
-      <section id="estimator" className="relative z-10 py-28 px-6 md:px-12 border-t border-slate-200/60">
+      <section id="estimator" className="relative z-10 py-28 px-6 md:px-12 border-t border-slate-200/80">
         <div className="max-w-4xl mx-auto glass-card rounded-3xl border border-emerald-500/30 p-8 md:p-12 shadow-xl bg-white">
           <div className="text-center mb-10">
-            <span className="px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 font-mono text-xs uppercase tracking-widest inline-block mb-3 font-semibold">
+            <span className="px-4 py-1.5 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-800 font-mono text-xs uppercase tracking-widest inline-block mb-3 font-bold shadow-sm">
               Interactive Scope Builder
             </span>
             <h2 className="text-3xl md:text-5xl font-black text-slate-900">
@@ -1037,7 +1064,7 @@ export default function Home() {
 
           <div className="space-y-6">
             <div>
-              <label className="text-xs font-mono uppercase tracking-widest text-slate-400 font-semibold block mb-3">
+              <label className="text-xs font-mono uppercase tracking-widest text-slate-500 font-bold block mb-3">
                 1. Select Creative Scope
               </label>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
@@ -1072,7 +1099,7 @@ export default function Home() {
               <a
                 href={`mailto:baldyas.albani@gmail.com?subject=New%20Project%20Inquiry%20-%20${encodeURIComponent(estimatorScope)}&body=Hi%20Baldyas,%20I'd%20like%20to%20discuss%20a%20new%20project%20regarding%20${encodeURIComponent(estimatorScope)}.`}
                 onMouseEnter={() => playSynthSound(700, 'sine', 0.05)}
-                className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-emerald-600 text-white font-bold text-sm tracking-wider uppercase hover:bg-emerald-700 transition-all hover:scale-105 shadow-xl shadow-emerald-500/20"
+                className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-emerald-600 text-white font-bold text-sm tracking-wider uppercase hover:bg-emerald-700 transition-all hover:scale-105 shadow-xl shadow-emerald-500/25"
               >
                 Send Inquiry for &quot;{estimatorScope}&quot; 🚀
               </a>
@@ -1084,9 +1111,9 @@ export default function Home() {
       {/* ═══════════════════════════════════════
           SECTION 10 — CONTACT & FOOTER
           ═══════════════════════════════════════ */}
-      <section id="contact" className="relative z-10 py-32 md:py-44 px-6 md:px-12 border-t border-slate-200/60">
+      <section id="contact" className="relative z-10 py-32 md:py-44 px-6 md:px-12 border-t border-slate-200/80">
         <div className="max-w-4xl mx-auto text-center">
-          <span className="px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 font-mono text-xs uppercase tracking-widest inline-block mb-6 font-semibold">
+          <span className="px-4 py-1.5 rounded-full bg-emerald-100 border border-emerald-300 text-emerald-800 font-mono text-xs uppercase tracking-widest inline-block mb-6 font-bold shadow-sm">
             Let&apos;s Build Together
           </span>
 
@@ -1125,7 +1152,7 @@ export default function Home() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onMouseEnter={() => playSynthSound(700, 'sine', 0.04)}
-                className="text-xs font-mono uppercase tracking-widest text-slate-500 hover:text-emerald-600 transition-colors font-semibold"
+                className="text-xs font-mono uppercase tracking-widest text-slate-600 hover:text-emerald-600 transition-colors font-bold"
               >
                 {s.name} ↗
               </a>
@@ -1187,7 +1214,7 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 border-t border-slate-100 pt-6">
               <div className="md:col-span-8">
                 <span
-                  className="px-3.5 py-1 rounded-full text-xs font-mono font-semibold uppercase tracking-wider inline-block mb-3 bg-emerald-50 text-emerald-700 border border-emerald-200"
+                  className="px-3.5 py-1 rounded-full text-xs font-mono font-semibold uppercase tracking-wider inline-block mb-3 bg-emerald-100 text-emerald-800 border border-emerald-300"
                 >
                   {selectedProject.category} • {selectedProject.year}
                 </span>
@@ -1200,7 +1227,7 @@ export default function Home() {
                   <div className="flex flex-wrap gap-4 pt-4 border-t border-slate-100">
                     {selectedProject.impactStats.map((st) => (
                       <div key={st.label} className="px-4 py-2 rounded-xl bg-slate-50 border border-slate-200">
-                        <span className="text-xs text-slate-500 block font-mono">{st.label}</span>
+                        <span className="text-xs text-slate-500 block font-mono font-semibold">{st.label}</span>
                         <span className="text-lg font-bold text-emerald-700">{st.value}</span>
                       </div>
                     ))}
@@ -1221,7 +1248,7 @@ export default function Home() {
                   <span className="text-slate-400 uppercase block font-semibold mb-1">Tools & Tech</span>
                   <div className="flex flex-wrap gap-1.5">
                     {selectedProject.tools.map((t) => (
-                      <span key={t} className="px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 font-medium">
+                      <span key={t} className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-900 border border-emerald-300 font-semibold">
                         {t}
                       </span>
                     ))}
