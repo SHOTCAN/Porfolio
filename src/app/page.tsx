@@ -1,94 +1,185 @@
 'use client';
 
 import { useEffect, useRef, useState, useCallback } from 'react';
+import dynamic from 'next/dynamic';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Image from 'next/image';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const Scene3D = dynamic(() => import('@/components/Scene3D'), { ssr: false });
+
 /* ═══════════════════════════════════════════
-   DATA
+   TYPES & PROJECT DATA
    ═══════════════════════════════════════════ */
-const PROJECTS = [
+export interface ProjectItem {
+  id: string;
+  title: string;
+  category: 'UI/UX' | 'Branding' | 'Software' | 'Editorial' | 'Photography' | 'Print';
+  year: string;
+  image: string;
+  gallery: string[];
+  client: string;
+  role: string;
+  tools: string[];
+  description: string;
+  accent: string;
+}
+
+const PROJECTS: ProjectItem[] = [
   {
     id: 'fotobooth',
-    title: 'Fotobooth Pro',
-    category: 'Software Design',
+    title: 'Fotobooth Pro System',
+    category: 'Software',
     year: '2025',
     image: '/images/projects/fotobooth-pro.png',
     gallery: ['/images/projects/fotobooth-app.webp', '/images/projects/fotobooth-event.webp', '/images/projects/fotobooth-output.webp'],
-    description: 'Professional event photobooth system with camera integration, template design, QR sharing & cloud upload. Built with Python & PyQt6.',
+    client: 'Event Technologies Co.',
+    role: 'Lead UI/UX & Desktop Developer',
+    tools: ['Python', 'PyQt6', 'Photoshop', 'Figma'],
+    description: 'Professional event photobooth desktop application featuring live camera feed integration, customizable layout templates, instant QR code sharing, and cloud gallery synchronization.',
     accent: '#10b981',
   },
   {
-    id: 'compro',
-    title: 'BNC Express',
-    category: 'Company Profile',
+    id: 'bnc-express',
+    title: 'BNC Express Profile',
+    category: 'Editorial',
     year: '2024',
     image: '/images/projects/compro-cover.webp',
-    gallery: ['/images/projects/compro-about.webp', '/images/projects/compro-service.webp', '/images/projects/compro-armada.webp', '/images/projects/compro-visi-misi.webp', '/images/projects/compro-keunggulan.webp'],
-    description: 'Complete 16-page company profile for a national logistics company. Professional print-ready editorial design.',
+    gallery: [
+      '/images/projects/compro-cover.webp',
+      '/images/projects/compro-about.webp',
+      '/images/projects/compro-service.webp',
+      '/images/projects/compro-armada.webp',
+      '/images/projects/compro-visi-misi.webp',
+      '/images/projects/compro-keunggulan.webp',
+      '/images/projects/compro-clients.webp',
+    ],
+    client: 'PT BNC Express Logistics',
+    role: 'Graphic Designer & Layout Artist',
+    tools: ['InDesign', 'Illustrator', 'Photoshop'],
+    description: 'Comprehensive 16-page editorial company profile for a major logistics provider. Designed with crisp grid structures, typography hierarchy, and high-impact fleet photography.',
     accent: '#3b82f6',
   },
   {
-    id: 'branding',
-    title: 'Brand Systems',
-    category: 'Logo & Identity',
-    year: '2024–25',
+    id: 'brand-identity',
+    title: 'Brand Systems & Logos',
+    category: 'Branding',
+    year: '2024–2025',
     image: '/images/projects/logo-crispy-krinj.webp',
-    gallery: ['/images/projects/logo-bnc-express.webp', '/images/projects/logo-expo-express.webp', '/images/projects/logo-cahaya-kontruksi.webp', '/images/projects/logo-fashion-france.webp', '/images/projects/logo-jewalen.webp', '/images/projects/logo-dkv.webp', '/images/projects/logo-pameran-perdana.webp'],
-    description: 'Complete brand identity systems for multiple clients — from restaurants to construction firms, fashion to logistics.',
+    gallery: [
+      '/images/projects/logo-crispy-krinj.webp',
+      '/images/projects/logo-bnc-express.webp',
+      '/images/projects/logo-expo-express.webp',
+      '/images/projects/logo-cahaya-kontruksi.webp',
+      '/images/projects/logo-fashion-france.webp',
+      '/images/projects/logo-jewalen.webp',
+      '/images/projects/logo-dkv.webp',
+      '/images/projects/logo-pameran-perdana.webp',
+    ],
+    client: 'Various Commercial Clients',
+    role: 'Brand Designer',
+    tools: ['Illustrator', 'Photoshop', 'Figma'],
+    description: 'Versatile collection of brand identities, vector logos, mark designs, and visual guidelines created for retail, construction, F&B, and logistics businesses.',
     accent: '#f59e0b',
   },
   {
-    id: 'aura',
-    title: 'Aura App',
-    category: 'UI/UX Design',
+    id: 'aura-app',
+    title: 'Aura Marketplace UI',
+    category: 'UI/UX',
     year: '2025',
     image: '/images/projects/aura-login.webp',
-    gallery: ['/images/projects/aura-home.webp', '/images/projects/aura-detail.webp', '/images/projects/aura-profile.webp'],
-    description: 'Modern marketplace mobile app with login, home, detail & profile screens featuring glassmorphism UI.',
+    gallery: [
+      '/images/projects/aura-login.webp',
+      '/images/projects/aura-home.webp',
+      '/images/projects/aura-detail.webp',
+      '/images/projects/aura-profile.webp',
+    ],
+    client: 'Aura Digital App',
+    role: 'Product UI Designer',
+    tools: ['Figma', 'Prototyping', 'After Effects'],
+    description: 'Next-gen mobile e-commerce interface featuring dark glassmorphic design system, smooth micro-interactions, seamless checkout flow, and custom icon sets.',
     accent: '#8b5cf6',
   },
   {
-    id: 'food',
-    title: 'Food & Poster',
-    category: 'Photography & Design',
+    id: 'food-posters',
+    title: 'Culinary Photography & Posters',
+    category: 'Photography',
     year: '2024',
     image: '/images/projects/food-photo-1.webp',
-    gallery: ['/images/projects/food-photo-2.webp', '/images/projects/food-photo-3.webp', '/images/projects/poster-bakso.webp', '/images/projects/poster-esteh.webp', '/images/projects/poster-sistagor.webp', '/images/projects/poster-animar.webp'],
-    description: 'Food photography and poster design for local F&B brands — from product shots to promotional material.',
+    gallery: [
+      '/images/projects/food-photo-1.webp',
+      '/images/projects/food-photo-2.webp',
+      '/images/projects/food-photo-3.webp',
+      '/images/projects/poster-bakso.webp',
+      '/images/projects/poster-esteh.webp',
+      '/images/projects/poster-sistagor.webp',
+      '/images/projects/poster-animar.webp',
+    ],
+    client: 'F&B Brands & Restaurants',
+    role: 'Commercial Photographer & Art Director',
+    tools: ['Camera Studio', 'Lightroom', 'Photoshop'],
+    description: 'High-end commercial food photography paired with vibrant print and digital marketing poster designs tailored for culinary campaigns.',
     accent: '#ef4444',
   },
   {
-    id: 'editorial',
-    title: 'Editorial Works',
-    category: 'Print & Layout',
+    id: 'editorial-print',
+    title: 'Magazine & Print Media',
+    category: 'Print',
     year: '2024',
     image: '/images/projects/majalah-cover.webp',
-    gallery: ['/images/projects/book-cover-tangga.webp', '/images/projects/brosur-crispy.webp', '/images/projects/menu-trifold.webp', '/images/projects/id-card-menu.webp', '/images/projects/mockup-gelas.webp', '/images/projects/mug-design.webp'],
-    description: 'Magazine covers, book layouts, brochures, menus, packaging & merchandise mockup designs.',
+    gallery: [
+      '/images/projects/majalah-cover.webp',
+      '/images/projects/book-cover-tangga.webp',
+      '/images/projects/brosur-crispy.webp',
+      '/images/projects/menu-trifold.webp',
+      '/images/projects/id-card-menu.webp',
+      '/images/projects/mockup-gelas.webp',
+      '/images/projects/mug-design.webp',
+    ],
+    client: 'Publishing & Hospitality',
+    role: 'Print & Layout Specialist',
+    tools: ['InDesign', 'Photoshop', 'Illustrator'],
+    description: 'Creative print collaterals including magazine covers, trifold menu brochures, merchandise packaging mockups, and corporate ID card branding.',
     accent: '#6366f1',
   },
   {
-    id: 'stickers',
-    title: 'Sticker & Merch',
-    category: 'Illustration',
+    id: 'sticker-art',
+    title: 'Character Stickers & Merch',
+    category: 'Print',
     year: '2024',
     image: '/images/projects/stiker-marvel.webp',
-    gallery: ['/images/projects/stiker-deadpool.webp', '/images/projects/stiker-frozen.webp', '/images/projects/stiker-spongebob.webp', '/images/projects/pin-design.webp'],
-    description: 'Character sticker collections, pin badges & merchandise design for print production.',
+    gallery: [
+      '/images/projects/stiker-marvel.webp',
+      '/images/projects/stiker-deadpool.webp',
+      '/images/projects/stiker-frozen.webp',
+      '/images/projects/stiker-spongebob.webp',
+      '/images/projects/pin-design.webp',
+    ],
+    client: 'Pop Culture & Print Merch',
+    role: 'Illustrator & Prepress Artist',
+    tools: ['Illustrator', 'Photoshop', 'Vector Art'],
+    description: 'Detailed character sticker illustrations, die-cut artwork, button pins, and custom merchandise items crafted for high-quality vinyl printing.',
     accent: '#ec4899',
   },
   {
-    id: 'product',
-    title: 'Product Shots',
+    id: 'product-shots',
+    title: 'Commercial Product Studio',
     category: 'Photography',
     year: '2024',
     image: '/images/projects/product-bakso-atas.webp',
-    gallery: ['/images/projects/product-bakso-45.webp', '/images/projects/product-sosis-atas.webp', '/images/projects/product-sosis-bright.webp', '/images/projects/food-product-karawaci.webp'],
-    description: 'Commercial product photography with controlled lighting for F&B brands.',
+    gallery: [
+      '/images/projects/product-bakso-atas.webp',
+      '/images/projects/product-bakso-45.webp',
+      '/images/projects/product-sosis-atas.webp',
+      '/images/projects/product-sosis-bright.webp',
+      '/images/projects/food-product-karawaci.webp',
+    ],
+    client: 'Retail Food Manufacturers',
+    role: 'Studio Photographer & Retoucher',
+    tools: ['Studio Lighting', 'Lightroom', 'Photoshop'],
+    description: 'Precision studio product photography with professional multi-point lighting, color grading, and texture retouching for consumer packaging and ads.',
     accent: '#f97316',
   },
 ];
@@ -96,9 +187,32 @@ const PROJECTS = [
 const SKILLS = [
   'Photoshop', 'Illustrator', 'Figma', 'After Effects',
   'Premiere Pro', 'Lightroom', 'InDesign', 'Photography',
-  'Branding', 'UI/UX', 'Typography', 'Motion Design',
-  'Python', 'DaVinci Resolve',
+  'Branding', 'UI/UX Design', 'Typography', 'Motion Graphics',
+  'Python', 'DaVinci Resolve', 'Prepress Print', 'Vector Art'
 ];
+
+/* ═══════════════════════════════════════════
+   AUDIO FEEDBACK SYNTHESIZER (Web Audio API)
+   ═══════════════════════════════════════════ */
+function playSynthSound(freq = 440, type: OscillatorType = 'sine', duration = 0.08) {
+  try {
+    const AudioContext = window.AudioContext || (window as unknown as { webkitAudioContext: typeof window.AudioContext }).webkitAudioContext;
+    if (!AudioContext) return;
+    const ctx = new AudioContext();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, ctx.currentTime);
+    gain.gain.setValueAtTime(0.04, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + duration);
+  } catch {
+    // Audio context allowed after user interaction
+  }
+}
 
 /* ═══════════════════════════════════════════
    TEXT SCRAMBLE HOOK
@@ -106,15 +220,18 @@ const SKILLS = [
 function useTextScramble(text: string) {
   const [display, setDisplay] = useState(text);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&';
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()';
+
   const scramble = useCallback(() => {
     let iteration = 0;
     if (intervalRef.current) clearInterval(intervalRef.current);
     intervalRef.current = setInterval(() => {
-      setDisplay(text.split('').map((char, idx) => {
-        if (idx < iteration) return text[idx];
-        return chars[Math.floor(Math.random() * chars.length)];
-      }).join(''));
+      setDisplay(
+        text.split('').map((char, index) => {
+          if (index < iteration) return text[index];
+          return chars[Math.floor(Math.random() * chars.length)];
+        }).join('')
+      );
       iteration += 0.5;
       if (iteration >= text.length && intervalRef.current) {
         clearInterval(intervalRef.current);
@@ -122,194 +239,466 @@ function useTextScramble(text: string) {
       }
     }, 25);
   }, [text, chars]);
+
   const reset = useCallback(() => setDisplay(text), [text]);
   return { display, scramble, reset };
 }
 
 /* ═══════════════════════════════════════════
-   MAIN PAGE
+   INTERACTIVE CANVAS PLAYGROUND WIDGET
+   ═══════════════════════════════════════════ */
+function CanvasPlayground() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [isDrawing, setIsDrawing] = useState(false);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let width = (canvas.width = canvas.parentElement?.clientWidth || 800);
+    let height = (canvas.height = canvas.parentElement?.clientHeight || 400);
+
+    const handleResize = () => {
+      if (!canvas.parentElement) return;
+      width = canvas.width = canvas.parentElement.clientWidth;
+      height = canvas.height = canvas.parentElement.clientHeight;
+    };
+    window.addEventListener('resize', handleResize);
+
+    const particles: Array<{ x: number; y: number; vx: number; vy: number; radius: number; color: string; alpha: number }> = [];
+    const colors = ['#10b981', '#34d399', '#6366f1', '#22d3ee', '#3b82f6'];
+
+    const spawnParticles = (x: number, y: number) => {
+      for (let i = 0; i < 4; i++) {
+        particles.push({
+          x,
+          y,
+          vx: (Math.random() - 0.5) * 4,
+          vy: (Math.random() - 0.5) * 4,
+          radius: Math.random() * 6 + 2,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          alpha: 1,
+        });
+      }
+    };
+
+    let animId: number;
+    const render = () => {
+      ctx.clearRect(0, 0, width, height);
+
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.alpha -= 0.015;
+
+        if (p.alpha <= 0) {
+          particles.splice(i, 1);
+          continue;
+        }
+
+        ctx.save();
+        ctx.globalAlpha = p.alpha;
+        ctx.fillStyle = p.color;
+        ctx.shadowBlur = 12;
+        ctx.shadowColor = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      animId = requestAnimationFrame(render);
+    };
+
+    render();
+
+    const handlePointerMove = (e: PointerEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      spawnParticles(x, y);
+    };
+
+    canvas.addEventListener('pointermove', handlePointerMove);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      canvas.removeEventListener('pointermove', handlePointerMove);
+      cancelAnimationFrame(animId);
+    };
+  }, []);
+
+  return (
+    <div
+      className="relative w-full h-[320px] md:h-[420px] rounded-3xl glass-card overflow-hidden border border-emerald-500/20 shadow-2xl cursor-crosshair group"
+      onMouseDown={() => setIsDrawing(true)}
+      onMouseUp={() => setIsDrawing(false)}
+    >
+      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full z-10" />
+      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-20 px-6 text-center">
+        <span className="px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono text-xs uppercase tracking-widest mb-3">
+          Interactive Canvas Playground
+        </span>
+        <h3 className="text-2xl md:text-4xl font-bold text-white mb-2">
+          Move your cursor to paint visual energy
+        </h3>
+        <p className="text-xs md:text-sm text-gray-400">
+          {isDrawing ? '✨ Creating neon particle bursts...' : 'Hover or drag anywhere inside this interactive zone'}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════
+   3D TILT CARD COMPONENT
+   ═══════════════════════════════════════════ */
+function TiltProjectCard({ project, onClick }: { project: ProjectItem; onClick: () => void }) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [transform, setTransform] = useState('');
+  const [sheen, setSheen] = useState({ x: 50, y: 50, opacity: 0 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = cardRef.current;
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    const rotateX = ((y - centerY) / centerY) * -12;
+    const rotateY = ((x - centerX) / centerX) * 12;
+
+    setTransform(`perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`);
+    setSheen({
+      x: (x / rect.width) * 100,
+      y: (y / rect.height) * 100,
+      opacity: 0.35,
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setTransform('perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)');
+    setSheen((prev) => ({ ...prev, opacity: 0 }));
+  };
+
+  return (
+    <div
+      ref={cardRef}
+      onClick={() => {
+        playSynthSound(587, 'triangle', 0.1);
+        onClick();
+      }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      onMouseEnter={() => playSynthSound(440, 'sine', 0.05)}
+      className="group relative rounded-3xl glass-card border border-white/10 overflow-hidden cursor-pointer transition-all duration-300 ease-out shadow-xl hover:border-emerald-500/40 hover:shadow-emerald-500/10"
+      style={{ transform, transformStyle: 'preserve-3d' }}
+    >
+      {/* Dynamic Sheen Overlay */}
+      <div
+        className="pointer-events-none absolute inset-0 z-30 transition-opacity duration-300"
+        style={{
+          background: `radial-gradient(circle at ${sheen.x}% ${sheen.y}%, rgba(255,255,255,0.4) 0%, transparent 60%)`,
+          opacity: sheen.opacity,
+        }}
+      />
+
+      {/* Image Thumbnail */}
+      <div className="relative aspect-[16/10] overflow-hidden bg-black/40">
+        <Image
+          src={project.image}
+          alt={project.title}
+          fill
+          className="object-cover transition-transform duration-700 group-hover:scale-110"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-transparent to-transparent opacity-80" />
+
+        {/* Category Pill */}
+        <div className="absolute top-4 left-4 z-20">
+          <span
+            className="px-3.5 py-1 rounded-full text-xs font-mono font-medium backdrop-blur-md border border-white/20 text-white"
+            style={{ backgroundColor: `${project.accent}33`, borderColor: `${project.accent}66` }}
+          >
+            {project.category}
+          </span>
+        </div>
+
+        {/* Year Tag */}
+        <div className="absolute top-4 right-4 z-20">
+          <span className="px-3 py-1 rounded-full text-xs font-mono text-gray-300 bg-black/40 backdrop-blur-md">
+            {project.year}
+          </span>
+        </div>
+
+        {/* Interactive Hover Overlay Icon */}
+        <div className="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40 backdrop-blur-[2px]">
+          <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-emerald-500 text-black font-semibold text-xs tracking-wider uppercase shadow-lg transform group-hover:scale-105 transition-transform">
+            Explore Gallery
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </span>
+        </div>
+      </div>
+
+      {/* Content Meta */}
+      <div className="p-6">
+        <h3 className="text-xl md:text-2xl font-bold text-white group-hover:text-emerald-400 transition-colors duration-300 mb-2">
+          {project.title}
+        </h3>
+        <p className="text-xs md:text-sm text-gray-400 line-clamp-2 leading-relaxed mb-4">
+          {project.description}
+        </p>
+        <div className="flex flex-wrap gap-2">
+          {project.tools.slice(0, 3).map((tool) => (
+            <span key={tool} className="text-[10px] font-mono px-2.5 py-1 rounded-md bg-white/5 text-gray-300 border border-white/5">
+              {tool}
+            </span>
+          ))}
+          {project.tools.length > 3 && (
+            <span className="text-[10px] font-mono px-2 py-1 rounded-md bg-white/5 text-gray-400">
+              +{project.tools.length - 3}
+            </span>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════
+   MAIN PAGE COMPONENT
    ═══════════════════════════════════════════ */
 export default function Home() {
-  const [expandedProject, setExpandedProject] = useState<string | null>(null);
-  const [hoveredProject, setHoveredProject] = useState<number | null>(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [activeCategory, setActiveCategory] = useState<string>('ALL');
+  const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
+  const [activeGalleryIndex, setActiveGalleryIndex] = useState(0);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [currentTime, setCurrentTime] = useState('');
+
   const heroRef = useRef<HTMLElement>(null);
   const manifestoRef = useRef<HTMLElement>(null);
   const worksRef = useRef<HTMLElement>(null);
   const aboutRef = useRef<HTMLElement>(null);
+
   const emailScramble = useTextScramble('baldyas.albani@gmail.com');
 
+  // ── Realtime Jakarta Clock ──
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      const options: Intl.DateTimeFormatOptions = {
+        timeZone: 'Asia/Jakarta',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+      };
+      setCurrentTime(now.toLocaleTimeString('en-US', options));
+    };
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // ── Scroll Progress Tracking ──
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      setScrollProgress(docHeight > 0 ? scrollTop / docHeight : 0);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // ── Keyboard Escape for Modal ──
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setSelectedProject(null);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  // ── GSAP Scroll Trigger Animations ──
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // ── Hero entrance ──
-      gsap.from('.hero-title', { y: 80, opacity: 0, duration: 1.2, ease: 'power4.out', delay: 0.2 });
-      gsap.from('.hero-subtitle', { y: 40, opacity: 0, duration: 1, ease: 'power3.out', delay: 0.6 });
-      gsap.from('.hero-badge', { y: 30, opacity: 0, duration: 0.8, ease: 'power3.out', delay: 0.9 });
-      gsap.from('.hero-cta', { y: 20, opacity: 0, duration: 0.8, ease: 'power3.out', delay: 1.1 });
-      gsap.from('.hero-visual', { scale: 0.8, opacity: 0, duration: 1.5, ease: 'power3.out', delay: 0.4 });
-      gsap.from('.hero-float-1', { x: -60, opacity: 0, duration: 1.2, ease: 'power3.out', delay: 0.8 });
-      gsap.from('.hero-float-2', { x: 60, y: 40, opacity: 0, duration: 1.2, ease: 'power3.out', delay: 1.0 });
-      gsap.from('.hero-float-3', { y: -50, opacity: 0, duration: 1.2, ease: 'power3.out', delay: 1.2 });
-      gsap.from('.scroll-cue', { opacity: 0, y: 10, duration: 1, delay: 2, ease: 'power2.out' });
+      // Hero Elements Reveal
+      gsap.from('.hero-badge-elem', { y: 30, opacity: 0, duration: 0.8, ease: 'power3.out', delay: 0.2 });
+      gsap.from('.hero-headline-word', { y: 60, opacity: 0, stagger: 0.08, duration: 1, ease: 'power4.out', delay: 0.4 });
+      gsap.from('.hero-sub-text', { y: 30, opacity: 0, duration: 0.8, ease: 'power3.out', delay: 0.8 });
+      gsap.from('.hero-cta-btn', { scale: 0.9, opacity: 0, stagger: 0.1, duration: 0.8, ease: 'back.out(1.7)', delay: 1 });
 
-      // ── Hero parallax out ──
-      if (heroRef.current) {
-        gsap.to(heroRef.current, {
-          scrollTrigger: { trigger: heroRef.current, start: 'top top', end: 'bottom top', scrub: 1 },
-          y: -100, opacity: 0,
-        });
-      }
-
-      // ── Manifesto word reveal ──
-      const mWords = manifestoRef.current?.querySelectorAll('.m-word');
+      // Manifesto Word-by-Word Scroll Reveal
+      const mWords = manifestoRef.current?.querySelectorAll('.manifesto-word');
       if (mWords) {
-        mWords.forEach((w, i) => {
-          gsap.to(w, {
-            scrollTrigger: { trigger: manifestoRef.current, start: `top+=${i * 35} center`, end: `top+=${i * 35 + 60} center`, scrub: 0.5 },
-            opacity: 1, y: 0, color: '#1a1a2e',
+        mWords.forEach((word, i) => {
+          gsap.to(word, {
+            scrollTrigger: {
+              trigger: manifestoRef.current,
+              start: `top+=${i * 30} center`,
+              end: `top+=${i * 30 + 50} center`,
+              scrub: 0.5,
+            },
+            opacity: 1,
+            color: '#ffffff',
+            textShadow: '0 0 20px rgba(16, 185, 129, 0.5)',
           });
         });
       }
 
-      // ── Works stagger ──
-      const rows = worksRef.current?.querySelectorAll('.work-item');
-      if (rows) {
-        gsap.from(rows, {
-          scrollTrigger: { trigger: worksRef.current, start: 'top 75%', toggleActions: 'play none none reverse' },
-          y: 60, opacity: 0, stagger: 0.1, duration: 0.7, ease: 'power3.out',
-        });
-      }
-
-      // ── About ──
-      gsap.from('.about-img', {
+      // About Section Reveal
+      gsap.from('.about-card-img', {
+        scrollTrigger: { trigger: aboutRef.current, start: 'top 75%', toggleActions: 'play none none reverse' },
+        scale: 0.9,
+        opacity: 0,
+        duration: 1,
+        ease: 'power3.out',
+      });
+      gsap.from('.about-content-item', {
         scrollTrigger: { trigger: aboutRef.current, start: 'top 70%', toggleActions: 'play none none reverse' },
-        scale: 0.85, opacity: 0, duration: 1.2, ease: 'power3.out',
-      });
-      gsap.from('.about-text > *', {
-        scrollTrigger: { trigger: aboutRef.current, start: 'top 65%', toggleActions: 'play none none reverse' },
-        y: 40, opacity: 0, stagger: 0.1, duration: 0.8, ease: 'power3.out',
-      });
-
-      // ── Skills marquee scroll ──
-      gsap.from('.skills-section', {
-        scrollTrigger: { trigger: '.skills-section', start: 'top 80%', toggleActions: 'play none none reverse' },
-        y: 40, opacity: 0, duration: 1, ease: 'power3.out',
-      });
-
-      // ── Contact ──
-      gsap.from('.contact-content > *', {
-        scrollTrigger: { trigger: '.contact-content', start: 'top 75%', toggleActions: 'play none none reverse' },
-        y: 50, opacity: 0, stagger: 0.12, duration: 0.8, ease: 'power3.out',
+        y: 40,
+        opacity: 0,
+        stagger: 0.12,
+        duration: 0.8,
+        ease: 'power3.out',
       });
     });
+
     return () => ctx.revert();
   }, []);
 
+  // ── Filtered Projects ──
+  const filteredProjects = PROJECTS.filter((p) => {
+    if (activeCategory === 'ALL') return true;
+    return p.category.toUpperCase() === activeCategory;
+  });
+
+  // ── Copy Toast Helper ──
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText('baldyas.albani@gmail.com');
+    playSynthSound(880, 'sine', 0.15);
+    setToastMessage('Email copied to clipboard!');
+    setTimeout(() => setToastMessage(null), 3000);
+  };
+
   return (
-    <div className="relative">
-      {/* ═══ NAVBAR ═══ */}
-      <nav className="fixed top-0 left-0 right-0 z-50 px-6 md:px-12 py-4">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <span className="text-xl font-bold tracking-tight" style={{ color: '#1a1a2e' }}>
-            BSA<span className="text-gradient-green">.</span>
-          </span>
-          <div className="hidden md:flex items-center gap-8">
-            {['Works', 'About', 'Contact'].map((l) => (
-              <a key={l} href={`#${l.toLowerCase()}`} className="text-sm text-gray-500 hover:text-gray-900 transition-colors duration-300 tracking-wide">
-                {l}
-              </a>
-            ))}
-          </div>
-          <a href="#contact" className="text-xs px-5 py-2 rounded-full border border-gray-200 text-gray-600 hover:bg-emerald-50 hover:border-emerald-200 hover:text-emerald-700 transition-all duration-300">
-            Let&apos;s Talk
-          </a>
-        </div>
-      </nav>
+    <div className="relative min-h-screen bg-[#0a0a0f] text-[#f0f0f5] selection:bg-emerald-500/30 selection:text-white">
+      {/* ── 3D Persistent Canvas Background ── */}
+      <Scene3D scrollProgress={scrollProgress} />
 
-      {/* ═══ HERO ═══ */}
-      <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden pt-20">
-        {/* Background gradient blobs */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-20 right-[10%] w-[500px] h-[500px] rounded-full bg-emerald-100/40 blur-[100px] animate-pulse-soft" />
-          <div className="absolute bottom-20 left-[5%] w-[400px] h-[400px] rounded-full bg-teal-50/60 blur-[80px] animate-pulse-soft" style={{ animationDelay: '2s' }} />
-          <div className="absolute top-[40%] left-[40%] w-[300px] h-[300px] rounded-full bg-gray-100/50 blur-[60px] animate-pulse-soft" style={{ animationDelay: '4s' }} />
+      {/* ── Toast Notification ── */}
+      {toastMessage && (
+        <div className="fixed bottom-8 right-8 z-[200] px-6 py-3 rounded-2xl bg-emerald-500 text-black font-semibold text-sm shadow-2xl flex items-center gap-3 animate-bounce">
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+          {toastMessage}
         </div>
+      )}
 
-        <div className="max-w-7xl mx-auto px-6 md:px-12 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
-          {/* Left — Text */}
-          <div>
-            <div className="hero-badge inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-50 border border-emerald-100 mb-6">
-              <span className="relative flex h-2 w-2">
+      {/* ═══════════════════════════════════════
+          SECTION 1 — HERO SECTION
+          ═══════════════════════════════════════ */}
+      <section ref={heroRef} className="relative z-10 min-h-screen flex flex-col justify-center px-6 md:px-12 pt-28 pb-16 overflow-hidden">
+        <div className="max-w-7xl mx-auto w-full">
+          {/* Top Status Badges */}
+          <div className="hero-badge-elem flex flex-wrap items-center gap-3 md:gap-4 mb-8">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-emerald-500/30">
+              <span className="relative flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
               </span>
-              <span className="text-xs text-emerald-700 font-medium">Available for projects</span>
+              <span className="text-xs font-mono tracking-wider text-emerald-400">
+                Available for Senior Roles & Freelance
+              </span>
             </div>
 
-            <h1 className="hero-title text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.05] tracking-tight mb-6" style={{ color: '#1a1a2e' }}>
-              Creative<br />
-              Designer &<br />
-              <span className="text-gradient-green">Digital Craftsman</span>
-            </h1>
-
-            <p className="hero-subtitle text-base md:text-lg text-gray-500 leading-relaxed max-w-md mb-8">
-              Turning ideas into visual experiences that connect, engage, and inspire.
-              Currently crafting at <span className="text-gray-800 font-medium">Anomali Digital</span>.
-            </p>
-
-            <div className="hero-cta flex items-center gap-4">
-              <a href="#works" className="px-7 py-3.5 rounded-full bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-200">
-                View Works
-              </a>
-              <a href="#contact" className="px-7 py-3.5 rounded-full border border-gray-200 text-sm text-gray-600 hover:border-emerald-200 hover:bg-emerald-50 transition-all duration-300">
-                Get in Touch
-              </a>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-xs font-mono text-gray-400">
+              <span>JAKARTA</span>
+              <span className="text-gray-600">•</span>
+              <span className="text-white font-medium">{currentTime || '20:56 WIB'}</span>
             </div>
           </div>
 
-          {/* Right — Floating visuals */}
-          <div className="relative h-[400px] md:h-[500px] lg:h-[550px]">
-            {/* Main hero image */}
-            <div className="hero-visual absolute inset-0 flex items-center justify-center">
-              <div className="relative w-[280px] h-[280px] md:w-[380px] md:h-[380px] rounded-3xl overflow-hidden shadow-xl" style={{ boxShadow: '0 20px 60px rgba(16,185,129,0.15)' }}>
-                <Image src="/images/hero-abstract.png" alt="Creative Design" fill className="object-cover" sizes="400px" priority />
-              </div>
-            </div>
+          {/* Kinetic Headline */}
+          <h1 className="text-4xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight leading-[0.95] mb-8 select-none">
+            <span className="block hero-headline-word text-white">BALDYAS</span>
+            <span className="block hero-headline-word text-gradient-emerald">SATRIO ALBANI</span>
+          </h1>
 
-            {/* Floating project previews */}
-            <div className="hero-float-1 absolute top-8 left-0 md:left-[-20px] w-[120px] h-[90px] md:w-[160px] md:h-[120px] rounded-2xl overflow-hidden shadow-lg animate-float glass-card">
-              <Image src="/images/projects/compro-cover.webp" alt="Company Profile" fill className="object-cover" sizes="160px" />
+          {/* Subtitle & Role */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-end mb-12">
+            <div className="md:col-span-8 hero-sub-text">
+              <p className="text-lg md:text-2xl text-gray-300 font-light leading-relaxed max-w-3xl">
+                Creative Designer & Digital Craftsman merging high-end graphic design,
+                brand systems, UI/UX architecture, and studio photography.
+                Currently leading visual design at <span className="text-emerald-400 font-medium">Anomali Digital</span>.
+              </p>
             </div>
+          </div>
 
-            <div className="hero-float-2 absolute bottom-12 right-0 md:right-[-10px] w-[130px] h-[100px] md:w-[170px] md:h-[130px] rounded-2xl overflow-hidden shadow-lg animate-float-delayed glass-card">
-              <Image src="/images/projects/logo-crispy-krinj.webp" alt="Brand Design" fill className="object-cover" sizes="170px" />
-            </div>
+          {/* CTA Buttons & Interactive Triggers */}
+          <div className="flex flex-wrap items-center gap-4">
+            <a
+              href="#works"
+              onMouseEnter={() => playSynthSound(523, 'sine', 0.05)}
+              className="hero-cta-btn group inline-flex items-center gap-3 px-8 py-4 rounded-full bg-emerald-500 text-black font-bold text-sm tracking-wider uppercase hover:bg-emerald-400 transition-all duration-300 shadow-[0_0_30px_rgba(16,185,129,0.3)] hover:scale-105"
+            >
+              Explore Projects
+              <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </a>
 
-            <div className="hero-float-3 absolute top-4 right-8 md:right-4 w-[100px] h-[75px] md:w-[140px] md:h-[105px] rounded-2xl overflow-hidden shadow-lg animate-float-slow glass-card">
-              <Image src="/images/projects/aura-login.webp" alt="UI Design" fill className="object-cover" sizes="140px" />
-            </div>
+            <a
+              href="#playground"
+              onMouseEnter={() => playSynthSound(659, 'sine', 0.05)}
+              className="hero-cta-btn inline-flex items-center gap-2 px-8 py-4 rounded-full glass border border-white/20 text-white font-semibold text-sm tracking-wider uppercase hover:bg-white/10 transition-all duration-300 hover:border-emerald-400/50"
+            >
+              🎮 Interactive Mode
+            </a>
 
-            {/* Decorative shapes */}
-            <div className="absolute bottom-[30%] left-[15%] w-4 h-4 rounded-full bg-emerald-300/50 animate-float" />
-            <div className="absolute top-[20%] right-[25%] w-3 h-3 rounded-full bg-gray-300/50 animate-float-delayed" />
-            <div className="absolute top-[60%] right-[15%] w-6 h-6 rounded-full border border-emerald-200/50 animate-float-slow" />
+            <button
+              onClick={handleCopyEmail}
+              onMouseEnter={() => playSynthSound(783, 'sine', 0.05)}
+              className="hero-cta-btn inline-flex items-center gap-2 px-6 py-4 rounded-full glass text-gray-400 hover:text-white text-xs font-mono tracking-wider transition-colors"
+            >
+              <span>✉ Copy Email</span>
+            </button>
           </div>
         </div>
 
-        {/* Scroll indicator */}
-        <div className="scroll-cue absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
-          <span className="text-[10px] uppercase tracking-[0.4em] text-gray-400">Scroll</span>
-          <div className="w-[1px] h-10 bg-gradient-to-b from-gray-300 to-transparent relative overflow-hidden">
-            <div className="absolute w-full h-3 bg-emerald-400/70 animate-[scrollLine_2s_ease-in-out_infinite]" />
+        {/* Animated Scroll Cue */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none">
+          <span className="text-[10px] font-mono uppercase tracking-[0.4em] text-gray-500">SCROLL TO EXPERIENCE</span>
+          <div className="w-[1px] h-10 bg-gradient-to-b from-emerald-500 to-transparent relative overflow-hidden">
+            <div className="absolute w-full h-3 bg-emerald-400 animate-[scrollLine_2s_ease-in-out_infinite]" />
           </div>
         </div>
       </section>
 
-      {/* ═══ MANIFESTO ═══ */}
-      <section ref={manifestoRef} className="relative min-h-[120vh] flex items-center px-6 md:px-16 py-32">
-        <div className="max-w-4xl mx-auto">
-          <p className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold leading-relaxed md:leading-relaxed">
-            {"I don't just design. I craft visual experiences that make brands unforgettable. Every pixel is intentional. Every detail tells a story.".split(' ').map((word, i) => (
-              <span key={i} className="m-word inline-block mr-[0.3em] opacity-[0.12] translate-y-1" style={{ color: '#c0c0c8' }}>
+      {/* ═══════════════════════════════════════
+          SECTION 2 — MANIFESTO SCROLLEYTELLING
+          ═══════════════════════════════════════ */}
+      <section ref={manifestoRef} className="relative z-10 min-h-[140vh] flex items-center px-6 md:px-16 py-32">
+        <div className="max-w-5xl mx-auto">
+          <p className="text-3xl md:text-5xl lg:text-6xl font-extrabold leading-snug tracking-tight">
+            {"I don't just design static visuals. I engineer immersive digital experiences that captivate attention and elevate brands. Every curve has intent. Every pixel tells a narrative.".split(' ').map((word, i) => (
+              <span
+                key={i}
+                className="manifesto-word inline-block mr-[0.3em] opacity-10 transition-all duration-300 select-none"
+                style={{ color: '#8888a0' }}
+              >
                 {word}
               </span>
             ))}
@@ -317,210 +706,329 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ═══ WORKS ═══ */}
-      <section ref={worksRef} id="works" className="relative py-24 md:py-32">
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
-          {/* Header */}
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-16">
+      {/* ═══════════════════════════════════════
+          SECTION 3 — INTERACTIVE PROJECTS MATRIX
+          ═══════════════════════════════════════ */}
+      <section ref={worksRef} id="works" className="relative z-10 py-24 md:py-36 px-6 md:px-12">
+        <div className="max-w-7xl mx-auto">
+          {/* Header & Filter Controls */}
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
             <div>
-              <p className="text-emerald-600 text-xs font-mono tracking-[0.4em] uppercase mb-3">Selected Works</p>
-              <h2 className="text-3xl md:text-5xl font-bold tracking-tight" style={{ color: '#1a1a2e' }}>
-                Recent Projects
+              <span className="px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs uppercase tracking-widest block w-max mb-4">
+                Selected Works Matrix
+              </span>
+              <h2 className="text-4xl md:text-6xl font-black text-white tracking-tight">
+                FEATURED PROJECTS
               </h2>
             </div>
-            <p className="text-sm text-gray-400 max-w-xs">Click to expand and explore the gallery for each project.</p>
-          </div>
 
-          {/* Project list */}
-          <div className="space-y-0">
-            {PROJECTS.map((project, i) => (
-              <div key={project.id} className="work-item">
-                {/* Row */}
-                <div
-                  className="group flex items-center gap-4 md:gap-8 py-5 md:py-7 border-b cursor-pointer transition-all duration-500 hover:pl-3"
-                  style={{ borderColor: hoveredProject === i ? project.accent + '30' : 'rgba(0,0,0,0.06)' }}
-                  onMouseEnter={() => setHoveredProject(i)}
-                  onMouseLeave={() => setHoveredProject(null)}
-                  onClick={() => setExpandedProject(expandedProject === project.id ? null : project.id)}
+            {/* Category Filter Pills */}
+            <div className="flex flex-wrap items-center gap-2">
+              {['ALL', 'UI/UX', 'BRANDING', 'SOFTWARE', 'EDITORIAL', 'PHOTOGRAPHY', 'PRINT'].map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => {
+                    playSynthSound(500, 'square', 0.05);
+                    setActiveCategory(cat);
+                  }}
+                  className={`px-4 py-2 rounded-full text-xs font-mono transition-all duration-300 ${
+                    activeCategory === cat
+                      ? 'bg-emerald-500 text-black font-bold shadow-lg shadow-emerald-500/20'
+                      : 'glass text-gray-400 hover:text-white hover:border-white/20'
+                  }`}
                 >
-                  <span className="text-gray-300 font-mono text-xs w-6 flex-shrink-0">
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
+                  {cat}
+                </button>
+              ))}
+            </div>
+          </div>
 
-                  {/* Thumbnail - visible on hover */}
-                  <div className="hidden md:block relative w-16 h-12 rounded-lg overflow-hidden flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -ml-2 group-hover:ml-0">
-                    <Image src={project.image} alt={project.title} fill className="object-cover" sizes="64px" />
-                  </div>
-
-                  <h3 className="text-xl md:text-2xl lg:text-3xl font-bold flex-1 transition-colors duration-300" style={{ color: hoveredProject === i ? project.accent : '#1a1a2e' }}>
-                    {project.title}
-                  </h3>
-
-                  <span className="hidden md:inline text-xs uppercase tracking-[0.15em] text-gray-400">{project.category}</span>
-                  <span className="text-xs font-mono text-gray-300">{project.year}</span>
-
-                  <svg className={`w-4 h-4 text-gray-300 transition-transform duration-300 ${expandedProject === project.id ? 'rotate-45' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
-                  </svg>
-                </div>
-
-                {/* Expanded gallery */}
-                <div className="overflow-hidden transition-all duration-700" style={{ maxHeight: expandedProject === project.id ? '500px' : '0', opacity: expandedProject === project.id ? 1 : 0 }}>
-                  <div className="py-8 space-y-4">
-                    <div className="flex flex-col md:flex-row gap-4 md:gap-8">
-                      <div className="md:w-1/4">
-                        <p className="text-xs font-mono uppercase tracking-wider mb-2" style={{ color: project.accent }}>{project.category}</p>
-                        <p className="text-sm text-gray-500 leading-relaxed">{project.description}</p>
-                      </div>
-                      <div className="md:w-3/4">
-                        <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide snap-x">
-                          {project.gallery.map((img, j) => (
-                            <div key={j} className="flex-shrink-0 w-[240px] md:w-[300px] aspect-[4/3] relative rounded-xl overflow-hidden snap-center group/img" style={{ boxShadow: `0 4px 20px ${project.accent}10` }}>
-                              <Image src={img} alt={`${project.title} ${j + 1}`} fill className="object-cover transition-transform duration-500 group-hover/img:scale-105" sizes="300px" />
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+          {/* Project Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredProjects.map((project) => (
+              <TiltProjectCard
+                key={project.id}
+                project={project}
+                onClick={() => {
+                  setSelectedProject(project);
+                  setActiveGalleryIndex(0);
+                }}
+              />
             ))}
           </div>
         </div>
       </section>
 
-      {/* ═══ SKILLS MARQUEE ═══ */}
-      <section className="skills-section py-16 md:py-24 overflow-hidden border-y" style={{ borderColor: 'rgba(0,0,0,0.04)' }}>
-        <p className="text-center text-xs font-mono uppercase tracking-[0.5em] text-gray-400 mb-10">Tools & Skills</p>
-        <div className="relative">
-          <div className="flex animate-marquee whitespace-nowrap">
-            {[...SKILLS, ...SKILLS].map((skill, i) => (
-              <span key={i} className="mx-6 md:mx-10 text-2xl md:text-4xl font-bold text-gray-200 hover:text-emerald-500 transition-colors duration-300 cursor-default select-none">
-                {skill}
-              </span>
-            ))}
-          </div>
-        </div>
-        <div className="relative mt-6">
-          <div className="flex animate-marquee whitespace-nowrap" style={{ animationDirection: 'reverse', animationDuration: '35s' }}>
-            {[...SKILLS.reverse(), ...SKILLS].map((skill, i) => (
-              <span key={i} className="mx-6 md:mx-10 text-xl md:text-3xl font-light text-gray-150 hover:text-teal-500 transition-colors duration-300 cursor-default select-none" style={{ color: 'rgba(0,0,0,0.06)' }}>
-                {skill}
-              </span>
-            ))}
-          </div>
+      {/* ═══════════════════════════════════════
+          SECTION 4 — INTERACTIVE CANVAS PLAYGROUND
+          ═══════════════════════════════════════ */}
+      <section id="playground" className="relative z-10 py-20 px-6 md:px-12">
+        <div className="max-w-7xl mx-auto">
+          <CanvasPlayground />
         </div>
       </section>
 
-      {/* ═══ ABOUT ═══ */}
-      <section ref={aboutRef} id="about" className="relative py-24 md:py-40">
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-20 items-center">
-            {/* Image */}
-            <div className="about-img relative">
-              <div className="relative aspect-[3/4] max-w-md mx-auto rounded-3xl overflow-hidden" style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.08)' }}>
-                <Image src="/images/profile-new.png" alt="Baldyas Satrio Albani" fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
-              </div>
-              {/* Floating badge */}
-              <div className="absolute -bottom-4 -right-4 md:bottom-8 md:-right-6 px-5 py-3 rounded-2xl glass-card shadow-lg">
-                <p className="text-[10px] text-gray-400 uppercase tracking-wider">Currently at</p>
-                <p className="text-sm font-semibold" style={{ color: '#1a1a2e' }}>Anomali Digital</p>
+      {/* ═══════════════════════════════════════
+          SECTION 5 — KINETIC SKILLS MARQUEE
+          ═══════════════════════════════════════ */}
+      <section id="skills" className="relative z-10 py-20 border-y border-white/10 overflow-hidden bg-black/40">
+        <div className="mb-8 text-center">
+          <span className="text-xs font-mono uppercase tracking-[0.4em] text-gray-500">
+            TECHNOLOGIES & CREATIVE DISCIPLINES
+          </span>
+        </div>
+
+        {/* Marquee Row 1 */}
+        <div className="flex animate-marquee whitespace-nowrap mb-6">
+          {[...SKILLS, ...SKILLS].map((skill, idx) => (
+            <span
+              key={idx}
+              className="mx-6 text-3xl md:text-5xl font-black text-gray-600 hover:text-emerald-400 transition-colors duration-300 cursor-pointer select-none"
+              onMouseEnter={() => playSynthSound(600 + (idx % 8) * 40, 'triangle', 0.04)}
+            >
+              {skill} <span className="text-emerald-500/50 mx-4">•</span>
+            </span>
+          ))}
+        </div>
+
+        {/* Marquee Row 2 */}
+        <div className="flex animate-marquee whitespace-nowrap" style={{ animationDirection: 'reverse', animationDuration: '30s' }}>
+          {[...SKILLS.reverse(), ...SKILLS].map((skill, idx) => (
+            <span
+              key={idx}
+              className="mx-6 text-2xl md:text-4xl font-light text-gray-700 hover:text-cyan-400 transition-colors duration-300 cursor-pointer select-none"
+              onMouseEnter={() => playSynthSound(400 + (idx % 8) * 30, 'sine', 0.04)}
+            >
+              {skill} <span className="text-cyan-500/30 mx-4">/</span>
+            </span>
+          ))}
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════
+          SECTION 6 — ABOUT & CAREER TIMELINE
+          ═══════════════════════════════════════ */}
+      <section ref={aboutRef} id="about" className="relative z-10 py-28 md:py-40 px-6 md:px-12">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+          {/* Profile Card */}
+          <div className="lg:col-span-5 about-card-img">
+            <div className="relative aspect-[3/4] rounded-3xl overflow-hidden glass-card border border-white/10 shadow-2xl">
+              <Image
+                src="/images/profile-new.png"
+                alt="Baldyas Satrio Albani"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 40vw"
+                priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-transparent to-transparent opacity-80" />
+
+              {/* Floating Badge */}
+              <div className="absolute bottom-6 left-6 right-6 p-4 rounded-2xl glass border border-white/10 backdrop-blur-xl">
+                <p className="text-[10px] font-mono uppercase tracking-widest text-emerald-400">Current Role</p>
+                <p className="text-lg font-bold text-white">Graphic Designer</p>
+                <p className="text-xs text-gray-400">Anomali Digital (Feb 2025 – Present)</p>
               </div>
             </div>
+          </div>
 
-            {/* Text */}
-            <div className="about-text">
-              <p className="text-emerald-600 text-xs font-mono tracking-[0.4em] uppercase mb-4">About Me</p>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-6" style={{ color: '#1a1a2e' }}>
-                Designer who cares about <span className="text-gradient-green">every detail</span>.
+          {/* Bio & Career Roadmap */}
+          <div className="lg:col-span-7 space-y-8">
+            <div className="about-content-item">
+              <span className="px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs uppercase tracking-widest inline-block mb-4">
+                Biography & Experience
+              </span>
+              <h2 className="text-3xl md:text-5xl font-black text-white leading-tight">
+                Crafting visual excellence across brand systems & digital products.
               </h2>
-              <div className="space-y-4 text-gray-500 text-sm md:text-base leading-relaxed">
-                <p>
-                  I&apos;m <span className="text-gray-800 font-medium">Baldyas Satrio Albani</span> — a multidisciplinary
-                  designer crafting visual experiences at <span className="text-emerald-600 font-medium">Anomali Digital</span> since February 2025.
-                </p>
-                <p>
-                  Visual Communication Design graduate from SMK Budhiwarman 1 with studies at Politeknik Negeri Media Kreatif.
-                  I specialize in brand identity, UI/UX, motion graphics, photography & print design.
-                </p>
-              </div>
+            </div>
 
-              {/* Stats */}
-              <div className="grid grid-cols-3 gap-8 mt-12 pt-8 border-t" style={{ borderColor: 'rgba(0,0,0,0.06)' }}>
-                {[
-                  { value: '30+', label: 'Projects' },
-                  { value: '15+', label: 'Clients' },
-                  { value: '2+', label: 'Years' },
-                ].map((stat) => (
-                  <div key={stat.label}>
-                    <p className="text-3xl md:text-4xl font-bold text-gradient-green">{stat.value}</p>
-                    <p className="text-xs text-gray-400 uppercase tracking-wider mt-1">{stat.label}</p>
+            <p className="about-content-item text-base md:text-lg text-gray-300 leading-relaxed font-light">
+              I&apos;m <span className="text-white font-semibold">Baldyas Satrio Albani</span>, a creative designer based in Jakarta.
+              Graduated from <span className="text-white font-medium">SMK Budhiwarman 1</span> (Visual Communication Design) and previously studied at <span className="text-white font-medium">Politeknik Negeri Media Kreatif</span>.
+              My expertise bridges graphic design, corporate editorial print, UI/UX apps, motion graphics, and studio commercial photography.
+            </p>
+
+            {/* Career Timeline Steps */}
+            <div className="about-content-item space-y-4">
+              <h3 className="text-xs font-mono uppercase tracking-widest text-gray-400 mb-4">Career Milestones</h3>
+              <div className="space-y-4">
+                <div className="p-4 rounded-2xl glass border border-emerald-500/30 flex items-start justify-between">
+                  <div>
+                    <span className="text-xs font-mono text-emerald-400">FEB 2025 — PRESENT</span>
+                    <h4 className="text-base font-bold text-white">Graphic Designer</h4>
+                    <p className="text-xs text-gray-400">Anomali Digital • Full-time</p>
                   </div>
-                ))}
+                  <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-mono">ACTIVE</span>
+                </div>
+
+                <div className="p-4 rounded-2xl glass border border-white/10 flex items-start justify-between">
+                  <div>
+                    <span className="text-xs font-mono text-gray-400">2024</span>
+                    <h4 className="text-base font-bold text-white">Photography Student (1 Semester)</h4>
+                    <p className="text-xs text-gray-400">Politeknik Negeri Media Kreatif (Polmed)</p>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-2xl glass border border-white/10 flex items-start justify-between">
+                  <div>
+                    <span className="text-xs font-mono text-gray-400">2022 — 2025</span>
+                    <h4 className="text-base font-bold text-white">Visual Communication Design (DKV)</h4>
+                    <p className="text-xs text-gray-400">SMK Budhiwarman 1 Jakarta</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ═══ CONTACT ═══ */}
-      <section id="contact" className="relative py-24 md:py-40">
-        {/* Background */}
-        <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(180deg, transparent, rgba(16,185,129,0.03), transparent)' }} />
+      {/* ═══════════════════════════════════════
+          SECTION 7 — CONTACT & QUICK LINKS
+          ═══════════════════════════════════════ */}
+      <section id="contact" className="relative z-10 py-32 md:py-44 px-6 md:px-12 border-t border-white/10">
+        <div className="max-w-4xl mx-auto text-center">
+          <span className="px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs uppercase tracking-widest inline-block mb-6">
+            Let&apos;s Build Together
+          </span>
 
-        <div className="contact-content max-w-3xl mx-auto px-6 md:px-12 text-center relative z-10">
-          <p className="text-emerald-600 text-xs font-mono tracking-[0.4em] uppercase mb-4">Get in Touch</p>
-          <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6" style={{ color: '#1a1a2e' }}>
-            Let&apos;s create something <span className="text-gradient-green">extraordinary</span>.
+          <h2 className="text-4xl md:text-7xl font-black text-white leading-tight mb-8">
+            READY TO START A <br />
+            <span className="text-gradient-emerald">PROJECT?</span>
           </h2>
-          <p className="text-gray-500 text-base md:text-lg mb-10 max-w-xl mx-auto">
-            Have a project in mind? I&apos;d love to hear about it. Let&apos;s turn your vision into reality.
+
+          <p className="text-base md:text-xl text-gray-400 max-w-xl mx-auto font-light mb-12">
+            Whether you need a brand redesign, UI/UX product architecture, or commercial photography, let&apos;s make it extraordinary.
           </p>
 
-          {/* Email */}
-          <a
-            href="mailto:baldyas.albani@gmail.com"
-            className="inline-block text-lg md:text-xl font-mono text-gray-400 hover:text-emerald-600 transition-colors duration-300 mb-10 border-b border-gray-200 hover:border-emerald-300 pb-1"
-            onMouseEnter={emailScramble.scramble}
-            onMouseLeave={emailScramble.reset}
-          >
-            {emailScramble.display}
-          </a>
-
-          {/* CTA */}
+          {/* Interactive Scramble Email Copy */}
           <div className="mb-12">
-            <a href="mailto:baldyas.albani@gmail.com" className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-200 hover:gap-4">
-              Start a Project
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            <button
+              onClick={handleCopyEmail}
+              onMouseEnter={emailScramble.scramble}
+              onMouseLeave={emailScramble.reset}
+              className="group inline-flex items-center gap-3 px-8 py-5 rounded-full glass border border-emerald-500/40 text-lg md:text-2xl font-mono text-white hover:bg-emerald-500 hover:text-black hover:border-emerald-400 transition-all duration-300 shadow-2xl"
+            >
+              <span>{emailScramble.display}</span>
+              <svg className="w-5 h-5 transition-transform group-hover:scale-125" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
               </svg>
-            </a>
+            </button>
           </div>
 
-          {/* Social */}
-          <div className="flex justify-center gap-8">
+          {/* Social Links */}
+          <div className="flex flex-wrap justify-center gap-6 md:gap-10">
             {[
               { name: 'Instagram', href: 'https://instagram.com/baldyas.sa' },
               { name: 'LinkedIn', href: 'https://linkedin.com/in/baldyas-satrio' },
               { name: 'GitHub', href: 'https://github.com/SHOTCAN' },
-            ].map((link) => (
-              <a key={link.name} href={link.href} target="_blank" rel="noopener noreferrer"
-                className="text-xs uppercase tracking-[0.3em] text-gray-400 hover:text-emerald-600 transition-colors duration-300">
-                {link.name}
+            ].map((s) => (
+              <a
+                key={s.name}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                onMouseEnter={() => playSynthSound(700, 'sine', 0.04)}
+                className="text-xs font-mono uppercase tracking-widest text-gray-400 hover:text-emerald-400 transition-colors"
+              >
+                {s.name} ↗
               </a>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ═══ FOOTER ═══ */}
-      <footer className="py-8 border-t" style={{ borderColor: 'rgba(0,0,0,0.04)' }}>
-        <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-4">
-          <span className="text-lg font-bold" style={{ color: '#1a1a2e' }}>BSA<span className="text-gradient-green">.</span></span>
-          <p className="text-xs text-gray-400">© {new Date().getFullYear()} Baldyas Satrio Albani. Crafted with passion.</p>
+      {/* ═══════════════════════════════════════
+          FULL-SCREEN PROJECT LIGHTBOX MODAL
+          ═══════════════════════════════════════ */}
+      {selectedProject && (
+        <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 md:p-8 bg-black/90 backdrop-blur-2xl animate-fadeIn">
+          <div className="relative w-full max-w-5xl max-h-[90vh] glass-card rounded-3xl border border-white/20 overflow-y-auto p-6 md:p-10 text-white shadow-2xl">
+            {/* Close Button */}
+            <button
+              onClick={() => {
+                playSynthSound(300, 'sine', 0.1);
+                setSelectedProject(null);
+              }}
+              className="absolute top-6 right-6 z-50 p-3 rounded-full glass hover:bg-white/20 text-gray-300 hover:text-white transition-colors"
+              aria-label="Close modal"
+            >
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            {/* Gallery Image Main View */}
+            <div className="relative aspect-[16/10] w-full rounded-2xl overflow-hidden bg-black/60 mb-6">
+              <Image
+                src={selectedProject.gallery[activeGalleryIndex] || selectedProject.image}
+                alt={selectedProject.title}
+                fill
+                className="object-contain"
+                sizes="(max-width: 1200px) 100vw, 80vw"
+                priority
+              />
+            </div>
+
+            {/* Gallery Thumbnail Selector */}
+            {selectedProject.gallery.length > 1 && (
+              <div className="flex gap-3 overflow-x-auto pb-4 mb-6 scrollbar-hide">
+                {selectedProject.gallery.map((img, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => {
+                      playSynthSound(600 + idx * 50, 'sine', 0.04);
+                      setActiveGalleryIndex(idx);
+                    }}
+                    className={`relative w-20 h-16 rounded-xl overflow-hidden border-2 transition-all flex-shrink-0 ${
+                      activeGalleryIndex === idx ? 'border-emerald-400 scale-105' : 'border-transparent opacity-50 hover:opacity-100'
+                    }`}
+                  >
+                    <Image src={img} alt={`Thumb ${idx}`} fill className="object-cover" sizes="80px" />
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Project Details Info */}
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 border-t border-white/10 pt-6">
+              <div className="md:col-span-8">
+                <span
+                  className="px-3.5 py-1 rounded-full text-xs font-mono font-semibold uppercase tracking-wider inline-block mb-3"
+                  style={{ backgroundColor: `${selectedProject.accent}33`, color: selectedProject.accent }}
+                >
+                  {selectedProject.category} • {selectedProject.year}
+                </span>
+                <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{selectedProject.title}</h2>
+                <p className="text-gray-300 text-sm md:text-base leading-relaxed font-light">
+                  {selectedProject.description}
+                </p>
+              </div>
+
+              <div className="md:col-span-4 space-y-4 text-xs font-mono border-l border-white/10 pl-0 md:pl-6">
+                <div>
+                  <span className="text-gray-500 uppercase block">Client</span>
+                  <span className="text-white font-medium">{selectedProject.client}</span>
+                </div>
+                <div>
+                  <span className="text-gray-500 uppercase block">Role</span>
+                  <span className="text-white font-medium">{selectedProject.role}</span>
+                </div>
+                <div>
+                  <span className="text-gray-500 uppercase block mb-1">Tools & Tech</span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {selectedProject.tools.map((t) => (
+                      <span key={t} className="px-2 py-0.5 rounded bg-white/10 text-emerald-300">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </footer>
+      )}
     </div>
   );
 }

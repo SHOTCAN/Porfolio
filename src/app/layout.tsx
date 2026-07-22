@@ -67,6 +67,9 @@ export const viewport: Viewport = {
 
 // ─── Root Layout ───
 
+import CustomCursor from '@/components/CustomCursor';
+import Navbar from '@/components/Navbar';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -78,8 +81,10 @@ export default function RootLayout({
       className={`${spaceGrotesk.variable} ${inter.variable}`}
       suppressHydrationWarning
     >
-      <body className="min-h-screen antialiased" style={{ background: '#fafaf8', color: '#1a1a2e' }}>
+      <body className="min-h-screen antialiased bg-[#0a0a0f] text-[#f0f0f5]">
         <SmoothScroll>
+          <CustomCursor />
+          <Navbar />
           <main>{children}</main>
         </SmoothScroll>
       </body>
