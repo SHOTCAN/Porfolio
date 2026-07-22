@@ -1,124 +1,103 @@
 'use client';
 
 import { useEffect, useRef, useState, useCallback } from 'react';
-import dynamic from 'next/dynamic';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Image from 'next/image';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const Scene3D = dynamic(() => import('@/components/Scene3D'), { ssr: false });
-
 /* ═══════════════════════════════════════════
-   PROJECT DATA — Real work + Concepts
+   DATA
    ═══════════════════════════════════════════ */
 const PROJECTS = [
   {
     id: 'fotobooth',
-    title: 'FOTOBOOTH PRO',
+    title: 'Fotobooth Pro',
     category: 'Software Design',
     year: '2025',
     image: '/images/projects/fotobooth-pro.png',
     gallery: ['/images/projects/fotobooth-app.webp', '/images/projects/fotobooth-event.webp', '/images/projects/fotobooth-output.webp'],
-    description: 'Professional event photobooth system with camera integration, template design, QR sharing & cloud upload.',
-    color: '#a78bfa',
+    description: 'Professional event photobooth system with camera integration, template design, QR sharing & cloud upload. Built with Python & PyQt6.',
+    accent: '#10b981',
   },
   {
     id: 'compro',
-    title: 'BNC EXPRESS',
+    title: 'BNC Express',
     category: 'Company Profile',
     year: '2024',
     image: '/images/projects/compro-cover.webp',
-    gallery: ['/images/projects/compro-about.webp', '/images/projects/compro-service.webp', '/images/projects/compro-armada.webp', '/images/projects/compro-keunggulan.webp'],
-    description: 'Complete 16-page company profile for a national logistics company. Print-ready editorial design.',
-    color: '#3b82f6',
+    gallery: ['/images/projects/compro-about.webp', '/images/projects/compro-service.webp', '/images/projects/compro-armada.webp', '/images/projects/compro-visi-misi.webp', '/images/projects/compro-keunggulan.webp'],
+    description: 'Complete 16-page company profile for a national logistics company. Professional print-ready editorial design.',
+    accent: '#3b82f6',
   },
   {
     id: 'branding',
-    title: 'BRAND SYSTEMS',
+    title: 'Brand Systems',
     category: 'Logo & Identity',
     year: '2024–25',
     image: '/images/projects/logo-crispy-krinj.webp',
-    gallery: ['/images/projects/logo-bnc-express.webp', '/images/projects/logo-expo-express.webp', '/images/projects/logo-cahaya-kontruksi.webp', '/images/projects/logo-fashion-france.webp', '/images/projects/logo-jewalen.webp', '/images/projects/logo-dkv.webp'],
-    description: 'Complete brand identity systems for multiple clients — from restaurants to construction firms.',
-    color: '#f59e0b',
+    gallery: ['/images/projects/logo-bnc-express.webp', '/images/projects/logo-expo-express.webp', '/images/projects/logo-cahaya-kontruksi.webp', '/images/projects/logo-fashion-france.webp', '/images/projects/logo-jewalen.webp', '/images/projects/logo-dkv.webp', '/images/projects/logo-pameran-perdana.webp'],
+    description: 'Complete brand identity systems for multiple clients — from restaurants to construction firms, fashion to logistics.',
+    accent: '#f59e0b',
   },
   {
     id: 'aura',
-    title: 'AURA APP',
+    title: 'Aura App',
     category: 'UI/UX Design',
     year: '2025',
     image: '/images/projects/aura-login.webp',
     gallery: ['/images/projects/aura-home.webp', '/images/projects/aura-detail.webp', '/images/projects/aura-profile.webp'],
-    description: 'Modern marketplace mobile app — login, home, detail & profile screens with glassmorphism UI.',
-    color: '#14b8a6',
+    description: 'Modern marketplace mobile app with login, home, detail & profile screens featuring glassmorphism UI.',
+    accent: '#8b5cf6',
   },
   {
     id: 'food',
-    title: 'FOOD PHOTOGRAPHY',
-    category: 'Photography & Poster',
+    title: 'Food & Poster',
+    category: 'Photography & Design',
     year: '2024',
     image: '/images/projects/food-photo-1.webp',
-    gallery: ['/images/projects/food-photo-2.webp', '/images/projects/food-photo-3.webp', '/images/projects/poster-bakso.webp', '/images/projects/poster-esteh.webp', '/images/projects/poster-sistagor.webp'],
+    gallery: ['/images/projects/food-photo-2.webp', '/images/projects/food-photo-3.webp', '/images/projects/poster-bakso.webp', '/images/projects/poster-esteh.webp', '/images/projects/poster-sistagor.webp', '/images/projects/poster-animar.webp'],
     description: 'Food photography and poster design for local F&B brands — from product shots to promotional material.',
-    color: '#ef4444',
-  },
-  {
-    id: 'stickers',
-    title: 'STICKER ART',
-    category: 'Illustration & Print',
-    year: '2024',
-    image: '/images/projects/stiker-marvel.webp',
-    gallery: ['/images/projects/stiker-deadpool.webp', '/images/projects/stiker-frozen.webp', '/images/projects/stiker-spongebob.webp', '/images/projects/pin-design.webp', '/images/projects/mug-design.webp'],
-    description: 'Character sticker collections, pin badges & merchandise design for print production.',
-    color: '#ec4899',
+    accent: '#ef4444',
   },
   {
     id: 'editorial',
-    title: 'EDITORIAL DESIGN',
+    title: 'Editorial Works',
     category: 'Print & Layout',
     year: '2024',
     image: '/images/projects/majalah-cover.webp',
-    gallery: ['/images/projects/book-cover-tangga.webp', '/images/projects/book-cover-back.webp', '/images/projects/brosur-crispy.webp', '/images/projects/menu-trifold.webp', '/images/projects/id-card-menu.webp'],
-    description: 'Magazine covers, book layouts, brochures, menus & ID card designs for various clients.',
-    color: '#8b5cf6',
+    gallery: ['/images/projects/book-cover-tangga.webp', '/images/projects/brosur-crispy.webp', '/images/projects/menu-trifold.webp', '/images/projects/id-card-menu.webp', '/images/projects/mockup-gelas.webp', '/images/projects/mug-design.webp'],
+    description: 'Magazine covers, book layouts, brochures, menus, packaging & merchandise mockup designs.',
+    accent: '#6366f1',
+  },
+  {
+    id: 'stickers',
+    title: 'Sticker & Merch',
+    category: 'Illustration',
+    year: '2024',
+    image: '/images/projects/stiker-marvel.webp',
+    gallery: ['/images/projects/stiker-deadpool.webp', '/images/projects/stiker-frozen.webp', '/images/projects/stiker-spongebob.webp', '/images/projects/pin-design.webp'],
+    description: 'Character sticker collections, pin badges & merchandise design for print production.',
+    accent: '#ec4899',
   },
   {
     id: 'product',
-    title: 'PRODUCT SHOTS',
-    category: 'Product Photography',
+    title: 'Product Shots',
+    category: 'Photography',
     year: '2024',
     image: '/images/projects/product-bakso-atas.webp',
-    gallery: ['/images/projects/product-bakso-45.webp', '/images/projects/product-sosis-atas.webp', '/images/projects/product-sosis-bright.webp', '/images/projects/mockup-gelas.webp'],
-    description: 'Commercial product photography with controlled lighting for F&B and merchandise brands.',
-    color: '#f97316',
+    gallery: ['/images/projects/product-bakso-45.webp', '/images/projects/product-sosis-atas.webp', '/images/projects/product-sosis-bright.webp', '/images/projects/food-product-karawaci.webp'],
+    description: 'Commercial product photography with controlled lighting for F&B brands.',
+    accent: '#f97316',
   },
 ];
 
-/* ═══════════════════════════════════════════
-   MANIFESTO WORDS
-   ═══════════════════════════════════════════ */
-const MANIFESTO = "I don't just design. I craft visual experiences that make brands unforgettable. Every pixel is intentional. Every detail tells a story. This is my universe.".split(' ');
-
-/* ═══════════════════════════════════════════
-   SKILLS
-   ═══════════════════════════════════════════ */
 const SKILLS = [
-  { name: 'Photoshop', size: 'text-4xl md:text-6xl', weight: 'font-black' },
-  { name: 'Illustrator', size: 'text-2xl md:text-4xl', weight: 'font-light' },
-  { name: 'Figma', size: 'text-5xl md:text-7xl', weight: 'font-bold' },
-  { name: 'After Effects', size: 'text-xl md:text-3xl', weight: 'font-normal' },
-  { name: 'Premiere Pro', size: 'text-lg md:text-2xl', weight: 'font-light' },
-  { name: 'Photography', size: 'text-3xl md:text-5xl', weight: 'font-semibold' },
-  { name: 'Branding', size: 'text-4xl md:text-6xl', weight: 'font-bold' },
-  { name: 'UI/UX', size: 'text-5xl md:text-8xl', weight: 'font-black' },
-  { name: 'Typography', size: 'text-2xl md:text-4xl', weight: 'font-medium' },
-  { name: 'Motion Design', size: 'text-3xl md:text-5xl', weight: 'font-semibold' },
-  { name: 'Python', size: 'text-xl md:text-2xl', weight: 'font-mono' },
-  { name: 'Lightroom', size: 'text-2xl md:text-3xl', weight: 'font-light' },
-  { name: 'InDesign', size: 'text-xl md:text-3xl', weight: 'font-normal' },
-  { name: 'DaVinci', size: 'text-lg md:text-2xl', weight: 'font-light' },
+  'Photoshop', 'Illustrator', 'Figma', 'After Effects',
+  'Premiere Pro', 'Lightroom', 'InDesign', 'Photography',
+  'Branding', 'UI/UX', 'Typography', 'Motion Design',
+  'Python', 'DaVinci Resolve',
 ];
 
 /* ═══════════════════════════════════════════
@@ -127,346 +106,210 @@ const SKILLS = [
 function useTextScramble(text: string) {
   const [display, setDisplay] = useState(text);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const chars = '!<>-_\\/[]{}—=+*^?#________';
-
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&';
   const scramble = useCallback(() => {
     let iteration = 0;
     if (intervalRef.current) clearInterval(intervalRef.current);
     intervalRef.current = setInterval(() => {
-      setDisplay(
-        text.split('').map((char, index) => {
-          if (index < iteration) return text[index];
-          return chars[Math.floor(Math.random() * chars.length)];
-        }).join('')
-      );
-      iteration += 1 / 3;
+      setDisplay(text.split('').map((char, idx) => {
+        if (idx < iteration) return text[idx];
+        return chars[Math.floor(Math.random() * chars.length)];
+      }).join(''));
+      iteration += 0.5;
       if (iteration >= text.length && intervalRef.current) {
         clearInterval(intervalRef.current);
         setDisplay(text);
       }
-    }, 30);
+    }, 25);
   }, [text, chars]);
-
   const reset = useCallback(() => setDisplay(text), [text]);
   return { display, scramble, reset };
 }
 
 /* ═══════════════════════════════════════════
-   HORIZONTAL GALLERY COMPONENT
-   ═══════════════════════════════════════════ */
-function ProjectGallery({ images, color }: { images: string[]; color: string }) {
-  return (
-    <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory">
-      {images.map((img, i) => (
-        <div
-          key={i}
-          className="flex-shrink-0 w-[280px] md:w-[400px] aspect-[4/3] relative rounded-xl overflow-hidden snap-center group"
-          style={{ boxShadow: `0 0 30px ${color}20` }}
-        >
-          <Image
-            src={img}
-            alt={`Gallery ${i + 1}`}
-            fill
-            className="object-cover transition-transform duration-700 group-hover:scale-110"
-            sizes="400px"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-        </div>
-      ))}
-    </div>
-  );
-}
-
-/* ═══════════════════════════════════════════
-   MAIN PAGE COMPONENT
+   MAIN PAGE
    ═══════════════════════════════════════════ */
 export default function Home() {
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [activeProject, setActiveProject] = useState<number | null>(null);
   const [expandedProject, setExpandedProject] = useState<string | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [hoveredProject, setHoveredProject] = useState<number | null>(null);
   const heroRef = useRef<HTMLElement>(null);
   const manifestoRef = useRef<HTMLElement>(null);
   const worksRef = useRef<HTMLElement>(null);
   const aboutRef = useRef<HTMLElement>(null);
-  const skillsRef = useRef<HTMLElement>(null);
-  const contactRef = useRef<HTMLElement>(null);
   const emailScramble = useTextScramble('baldyas.albani@gmail.com');
 
-  // ─── Scroll Progress ───
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      setScrollProgress(docHeight > 0 ? scrollTop / docHeight : 0);
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // ─── GSAP Animations ───
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Hero text reveal — character split
-      const heroChars = heroRef.current?.querySelectorAll('.hero-char');
-      if (heroChars) {
-        gsap.from(heroChars, {
-          y: 120,
-          rotateX: -90,
-          opacity: 0,
-          stagger: 0.04,
-          duration: 1.2,
-          ease: 'power4.out',
-          delay: 0.3,
-        });
-      }
+      // ── Hero entrance ──
+      gsap.from('.hero-title', { y: 80, opacity: 0, duration: 1.2, ease: 'power4.out', delay: 0.2 });
+      gsap.from('.hero-subtitle', { y: 40, opacity: 0, duration: 1, ease: 'power3.out', delay: 0.6 });
+      gsap.from('.hero-badge', { y: 30, opacity: 0, duration: 0.8, ease: 'power3.out', delay: 0.9 });
+      gsap.from('.hero-cta', { y: 20, opacity: 0, duration: 0.8, ease: 'power3.out', delay: 1.1 });
+      gsap.from('.hero-visual', { scale: 0.8, opacity: 0, duration: 1.5, ease: 'power3.out', delay: 0.4 });
+      gsap.from('.hero-float-1', { x: -60, opacity: 0, duration: 1.2, ease: 'power3.out', delay: 0.8 });
+      gsap.from('.hero-float-2', { x: 60, y: 40, opacity: 0, duration: 1.2, ease: 'power3.out', delay: 1.0 });
+      gsap.from('.hero-float-3', { y: -50, opacity: 0, duration: 1.2, ease: 'power3.out', delay: 1.2 });
+      gsap.from('.scroll-cue', { opacity: 0, y: 10, duration: 1, delay: 2, ease: 'power2.out' });
 
-      // Hero subtitle
-      gsap.from('.hero-sub', {
-        y: 40,
-        opacity: 0,
-        duration: 1,
-        ease: 'power3.out',
-        delay: 1.2,
-      });
-
-      // Hero scroll indicator
-      gsap.from('.scroll-indicator', {
-        opacity: 0,
-        y: 20,
-        duration: 1,
-        delay: 2,
-        ease: 'power2.out',
-      });
-
-      // Hero parallax out
+      // ── Hero parallax out ──
       if (heroRef.current) {
         gsap.to(heroRef.current, {
-          scrollTrigger: {
-            trigger: heroRef.current,
-            start: 'top top',
-            end: 'bottom top',
-            scrub: 1,
-          },
-          y: -200,
-          opacity: 0,
-          scale: 0.9,
+          scrollTrigger: { trigger: heroRef.current, start: 'top top', end: 'bottom top', scrub: 1 },
+          y: -100, opacity: 0,
         });
       }
 
-      // Manifesto word-by-word reveal
-      const manifestoWords = manifestoRef.current?.querySelectorAll('.manifesto-word');
-      if (manifestoWords) {
-        manifestoWords.forEach((word, i) => {
-          gsap.to(word, {
-            scrollTrigger: {
-              trigger: manifestoRef.current,
-              start: `top+=${i * 40} center`,
-              end: `top+=${i * 40 + 80} center`,
-              scrub: 0.5,
-            },
-            opacity: 1,
-            y: 0,
-            filter: 'blur(0px)',
+      // ── Manifesto word reveal ──
+      const mWords = manifestoRef.current?.querySelectorAll('.m-word');
+      if (mWords) {
+        mWords.forEach((w, i) => {
+          gsap.to(w, {
+            scrollTrigger: { trigger: manifestoRef.current, start: `top+=${i * 35} center`, end: `top+=${i * 35 + 60} center`, scrub: 0.5 },
+            opacity: 1, y: 0, color: '#1a1a2e',
           });
         });
       }
 
-      // Works section — stagger entrance
-      const workRows = worksRef.current?.querySelectorAll('.work-row');
-      if (workRows) {
-        gsap.from(workRows, {
-          scrollTrigger: {
-            trigger: worksRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none reverse',
-          },
-          x: 100,
-          opacity: 0,
-          stagger: 0.12,
-          duration: 0.8,
-          ease: 'power3.out',
+      // ── Works stagger ──
+      const rows = worksRef.current?.querySelectorAll('.work-item');
+      if (rows) {
+        gsap.from(rows, {
+          scrollTrigger: { trigger: worksRef.current, start: 'top 75%', toggleActions: 'play none none reverse' },
+          y: 60, opacity: 0, stagger: 0.1, duration: 0.7, ease: 'power3.out',
         });
       }
 
-      // About section
-      gsap.from('.about-image', {
-        scrollTrigger: {
-          trigger: aboutRef.current,
-          start: 'top 70%',
-          toggleActions: 'play none none reverse',
-        },
-        clipPath: 'circle(0% at 50% 50%)',
-        duration: 1.5,
-        ease: 'power3.inOut',
+      // ── About ──
+      gsap.from('.about-img', {
+        scrollTrigger: { trigger: aboutRef.current, start: 'top 70%', toggleActions: 'play none none reverse' },
+        scale: 0.85, opacity: 0, duration: 1.2, ease: 'power3.out',
+      });
+      gsap.from('.about-text > *', {
+        scrollTrigger: { trigger: aboutRef.current, start: 'top 65%', toggleActions: 'play none none reverse' },
+        y: 40, opacity: 0, stagger: 0.1, duration: 0.8, ease: 'power3.out',
       });
 
-      gsap.from('.about-text', {
-        scrollTrigger: {
-          trigger: aboutRef.current,
-          start: 'top 60%',
-          toggleActions: 'play none none reverse',
-        },
-        y: 60,
-        opacity: 0,
-        duration: 1,
-        delay: 0.3,
-        ease: 'power3.out',
+      // ── Skills marquee scroll ──
+      gsap.from('.skills-section', {
+        scrollTrigger: { trigger: '.skills-section', start: 'top 80%', toggleActions: 'play none none reverse' },
+        y: 40, opacity: 0, duration: 1, ease: 'power3.out',
       });
 
-      // Stats counter animation
-      const stats = aboutRef.current?.querySelectorAll('.stat-number');
-      if (stats) {
-        stats.forEach((stat) => {
-          const target = parseInt(stat.getAttribute('data-value') || '0');
-          gsap.from(stat, {
-            scrollTrigger: {
-              trigger: stat,
-              start: 'top 85%',
-              toggleActions: 'play none none reverse',
-            },
-            textContent: 0,
-            duration: 2,
-            ease: 'power2.out',
-            snap: { textContent: 1 },
-            onUpdate: function () {
-              const val = Math.round(gsap.getProperty(stat, 'textContent') as number);
-              stat.textContent = val + '+';
-            },
-          });
-        });
-      }
-
-      // Skills float-in
-      const skillWords = skillsRef.current?.querySelectorAll('.skill-word');
-      if (skillWords) {
-        skillWords.forEach((word, i) => {
-          gsap.from(word, {
-            scrollTrigger: {
-              trigger: skillsRef.current,
-              start: 'top 80%',
-              toggleActions: 'play none none reverse',
-            },
-            y: gsap.utils.random(60, 150),
-            x: gsap.utils.random(-100, 100),
-            opacity: 0,
-            rotation: gsap.utils.random(-15, 15),
-            duration: 1.2,
-            delay: i * 0.08,
-            ease: 'elastic.out(1, 0.5)',
-          });
-        });
-      }
-
-      // Contact entrance
-      gsap.from('.contact-title', {
-        scrollTrigger: {
-          trigger: contactRef.current,
-          start: 'top 75%',
-          toggleActions: 'play none none reverse',
-        },
-        y: 100,
-        opacity: 0,
-        duration: 1.2,
-        ease: 'power3.out',
+      // ── Contact ──
+      gsap.from('.contact-content > *', {
+        scrollTrigger: { trigger: '.contact-content', start: 'top 75%', toggleActions: 'play none none reverse' },
+        y: 50, opacity: 0, stagger: 0.12, duration: 0.8, ease: 'power3.out',
       });
     });
-
     return () => ctx.revert();
   }, []);
 
   return (
-    <div ref={containerRef} className="relative">
-      {/* ─── 3D Background Canvas ─── */}
-      <div className="fixed inset-0 z-0">
-        <Scene3D scrollProgress={scrollProgress} />
-      </div>
-
-      {/* ═══════════════════════════════════════
-          SECTION 1 — HERO
-          ═══════════════════════════════════════ */}
-      <section ref={heroRef} className="relative z-10 h-screen flex flex-col items-center justify-center px-4 overflow-hidden">
-        {/* Main title */}
-        <h1 className="text-center select-none" style={{ mixBlendMode: 'difference' }}>
-          <span className="block overflow-hidden">
-            <span className="flex justify-center">
-              {'BALDYAS'.split('').map((char, i) => (
-                <span
-                  key={`a-${i}`}
-                  className="hero-char inline-block text-white"
-                  style={{
-                    fontSize: 'clamp(3rem, 15vw, 12rem)',
-                    letterSpacing: 'clamp(0.2rem, 2vw, 1.5rem)',
-                    fontWeight: 900,
-                    lineHeight: 1,
-                  }}
-                >
-                  {char}
-                </span>
-              ))}
-            </span>
+    <div className="relative">
+      {/* ═══ NAVBAR ═══ */}
+      <nav className="fixed top-0 left-0 right-0 z-50 px-6 md:px-12 py-4">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <span className="text-xl font-bold tracking-tight" style={{ color: '#1a1a2e' }}>
+            BSA<span className="text-gradient-green">.</span>
           </span>
-          <span className="block overflow-hidden mt-2 md:mt-4">
-            <span className="flex justify-center">
-              {'SATRIO ALBANI'.split('').map((char, i) => (
-                <span
-                  key={`b-${i}`}
-                  className="hero-char inline-block bg-gradient-to-r from-indigo-400 via-violet-400 to-cyan-400 bg-clip-text text-transparent"
-                  style={{
-                    fontSize: 'clamp(1.5rem, 6vw, 5rem)',
-                    letterSpacing: 'clamp(0.1rem, 0.8vw, 0.6rem)',
-                    fontWeight: 700,
-                    lineHeight: 1.2,
-                  }}
-                >
-                  {char === ' ' ? '\u00A0' : char}
-                </span>
-              ))}
-            </span>
-          </span>
-        </h1>
+          <div className="hidden md:flex items-center gap-8">
+            {['Works', 'About', 'Contact'].map((l) => (
+              <a key={l} href={`#${l.toLowerCase()}`} className="text-sm text-gray-500 hover:text-gray-900 transition-colors duration-300 tracking-wide">
+                {l}
+              </a>
+            ))}
+          </div>
+          <a href="#contact" className="text-xs px-5 py-2 rounded-full border border-gray-200 text-gray-600 hover:bg-emerald-50 hover:border-emerald-200 hover:text-emerald-700 transition-all duration-300">
+            Let&apos;s Talk
+          </a>
+        </div>
+      </nav>
 
-        <div className="hero-sub mt-8 md:mt-12 text-center">
-          <p className="text-[var(--text-secondary)] text-sm md:text-base uppercase tracking-[0.4em] mb-4">
-            Creative Designer & Digital Craftsman
-          </p>
-          <div className="flex items-center justify-center gap-2">
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
-            </span>
-            <span className="text-[var(--text-secondary)] text-xs md:text-sm tracking-wider">
-              Currently at <span className="text-white font-medium">Anomali Digital</span>
-            </span>
+      {/* ═══ HERO ═══ */}
+      <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden pt-20">
+        {/* Background gradient blobs */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute top-20 right-[10%] w-[500px] h-[500px] rounded-full bg-emerald-100/40 blur-[100px] animate-pulse-soft" />
+          <div className="absolute bottom-20 left-[5%] w-[400px] h-[400px] rounded-full bg-teal-50/60 blur-[80px] animate-pulse-soft" style={{ animationDelay: '2s' }} />
+          <div className="absolute top-[40%] left-[40%] w-[300px] h-[300px] rounded-full bg-gray-100/50 blur-[60px] animate-pulse-soft" style={{ animationDelay: '4s' }} />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-6 md:px-12 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+          {/* Left — Text */}
+          <div>
+            <div className="hero-badge inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-50 border border-emerald-100 mb-6">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+              </span>
+              <span className="text-xs text-emerald-700 font-medium">Available for projects</span>
+            </div>
+
+            <h1 className="hero-title text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.05] tracking-tight mb-6" style={{ color: '#1a1a2e' }}>
+              Creative<br />
+              Designer &<br />
+              <span className="text-gradient-green">Digital Craftsman</span>
+            </h1>
+
+            <p className="hero-subtitle text-base md:text-lg text-gray-500 leading-relaxed max-w-md mb-8">
+              Turning ideas into visual experiences that connect, engage, and inspire.
+              Currently crafting at <span className="text-gray-800 font-medium">Anomali Digital</span>.
+            </p>
+
+            <div className="hero-cta flex items-center gap-4">
+              <a href="#works" className="px-7 py-3.5 rounded-full bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-200">
+                View Works
+              </a>
+              <a href="#contact" className="px-7 py-3.5 rounded-full border border-gray-200 text-sm text-gray-600 hover:border-emerald-200 hover:bg-emerald-50 transition-all duration-300">
+                Get in Touch
+              </a>
+            </div>
+          </div>
+
+          {/* Right — Floating visuals */}
+          <div className="relative h-[400px] md:h-[500px] lg:h-[550px]">
+            {/* Main hero image */}
+            <div className="hero-visual absolute inset-0 flex items-center justify-center">
+              <div className="relative w-[280px] h-[280px] md:w-[380px] md:h-[380px] rounded-3xl overflow-hidden shadow-xl" style={{ boxShadow: '0 20px 60px rgba(16,185,129,0.15)' }}>
+                <Image src="/images/hero-abstract.png" alt="Creative Design" fill className="object-cover" sizes="400px" priority />
+              </div>
+            </div>
+
+            {/* Floating project previews */}
+            <div className="hero-float-1 absolute top-8 left-0 md:left-[-20px] w-[120px] h-[90px] md:w-[160px] md:h-[120px] rounded-2xl overflow-hidden shadow-lg animate-float glass-card">
+              <Image src="/images/projects/compro-cover.webp" alt="Company Profile" fill className="object-cover" sizes="160px" />
+            </div>
+
+            <div className="hero-float-2 absolute bottom-12 right-0 md:right-[-10px] w-[130px] h-[100px] md:w-[170px] md:h-[130px] rounded-2xl overflow-hidden shadow-lg animate-float-delayed glass-card">
+              <Image src="/images/projects/logo-crispy-krinj.webp" alt="Brand Design" fill className="object-cover" sizes="170px" />
+            </div>
+
+            <div className="hero-float-3 absolute top-4 right-8 md:right-4 w-[100px] h-[75px] md:w-[140px] md:h-[105px] rounded-2xl overflow-hidden shadow-lg animate-float-slow glass-card">
+              <Image src="/images/projects/aura-login.webp" alt="UI Design" fill className="object-cover" sizes="140px" />
+            </div>
+
+            {/* Decorative shapes */}
+            <div className="absolute bottom-[30%] left-[15%] w-4 h-4 rounded-full bg-emerald-300/50 animate-float" />
+            <div className="absolute top-[20%] right-[25%] w-3 h-3 rounded-full bg-gray-300/50 animate-float-delayed" />
+            <div className="absolute top-[60%] right-[15%] w-6 h-6 rounded-full border border-emerald-200/50 animate-float-slow" />
           </div>
         </div>
 
         {/* Scroll indicator */}
-        <div className="scroll-indicator absolute bottom-8 md:bottom-12 flex flex-col items-center gap-3">
-          <span className="text-[var(--text-secondary)] text-[10px] uppercase tracking-[0.5em]">Scroll to explore</span>
-          <div className="w-[1px] h-12 bg-gradient-to-b from-white/40 to-transparent relative overflow-hidden">
-            <div className="absolute w-full h-4 bg-white/80 animate-[scrollLine_2s_ease-in-out_infinite]" />
+        <div className="scroll-cue absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+          <span className="text-[10px] uppercase tracking-[0.4em] text-gray-400">Scroll</span>
+          <div className="w-[1px] h-10 bg-gradient-to-b from-gray-300 to-transparent relative overflow-hidden">
+            <div className="absolute w-full h-3 bg-emerald-400/70 animate-[scrollLine_2s_ease-in-out_infinite]" />
           </div>
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════
-          SECTION 2 — MANIFESTO
-          ═══════════════════════════════════════ */}
-      <section ref={manifestoRef} className="relative z-10 min-h-[150vh] flex items-center px-6 md:px-16 lg:px-24">
-        <div className="max-w-5xl mx-auto">
-          <p className="text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-snug md:leading-tight tracking-tight">
-            {MANIFESTO.map((word, i) => (
-              <span
-                key={i}
-                className="manifesto-word inline-block mr-[0.3em] opacity-[0.08] translate-y-2"
-                style={{
-                  filter: 'blur(4px)',
-                  transition: 'text-shadow 0.3s',
-                  textShadow: 'none',
-                  color: '#fff',
-                }}
-              >
+      {/* ═══ MANIFESTO ═══ */}
+      <section ref={manifestoRef} className="relative min-h-[120vh] flex items-center px-6 md:px-16 py-32">
+        <div className="max-w-4xl mx-auto">
+          <p className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold leading-relaxed md:leading-relaxed">
+            {"I don't just design. I craft visual experiences that make brands unforgettable. Every pixel is intentional. Every detail tells a story.".split(' ').map((word, i) => (
+              <span key={i} className="m-word inline-block mr-[0.3em] opacity-[0.12] translate-y-1" style={{ color: '#c0c0c8' }}>
                 {word}
               </span>
             ))}
@@ -474,183 +317,145 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════
-          SECTION 3 — SELECTED WORKS
-          ═══════════════════════════════════════ */}
-      <section ref={worksRef} id="works" className="relative z-10 py-24 md:py-40">
+      {/* ═══ WORKS ═══ */}
+      <section ref={worksRef} id="works" className="relative py-24 md:py-32">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
-          {/* Section title */}
-          <div className="mb-16 md:mb-24">
-            <p className="text-indigo-400 font-mono text-xs md:text-sm tracking-[0.5em] uppercase mb-3">Selected Works</p>
-            <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight">
-              Projects that<br />
-              <span className="bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-transparent">speak for themselves.</span>
-            </h2>
+          {/* Header */}
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-16">
+            <div>
+              <p className="text-emerald-600 text-xs font-mono tracking-[0.4em] uppercase mb-3">Selected Works</p>
+              <h2 className="text-3xl md:text-5xl font-bold tracking-tight" style={{ color: '#1a1a2e' }}>
+                Recent Projects
+              </h2>
+            </div>
+            <p className="text-sm text-gray-400 max-w-xs">Click to expand and explore the gallery for each project.</p>
           </div>
 
           {/* Project list */}
           <div className="space-y-0">
             {PROJECTS.map((project, i) => (
-              <div key={project.id} className="work-row group">
-                {/* Main row */}
+              <div key={project.id} className="work-item">
+                {/* Row */}
                 <div
-                  className="relative flex items-center justify-between py-6 md:py-8 border-b border-white/[0.06] cursor-pointer transition-all duration-500 hover:border-white/20 hover:pl-4"
-                  onMouseEnter={() => setActiveProject(i)}
-                  onMouseLeave={() => setActiveProject(null)}
+                  className="group flex items-center gap-4 md:gap-8 py-5 md:py-7 border-b cursor-pointer transition-all duration-500 hover:pl-3"
+                  style={{ borderColor: hoveredProject === i ? project.accent + '30' : 'rgba(0,0,0,0.06)' }}
+                  onMouseEnter={() => setHoveredProject(i)}
+                  onMouseLeave={() => setHoveredProject(null)}
                   onClick={() => setExpandedProject(expandedProject === project.id ? null : project.id)}
                 >
-                  {/* Background image on hover — desktop only */}
-                  <div
-                    className="absolute inset-0 overflow-hidden rounded-lg hidden md:block"
-                    style={{
-                      clipPath: activeProject === i
-                        ? 'inset(0% 0% 0% 0%)'
-                        : 'inset(50% 50% 50% 50%)',
-                      transition: 'clip-path 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
-                    }}
-                  >
-                    <Image
-                      src={project.image}
-                      alt={project.title}
-                      fill
-                      className="object-cover opacity-20 scale-110 blur-sm"
-                      sizes="100vw"
-                    />
-                    <div className="absolute inset-0" style={{ background: `linear-gradient(90deg, ${project.color}10, transparent)` }} />
+                  <span className="text-gray-300 font-mono text-xs w-6 flex-shrink-0">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+
+                  {/* Thumbnail - visible on hover */}
+                  <div className="hidden md:block relative w-16 h-12 rounded-lg overflow-hidden flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -ml-2 group-hover:ml-0">
+                    <Image src={project.image} alt={project.title} fill className="object-cover" sizes="64px" />
                   </div>
 
-                  {/* Content */}
-                  <div className="relative z-10 flex items-center gap-4 md:gap-8 flex-1 min-w-0">
-                    <span className="text-white/20 font-mono text-xs md:text-sm w-8 flex-shrink-0">
-                      {String(i + 1).padStart(2, '0')}
-                    </span>
-                    <h3
-                      className="text-xl md:text-3xl lg:text-4xl font-bold text-white truncate transition-all duration-300"
-                      style={{
-                        textShadow: activeProject === i ? `0 0 30px ${project.color}60` : 'none',
-                      }}
-                    >
-                      {project.title}
-                    </h3>
-                  </div>
+                  <h3 className="text-xl md:text-2xl lg:text-3xl font-bold flex-1 transition-colors duration-300" style={{ color: hoveredProject === i ? project.accent : '#1a1a2e' }}>
+                    {project.title}
+                  </h3>
 
-                  <div className="relative z-10 flex items-center gap-4 md:gap-8 flex-shrink-0">
-                    <span className="hidden md:inline text-xs uppercase tracking-[0.2em] text-[var(--text-secondary)]">
-                      {project.category}
-                    </span>
-                    <span className="text-xs font-mono text-white/30">{project.year}</span>
-                    <svg
-                      className={`w-4 h-4 md:w-5 md:h-5 text-white/30 transition-transform duration-300 ${expandedProject === project.id ? 'rotate-45' : ''}`}
-                      fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
-                    </svg>
-                  </div>
+                  <span className="hidden md:inline text-xs uppercase tracking-[0.15em] text-gray-400">{project.category}</span>
+                  <span className="text-xs font-mono text-gray-300">{project.year}</span>
+
+                  <svg className={`w-4 h-4 text-gray-300 transition-transform duration-300 ${expandedProject === project.id ? 'rotate-45' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
+                  </svg>
                 </div>
 
-                {/* Expanded content */}
-                <div
-                  className="overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]"
-                  style={{
-                    maxHeight: expandedProject === project.id ? '600px' : '0',
-                    opacity: expandedProject === project.id ? 1 : 0,
-                  }}
-                >
-                  <div className="py-8 md:py-12 pl-0 md:pl-12">
-                    <div className="flex flex-col md:flex-row gap-6 md:gap-12 mb-6">
-                      <div className="md:w-1/3">
-                        <p className="text-xs uppercase tracking-[0.2em] mb-2" style={{ color: project.color }}>
-                          {project.category}
-                        </p>
-                        <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
-                          {project.description}
-                        </p>
+                {/* Expanded gallery */}
+                <div className="overflow-hidden transition-all duration-700" style={{ maxHeight: expandedProject === project.id ? '500px' : '0', opacity: expandedProject === project.id ? 1 : 0 }}>
+                  <div className="py-8 space-y-4">
+                    <div className="flex flex-col md:flex-row gap-4 md:gap-8">
+                      <div className="md:w-1/4">
+                        <p className="text-xs font-mono uppercase tracking-wider mb-2" style={{ color: project.accent }}>{project.category}</p>
+                        <p className="text-sm text-gray-500 leading-relaxed">{project.description}</p>
                       </div>
-                      <div className="md:w-2/3">
-                        <ProjectGallery images={project.gallery} color={project.color} />
+                      <div className="md:w-3/4">
+                        <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide snap-x">
+                          {project.gallery.map((img, j) => (
+                            <div key={j} className="flex-shrink-0 w-[240px] md:w-[300px] aspect-[4/3] relative rounded-xl overflow-hidden snap-center group/img" style={{ boxShadow: `0 4px 20px ${project.accent}10` }}>
+                              <Image src={img} alt={`${project.title} ${j + 1}`} fill className="object-cover transition-transform duration-500 group-hover/img:scale-105" sizes="300px" />
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-
-                {/* Bottom glow */}
-                <div
-                  className="h-[1px] transition-all duration-500"
-                  style={{
-                    background: activeProject === i
-                      ? `linear-gradient(90deg, transparent, ${project.color}60, transparent)`
-                      : 'transparent',
-                  }}
-                />
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════
-          SECTION 4 — ABOUT
-          ═══════════════════════════════════════ */}
-      <section ref={aboutRef} id="about" className="relative z-10 py-24 md:py-40">
+      {/* ═══ SKILLS MARQUEE ═══ */}
+      <section className="skills-section py-16 md:py-24 overflow-hidden border-y" style={{ borderColor: 'rgba(0,0,0,0.04)' }}>
+        <p className="text-center text-xs font-mono uppercase tracking-[0.5em] text-gray-400 mb-10">Tools & Skills</p>
+        <div className="relative">
+          <div className="flex animate-marquee whitespace-nowrap">
+            {[...SKILLS, ...SKILLS].map((skill, i) => (
+              <span key={i} className="mx-6 md:mx-10 text-2xl md:text-4xl font-bold text-gray-200 hover:text-emerald-500 transition-colors duration-300 cursor-default select-none">
+                {skill}
+              </span>
+            ))}
+          </div>
+        </div>
+        <div className="relative mt-6">
+          <div className="flex animate-marquee whitespace-nowrap" style={{ animationDirection: 'reverse', animationDuration: '35s' }}>
+            {[...SKILLS.reverse(), ...SKILLS].map((skill, i) => (
+              <span key={i} className="mx-6 md:mx-10 text-xl md:text-3xl font-light text-gray-150 hover:text-teal-500 transition-colors duration-300 cursor-default select-none" style={{ color: 'rgba(0,0,0,0.06)' }}>
+                {skill}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ ABOUT ═══ */}
+      <section ref={aboutRef} id="about" className="relative py-24 md:py-40">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-20 items-center">
-            {/* Profile image */}
-            <div className="about-image relative aspect-[3/4] max-w-md mx-auto lg:mx-0 rounded-2xl overflow-hidden" style={{ clipPath: 'circle(50% at 50% 50%)' }}>
-              <Image
-                src="/images/profile.webp"
-                alt="Baldyas Satrio Albani"
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 50vw"
-                priority
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f]/70 via-transparent to-transparent" />
-              <div className="absolute bottom-6 left-6 right-6">
-                <p className="text-xs uppercase tracking-[0.3em] text-indigo-300 mb-1">Anomali Digital</p>
-                <p className="text-lg font-semibold text-white">Graphic Designer</p>
+            {/* Image */}
+            <div className="about-img relative">
+              <div className="relative aspect-[3/4] max-w-md mx-auto rounded-3xl overflow-hidden" style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.08)' }}>
+                <Image src="/images/profile-new.png" alt="Baldyas Satrio Albani" fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
+              </div>
+              {/* Floating badge */}
+              <div className="absolute -bottom-4 -right-4 md:bottom-8 md:-right-6 px-5 py-3 rounded-2xl glass-card shadow-lg">
+                <p className="text-[10px] text-gray-400 uppercase tracking-wider">Currently at</p>
+                <p className="text-sm font-semibold" style={{ color: '#1a1a2e' }}>Anomali Digital</p>
               </div>
             </div>
 
-            {/* Bio */}
+            {/* Text */}
             <div className="about-text">
-              <p className="text-indigo-400 font-mono text-xs md:text-sm tracking-[0.5em] uppercase mb-6">About</p>
-              <h2 className="text-3xl md:text-5xl font-bold text-white mb-8 leading-tight">
-                Designing the<br />
-                <span className="bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">
-                  future of brands.
-                </span>
+              <p className="text-emerald-600 text-xs font-mono tracking-[0.4em] uppercase mb-4">About Me</p>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-6" style={{ color: '#1a1a2e' }}>
+                Designer who cares about <span className="text-gradient-green">every detail</span>.
               </h2>
-              <div className="space-y-4 text-[var(--text-secondary)] text-sm md:text-base leading-relaxed">
+              <div className="space-y-4 text-gray-500 text-sm md:text-base leading-relaxed">
                 <p>
-                  I&apos;m <span className="text-white font-medium">Baldyas Satrio Albani</span> — a multidisciplinary
-                  designer currently crafting visual experiences at{' '}
-                  <span className="text-indigo-400">Anomali Digital</span> since February 2025.
+                  I&apos;m <span className="text-gray-800 font-medium">Baldyas Satrio Albani</span> — a multidisciplinary
+                  designer crafting visual experiences at <span className="text-emerald-600 font-medium">Anomali Digital</span> since February 2025.
                 </p>
                 <p>
-                  With a background in Visual Communication Design from{' '}
-                  <span className="text-white/80">SMK Budhiwarman 1</span> and studies at{' '}
-                  <span className="text-white/80">Politeknik Negeri Media Kreatif</span>,
+                  Visual Communication Design graduate from SMK Budhiwarman 1 with studies at Politeknik Negeri Media Kreatif.
                   I specialize in brand identity, UI/UX, motion graphics, photography & print design.
-                </p>
-                <p>
-                  Based in <span className="text-white/80">Jakarta, Indonesia</span>.
-                  Building brands that don&apos;t just look beautiful — they{' '}
-                  <em className="text-white not-italic font-medium">resonate</em>.
                 </p>
               </div>
 
               {/* Stats */}
-              <div className="grid grid-cols-3 gap-6 mt-12">
+              <div className="grid grid-cols-3 gap-8 mt-12 pt-8 border-t" style={{ borderColor: 'rgba(0,0,0,0.06)' }}>
                 {[
-                  { value: 30, label: 'Projects' },
-                  { value: 15, label: 'Clients' },
-                  { value: 2, label: 'Years' },
+                  { value: '30+', label: 'Projects' },
+                  { value: '15+', label: 'Clients' },
+                  { value: '2+', label: 'Years' },
                 ].map((stat) => (
-                  <div key={stat.label} className="text-center md:text-left">
-                    <p className="stat-number text-3xl md:text-5xl font-bold text-white" data-value={stat.value}>
-                      0+
-                    </p>
-                    <p className="text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">{stat.label}</p>
+                  <div key={stat.label}>
+                    <p className="text-3xl md:text-4xl font-bold text-gradient-green">{stat.value}</p>
+                    <p className="text-xs text-gray-400 uppercase tracking-wider mt-1">{stat.label}</p>
                   </div>
                 ))}
               </div>
@@ -659,94 +464,63 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════
-          SECTION 5 — SKILLS
-          ═══════════════════════════════════════ */}
-      <section ref={skillsRef} id="skills" className="relative z-10 py-24 md:py-40 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
-          <p className="text-indigo-400 font-mono text-xs md:text-sm tracking-[0.5em] uppercase mb-6 text-center">Skills & Tools</p>
-          <div className="relative min-h-[50vh] md:min-h-[60vh] flex flex-wrap items-center justify-center gap-x-6 md:gap-x-10 gap-y-4 md:gap-y-6">
-            {SKILLS.map((skill, i) => (
-              <span
-                key={skill.name}
-                className={`skill-word ${skill.size} ${skill.weight} text-white/[0.15] hover:text-white hover:scale-110 cursor-default select-none transition-all duration-500`}
-                style={{
-                  transitionDelay: `${i * 20}ms`,
-                  textShadow: 'none',
-                }}
-                onMouseEnter={(e) => {
-                  (e.target as HTMLElement).style.textShadow = '0 0 40px rgba(99,102,241,0.6), 0 0 80px rgba(99,102,241,0.3)';
-                  (e.target as HTMLElement).style.color = '#a5b4fc';
-                }}
-                onMouseLeave={(e) => {
-                  (e.target as HTMLElement).style.textShadow = 'none';
-                  (e.target as HTMLElement).style.color = '';
-                }}
-              >
-                {skill.name}
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* ═══ CONTACT ═══ */}
+      <section id="contact" className="relative py-24 md:py-40">
+        {/* Background */}
+        <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(180deg, transparent, rgba(16,185,129,0.03), transparent)' }} />
 
-      {/* ═══════════════════════════════════════
-          SECTION 6 — CONTACT
-          ═══════════════════════════════════════ */}
-      <section ref={contactRef} id="contact" className="relative z-10 py-24 md:py-40 min-h-screen flex flex-col items-center justify-center">
-        <div className="max-w-5xl mx-auto px-6 md:px-12 text-center">
-          <p className="text-indigo-400 font-mono text-xs md:text-sm tracking-[0.5em] uppercase mb-6">Get in Touch</p>
-          <h2
-            className="contact-title text-3xl md:text-5xl lg:text-7xl font-bold text-white leading-tight mb-12"
-          >
-            LET&apos;S CREATE
-            <br />
-            SOMETHING{' '}
-            <span className="bg-gradient-to-r from-indigo-400 via-violet-400 to-pink-400 bg-clip-text text-transparent">
-              EXTRAORDINARY
-            </span>
+        <div className="contact-content max-w-3xl mx-auto px-6 md:px-12 text-center relative z-10">
+          <p className="text-emerald-600 text-xs font-mono tracking-[0.4em] uppercase mb-4">Get in Touch</p>
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6" style={{ color: '#1a1a2e' }}>
+            Let&apos;s create something <span className="text-gradient-green">extraordinary</span>.
           </h2>
+          <p className="text-gray-500 text-base md:text-lg mb-10 max-w-xl mx-auto">
+            Have a project in mind? I&apos;d love to hear about it. Let&apos;s turn your vision into reality.
+          </p>
 
-          {/* Email with scramble */}
+          {/* Email */}
           <a
             href="mailto:baldyas.albani@gmail.com"
-            className="inline-block text-lg md:text-2xl font-mono text-[var(--text-secondary)] hover:text-white transition-colors duration-300 mb-16 border-b border-white/10 hover:border-indigo-500/50 pb-2"
+            className="inline-block text-lg md:text-xl font-mono text-gray-400 hover:text-emerald-600 transition-colors duration-300 mb-10 border-b border-gray-200 hover:border-emerald-300 pb-1"
             onMouseEnter={emailScramble.scramble}
             onMouseLeave={emailScramble.reset}
           >
             {emailScramble.display}
           </a>
 
-          {/* Social links */}
-          <div className="flex items-center justify-center gap-8 md:gap-12 mb-20">
+          {/* CTA */}
+          <div className="mb-12">
+            <a href="mailto:baldyas.albani@gmail.com" className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-200 hover:gap-4">
+              Start a Project
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </a>
+          </div>
+
+          {/* Social */}
+          <div className="flex justify-center gap-8">
             {[
               { name: 'Instagram', href: 'https://instagram.com/baldyas.sa' },
               { name: 'LinkedIn', href: 'https://linkedin.com/in/baldyas-satrio' },
               { name: 'GitHub', href: 'https://github.com/SHOTCAN' },
             ].map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-xs md:text-sm uppercase tracking-[0.3em] text-[var(--text-secondary)] hover:text-white transition-all duration-300 hover:tracking-[0.5em]"
-              >
+              <a key={link.name} href={link.href} target="_blank" rel="noopener noreferrer"
+                className="text-xs uppercase tracking-[0.3em] text-gray-400 hover:text-emerald-600 transition-colors duration-300">
                 {link.name}
               </a>
             ))}
           </div>
         </div>
-
-        {/* Footer */}
-        <footer className="absolute bottom-0 left-0 right-0 py-6 border-t border-white/5">
-          <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-lg font-bold bg-gradient-to-r from-white to-white/40 bg-clip-text text-transparent">BSA.</p>
-            <p className="text-xs text-[var(--text-secondary)]">
-              © {new Date().getFullYear()} Baldyas Satrio Albani. Crafted with passion.
-            </p>
-          </div>
-        </footer>
       </section>
+
+      {/* ═══ FOOTER ═══ */}
+      <footer className="py-8 border-t" style={{ borderColor: 'rgba(0,0,0,0.04)' }}>
+        <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-4">
+          <span className="text-lg font-bold" style={{ color: '#1a1a2e' }}>BSA<span className="text-gradient-green">.</span></span>
+          <p className="text-xs text-gray-400">© {new Date().getFullYear()} Baldyas Satrio Albani. Crafted with passion.</p>
+        </div>
+      </footer>
     </div>
   );
 }

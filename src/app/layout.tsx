@@ -2,8 +2,6 @@ import type { Metadata, Viewport } from 'next';
 import { Space_Grotesk, Inter } from 'next/font/google';
 import './globals.css';
 import SmoothScroll from '@/components/SmoothScroll';
-import CustomCursor from '@/components/CustomCursor';
-import Navbar from '@/components/Navbar';
 
 // ─── Font Configuration ───
 
@@ -62,7 +60,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#0a0a0f',
+  themeColor: '#fafaf8',
   width: 'device-width',
   initialScale: 1,
 };
@@ -80,10 +78,8 @@ export default function RootLayout({
       className={`${spaceGrotesk.variable} ${inter.variable}`}
       suppressHydrationWarning
     >
-      <body className="noise min-h-screen bg-bg font-body text-text antialiased">
+      <body className="min-h-screen antialiased" style={{ background: '#fafaf8', color: '#1a1a2e' }}>
         <SmoothScroll>
-          <CustomCursor />
-          <Navbar />
           <main>{children}</main>
         </SmoothScroll>
       </body>
