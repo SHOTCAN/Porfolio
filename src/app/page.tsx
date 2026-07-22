@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Image from 'next/image';
+import { getAssetPath } from '@/utils/assets';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -34,7 +35,12 @@ const PROJECTS: ProjectItem[] = [
     category: 'Software',
     year: '2025',
     image: '/images/projects/fotobooth-pro.png',
-    gallery: ['/images/projects/fotobooth-app.webp', '/images/projects/fotobooth-event.webp', '/images/projects/fotobooth-output.webp'],
+    gallery: [
+      '/images/projects/fotobooth-pro.png',
+      '/images/projects/fotobooth-app.webp',
+      '/images/projects/fotobooth-event.webp',
+      '/images/projects/fotobooth-output.webp',
+    ],
     client: 'Event Technologies Co.',
     role: 'Lead UI/UX & Desktop Developer',
     tools: ['Python', 'PyQt6', 'Photoshop', 'Figma'],
@@ -192,7 +198,7 @@ const SKILLS = [
 ];
 
 /* ═══════════════════════════════════════════
-   AUDIO FEEDBACK SYNTHESIZER (Web Audio API)
+   AUDIO FEEDBACK SYNTHESIZER
    ═══════════════════════════════════════════ */
 function playSynthSound(freq = 440, type: OscillatorType = 'sine', duration = 0.08) {
   try {
@@ -210,7 +216,7 @@ function playSynthSound(freq = 440, type: OscillatorType = 'sine', duration = 0.
     osc.start();
     osc.stop(ctx.currentTime + duration);
   } catch {
-    // Audio context allowed after user interaction
+    // Graceful fallback
   }
 }
 
@@ -340,13 +346,13 @@ function CanvasPlayground() {
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full z-10" />
       <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-20 px-6 text-center">
         <span className="px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono text-xs uppercase tracking-widest mb-3">
-          Interactive Canvas Playground
+          Interactive WebGL Lab
         </span>
         <h3 className="text-2xl md:text-4xl font-bold text-white mb-2">
-          Move your cursor to paint visual energy
+          Paint neon energy on screen
         </h3>
         <p className="text-xs md:text-sm text-gray-400">
-          {isDrawing ? '✨ Creating neon particle bursts...' : 'Hover or drag anywhere inside this interactive zone'}
+          {isDrawing ? '✨ Generating particle sparks...' : 'Drag or move cursor anywhere inside this zone'}
         </p>
       </div>
     </div>
@@ -354,7 +360,7 @@ function CanvasPlayground() {
 }
 
 /* ═══════════════════════════════════════════
-   3D TILT CARD COMPONENT
+   3D TILT CARD COMPONENT WITH RESOLVED ASSET PATHS
    ═══════════════════════════════════════════ */
 function TiltProjectCard({ project, onClick }: { project: ProjectItem; onClick: () => void }) {
   const cardRef = useRef<HTMLDivElement>(null);
@@ -387,6 +393,8 @@ function TiltProjectCard({ project, onClick }: { project: ProjectItem; onClick: 
     setSheen((prev) => ({ ...prev, opacity: 0 }));
   };
 
+  const resolvedImageSrc = getAssetPath(project.image);
+
   return (
     <div
       ref={cardRef}
@@ -400,7 +408,7 @@ function TiltProjectCard({ project, onClick }: { project: ProjectItem; onClick: 
       className="group relative rounded-3xl glass-card border border-white/10 overflow-hidden cursor-pointer transition-all duration-300 ease-out shadow-xl hover:border-emerald-500/40 hover:shadow-emerald-500/10"
       style={{ transform, transformStyle: 'preserve-3d' }}
     >
-      {/* Dynamic Sheen Overlay */}
+      {/* Sheen Overlay */}
       <div
         className="pointer-events-none absolute inset-0 z-30 transition-opacity duration-300"
         style={{
@@ -412,11 +420,12 @@ function TiltProjectCard({ project, onClick }: { project: ProjectItem; onClick: 
       {/* Image Thumbnail */}
       <div className="relative aspect-[16/10] overflow-hidden bg-black/40">
         <Image
-          src={project.image}
+          src={resolvedImageSrc}
           alt={project.title}
           fill
           className="object-cover transition-transform duration-700 group-hover:scale-110"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          unoptimized
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-transparent to-transparent opacity-80" />
 
@@ -437,7 +446,7 @@ function TiltProjectCard({ project, onClick }: { project: ProjectItem; onClick: 
           </span>
         </div>
 
-        {/* Interactive Hover Overlay Icon */}
+        {/* Hover Overlay Icon */}
         <div className="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40 backdrop-blur-[2px]">
           <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-emerald-500 text-black font-semibold text-xs tracking-wider uppercase shadow-lg transform group-hover:scale-105 transition-transform">
             Explore Gallery
@@ -448,7 +457,7 @@ function TiltProjectCard({ project, onClick }: { project: ProjectItem; onClick: 
         </div>
       </div>
 
-      {/* Content Meta */}
+      {/* Meta Content */}
       <div className="p-6">
         <h3 className="text-xl md:text-2xl font-bold text-white group-hover:text-emerald-400 transition-colors duration-300 mb-2">
           {project.title}
@@ -532,13 +541,11 @@ export default function Home() {
   // ── GSAP Scroll Trigger Animations ──
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Hero Elements Reveal
       gsap.from('.hero-badge-elem', { y: 30, opacity: 0, duration: 0.8, ease: 'power3.out', delay: 0.2 });
       gsap.from('.hero-headline-word', { y: 60, opacity: 0, stagger: 0.08, duration: 1, ease: 'power4.out', delay: 0.4 });
       gsap.from('.hero-sub-text', { y: 30, opacity: 0, duration: 0.8, ease: 'power3.out', delay: 0.8 });
       gsap.from('.hero-cta-btn', { scale: 0.9, opacity: 0, stagger: 0.1, duration: 0.8, ease: 'back.out(1.7)', delay: 1 });
 
-      // Manifesto Word-by-Word Scroll Reveal
       const mWords = manifestoRef.current?.querySelectorAll('.manifesto-word');
       if (mWords) {
         mWords.forEach((word, i) => {
@@ -556,7 +563,6 @@ export default function Home() {
         });
       }
 
-      // About Section Reveal
       gsap.from('.about-card-img', {
         scrollTrigger: { trigger: aboutRef.current, start: 'top 75%', toggleActions: 'play none none reverse' },
         scale: 0.9,
@@ -577,13 +583,11 @@ export default function Home() {
     return () => ctx.revert();
   }, []);
 
-  // ── Filtered Projects ──
   const filteredProjects = PROJECTS.filter((p) => {
     if (activeCategory === 'ALL') return true;
     return p.category.toUpperCase() === activeCategory;
   });
 
-  // ── Copy Toast Helper ──
   const handleCopyEmail = () => {
     navigator.clipboard.writeText('baldyas.albani@gmail.com');
     playSynthSound(880, 'sine', 0.15);
@@ -591,10 +595,17 @@ export default function Home() {
     setTimeout(() => setToastMessage(null), 3000);
   };
 
+  const handleSelect3DProject = (index: number) => {
+    if (PROJECTS[index]) {
+      setSelectedProject(PROJECTS[index]);
+      setActiveGalleryIndex(0);
+    }
+  };
+
   return (
     <div className="relative min-h-screen bg-[#0a0a0f] text-[#f0f0f5] selection:bg-emerald-500/30 selection:text-white">
-      {/* ── 3D Persistent Canvas Background ── */}
-      <Scene3D scrollProgress={scrollProgress} />
+      {/* ── 3D Floating WebGL Scene Background ── */}
+      <Scene3D scrollProgress={scrollProgress} onSelectProject={handleSelect3DProject} />
 
       {/* ── Toast Notification ── */}
       {toastMessage && (
@@ -611,7 +622,7 @@ export default function Home() {
           ═══════════════════════════════════════ */}
       <section ref={heroRef} className="relative z-10 min-h-screen flex flex-col justify-center px-6 md:px-12 pt-28 pb-16 overflow-hidden">
         <div className="max-w-7xl mx-auto w-full">
-          {/* Top Status Badges */}
+          {/* Status & Clock Badges */}
           <div className="hero-badge-elem flex flex-wrap items-center gap-3 md:gap-4 mb-8">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-emerald-500/30">
               <span className="relative flex h-2.5 w-2.5">
@@ -626,7 +637,7 @@ export default function Home() {
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-xs font-mono text-gray-400">
               <span>JAKARTA</span>
               <span className="text-gray-600">•</span>
-              <span className="text-white font-medium">{currentTime || '20:56 WIB'}</span>
+              <span className="text-white font-medium">{currentTime || '21:13 WIB'}</span>
             </div>
           </div>
 
@@ -647,14 +658,14 @@ export default function Home() {
             </div>
           </div>
 
-          {/* CTA Buttons & Interactive Triggers */}
+          {/* CTA Buttons */}
           <div className="flex flex-wrap items-center gap-4">
             <a
               href="#works"
               onMouseEnter={() => playSynthSound(523, 'sine', 0.05)}
               className="hero-cta-btn group inline-flex items-center gap-3 px-8 py-4 rounded-full bg-emerald-500 text-black font-bold text-sm tracking-wider uppercase hover:bg-emerald-400 transition-all duration-300 shadow-[0_0_30px_rgba(16,185,129,0.3)] hover:scale-105"
             >
-              Explore Projects
+              Explore Works Matrix
               <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
               </svg>
@@ -665,7 +676,7 @@ export default function Home() {
               onMouseEnter={() => playSynthSound(659, 'sine', 0.05)}
               className="hero-cta-btn inline-flex items-center gap-2 px-8 py-4 rounded-full glass border border-white/20 text-white font-semibold text-sm tracking-wider uppercase hover:bg-white/10 transition-all duration-300 hover:border-emerald-400/50"
             >
-              🎮 Interactive Mode
+              🎮 WebGL Lab
             </a>
 
             <button
@@ -678,9 +689,9 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Animated Scroll Cue */}
+        {/* Scroll Cue */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none">
-          <span className="text-[10px] font-mono uppercase tracking-[0.4em] text-gray-500">SCROLL TO EXPERIENCE</span>
+          <span className="text-[10px] font-mono uppercase tracking-[0.4em] text-gray-500">SCROLL TO FLY THROUGH 3D WORLD</span>
           <div className="w-[1px] h-10 bg-gradient-to-b from-emerald-500 to-transparent relative overflow-hidden">
             <div className="absolute w-full h-3 bg-emerald-400 animate-[scrollLine_2s_ease-in-out_infinite]" />
           </div>
@@ -711,7 +722,7 @@ export default function Home() {
           ═══════════════════════════════════════ */}
       <section ref={worksRef} id="works" className="relative z-10 py-24 md:py-36 px-6 md:px-12">
         <div className="max-w-7xl mx-auto">
-          {/* Header & Filter Controls */}
+          {/* Controls */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
             <div>
               <span className="px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs uppercase tracking-widest block w-max mb-4">
@@ -722,7 +733,7 @@ export default function Home() {
               </h2>
             </div>
 
-            {/* Category Filter Pills */}
+            {/* Filter Pills */}
             <div className="flex flex-wrap items-center gap-2">
               {['ALL', 'UI/UX', 'BRANDING', 'SOFTWARE', 'EDITORIAL', 'PHOTOGRAPHY', 'PRINT'].map((cat) => (
                 <button
@@ -743,7 +754,7 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Project Grid */}
+          {/* Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredProjects.map((project) => (
               <TiltProjectCard
@@ -778,7 +789,7 @@ export default function Home() {
           </span>
         </div>
 
-        {/* Marquee Row 1 */}
+        {/* Row 1 */}
         <div className="flex animate-marquee whitespace-nowrap mb-6">
           {[...SKILLS, ...SKILLS].map((skill, idx) => (
             <span
@@ -791,7 +802,7 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Marquee Row 2 */}
+        {/* Row 2 */}
         <div className="flex animate-marquee whitespace-nowrap" style={{ animationDirection: 'reverse', animationDuration: '30s' }}>
           {[...SKILLS.reverse(), ...SKILLS].map((skill, idx) => (
             <span
@@ -810,20 +821,20 @@ export default function Home() {
           ═══════════════════════════════════════ */}
       <section ref={aboutRef} id="about" className="relative z-10 py-28 md:py-40 px-6 md:px-12">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-          {/* Profile Card */}
+          {/* Profile */}
           <div className="lg:col-span-5 about-card-img">
             <div className="relative aspect-[3/4] rounded-3xl overflow-hidden glass-card border border-white/10 shadow-2xl">
               <Image
-                src="/images/profile-new.png"
+                src={getAssetPath('/images/profile-new.png')}
                 alt="Baldyas Satrio Albani"
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 40vw"
                 priority
+                unoptimized
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-transparent to-transparent opacity-80" />
 
-              {/* Floating Badge */}
               <div className="absolute bottom-6 left-6 right-6 p-4 rounded-2xl glass border border-white/10 backdrop-blur-xl">
                 <p className="text-[10px] font-mono uppercase tracking-widest text-emerald-400">Current Role</p>
                 <p className="text-lg font-bold text-white">Graphic Designer</p>
@@ -832,7 +843,7 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Bio & Career Roadmap */}
+          {/* Bio */}
           <div className="lg:col-span-7 space-y-8">
             <div className="about-content-item">
               <span className="px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs uppercase tracking-widest inline-block mb-4">
@@ -849,7 +860,7 @@ export default function Home() {
               My expertise bridges graphic design, corporate editorial print, UI/UX apps, motion graphics, and studio commercial photography.
             </p>
 
-            {/* Career Timeline Steps */}
+            {/* Timeline */}
             <div className="about-content-item space-y-4">
               <h3 className="text-xs font-mono uppercase tracking-widest text-gray-400 mb-4">Career Milestones</h3>
               <div className="space-y-4">
@@ -901,7 +912,6 @@ export default function Home() {
             Whether you need a brand redesign, UI/UX product architecture, or commercial photography, let&apos;s make it extraordinary.
           </p>
 
-          {/* Interactive Scramble Email Copy */}
           <div className="mb-12">
             <button
               onClick={handleCopyEmail}
@@ -916,7 +926,6 @@ export default function Home() {
             </button>
           </div>
 
-          {/* Social Links */}
           <div className="flex flex-wrap justify-center gap-6 md:gap-10">
             {[
               { name: 'Instagram', href: 'https://instagram.com/baldyas.sa' },
@@ -961,16 +970,17 @@ export default function Home() {
             {/* Gallery Image Main View */}
             <div className="relative aspect-[16/10] w-full rounded-2xl overflow-hidden bg-black/60 mb-6">
               <Image
-                src={selectedProject.gallery[activeGalleryIndex] || selectedProject.image}
+                src={getAssetPath(selectedProject.gallery[activeGalleryIndex] || selectedProject.image)}
                 alt={selectedProject.title}
                 fill
                 className="object-contain"
                 sizes="(max-width: 1200px) 100vw, 80vw"
                 priority
+                unoptimized
               />
             </div>
 
-            {/* Gallery Thumbnail Selector */}
+            {/* Gallery Thumbnails */}
             {selectedProject.gallery.length > 1 && (
               <div className="flex gap-3 overflow-x-auto pb-4 mb-6 scrollbar-hide">
                 {selectedProject.gallery.map((img, idx) => (
@@ -984,13 +994,13 @@ export default function Home() {
                       activeGalleryIndex === idx ? 'border-emerald-400 scale-105' : 'border-transparent opacity-50 hover:opacity-100'
                     }`}
                   >
-                    <Image src={img} alt={`Thumb ${idx}`} fill className="object-cover" sizes="80px" />
+                    <Image src={getAssetPath(img)} alt={`Thumb ${idx}`} fill className="object-cover" sizes="80px" unoptimized />
                   </button>
                 ))}
               </div>
             )}
 
-            {/* Project Details Info */}
+            {/* Metadata */}
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 border-t border-white/10 pt-6">
               <div className="md:col-span-8">
                 <span
