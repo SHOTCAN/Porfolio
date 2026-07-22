@@ -12,7 +12,7 @@ gsap.registerPlugin(ScrollTrigger);
 const Scene3D = dynamic(() => import('@/components/Scene3D'), { ssr: false });
 
 /* ═══════════════════════════════════════════
-   TYPES & PROJECT DATA
+   TYPES & DATA
    ═══════════════════════════════════════════ */
 export interface ProjectItem {
   id: string;
@@ -26,6 +26,7 @@ export interface ProjectItem {
   tools: string[];
   description: string;
   accent: string;
+  impactStats?: { label: string; value: string }[];
 }
 
 const PROJECTS: ProjectItem[] = [
@@ -46,6 +47,11 @@ const PROJECTS: ProjectItem[] = [
     tools: ['Python', 'PyQt6', 'Photoshop', 'Figma'],
     description: 'Professional event photobooth desktop application featuring live camera feed integration, customizable layout templates, instant QR code sharing, and cloud gallery synchronization.',
     accent: '#10b981',
+    impactStats: [
+      { label: 'Event Captures', value: '50,000+' },
+      { label: 'Instant Shares', value: '98.4%' },
+      { label: 'Cloud Uptime', value: '99.9%' },
+    ],
   },
   {
     id: 'bnc-express',
@@ -67,6 +73,11 @@ const PROJECTS: ProjectItem[] = [
     tools: ['InDesign', 'Illustrator', 'Photoshop'],
     description: 'Comprehensive 16-page editorial company profile for a major logistics provider. Designed with crisp grid structures, typography hierarchy, and high-impact fleet photography.',
     accent: '#3b82f6',
+    impactStats: [
+      { label: 'Pages Designed', value: '16 Pages' },
+      { label: 'Print Quality', value: '300 DPI' },
+      { label: 'Client Approval', value: '100%' },
+    ],
   },
   {
     id: 'brand-identity',
@@ -89,6 +100,10 @@ const PROJECTS: ProjectItem[] = [
     tools: ['Illustrator', 'Photoshop', 'Figma'],
     description: 'Versatile collection of brand identities, vector logos, mark designs, and visual guidelines created for retail, construction, F&B, and logistics businesses.',
     accent: '#f59e0b',
+    impactStats: [
+      { label: 'Logos Crafted', value: '25+ Marks' },
+      { label: 'Industries Served', value: '8 Sectors' },
+    ],
   },
   {
     id: 'aura-app',
@@ -107,6 +122,10 @@ const PROJECTS: ProjectItem[] = [
     tools: ['Figma', 'Prototyping', 'After Effects'],
     description: 'Next-gen mobile e-commerce interface featuring dark glassmorphic design system, smooth micro-interactions, seamless checkout flow, and custom icon sets.',
     accent: '#8b5cf6',
+    impactStats: [
+      { label: 'Screens Designed', value: '40+ Views' },
+      { label: 'User Rating', value: '4.9 / 5.0' },
+    ],
   },
   {
     id: 'food-posters',
@@ -197,8 +216,54 @@ const SKILLS = [
   'Python', 'DaVinci Resolve', 'Prepress Print', 'Vector Art'
 ];
 
+const WORKFLOW_STEPS = [
+  {
+    step: '01',
+    title: 'Discovery & Creative Strategy',
+    desc: 'Analyzing brand goals, researching market positioning, defining visual direction, and establishing design moodboards.',
+    accent: '#10b981',
+  },
+  {
+    step: '02',
+    title: 'Brand Architecture & Design Systems',
+    desc: 'Crafting precision vector logos, typography pairings, grid structures, and reusable component libraries.',
+    accent: '#3b82f6',
+  },
+  {
+    step: '03',
+    title: 'Interactive Prototyping & Motion',
+    desc: 'Building responsive UI/UX screen flows, 3D visual assets, fluid micro-interactions, and motion graphics previews.',
+    accent: '#8b5cf6',
+  },
+  {
+    step: '04',
+    title: 'Production, Prepress & Delivery',
+    desc: 'Ensuring 300 DPI pre-press color accuracy, digital asset optimization, handoff guidelines, and live deployment.',
+    accent: '#f59e0b',
+  },
+];
+
+const FAQS = [
+  {
+    q: 'What visual design services do you specialize in?',
+    a: 'I specialize in full-spectrum visual design including Brand Identity Systems, UI/UX Mobile & Web Interfaces, Editorial Company Profiles, Commercial Photography, Prepress Print Collaterals, and Custom Desktop Software Interfaces.',
+  },
+  {
+    q: 'What is your current role at Anomali Digital?',
+    a: 'I serve as Graphic Designer at Anomali Digital since February 2025, leading visual identity design, brand collaterals, and digital creative assets for various corporate and commercial clients.',
+  },
+  {
+    q: 'Can you handle both print production and digital UI design?',
+    a: 'Yes, absolutely! Having graduated in Visual Communication Design (DKV) and trained in commercial photography and software design, I seamlessly bridge prepress print accuracy with digital product UI/UX.',
+  },
+  {
+    q: 'How can we initiate a new project or hire you?',
+    a: 'You can easily click the "Copy Email" button or use the Interactive Project Estimator on this page to send a direct message. I will respond with a tailored creative proposal within 24 hours.',
+  },
+];
+
 /* ═══════════════════════════════════════════
-   AUDIO FEEDBACK SYNTHESIZER
+   AUDIO SYNTHESIZER
    ═══════════════════════════════════════════ */
 function playSynthSound(freq = 440, type: OscillatorType = 'sine', duration = 0.08) {
   try {
@@ -216,7 +281,7 @@ function playSynthSound(freq = 440, type: OscillatorType = 'sine', duration = 0.
     osc.start();
     osc.stop(ctx.currentTime + duration);
   } catch {
-    // Graceful fallback
+    // Audio fallback
   }
 }
 
@@ -251,7 +316,7 @@ function useTextScramble(text: string) {
 }
 
 /* ═══════════════════════════════════════════
-   INTERACTIVE CANVAS PLAYGROUND WIDGET
+   INTERACTIVE CANVAS PLAYGROUND
    ═══════════════════════════════════════════ */
 function CanvasPlayground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -360,7 +425,7 @@ function CanvasPlayground() {
 }
 
 /* ═══════════════════════════════════════════
-   3D TILT CARD COMPONENT WITH RESOLVED ASSET PATHS
+   3D TILT CARD COMPONENT
    ═══════════════════════════════════════════ */
 function TiltProjectCard({ project, onClick }: { project: ProjectItem; onClick: () => void }) {
   const cardRef = useRef<HTMLDivElement>(null);
@@ -408,7 +473,6 @@ function TiltProjectCard({ project, onClick }: { project: ProjectItem; onClick: 
       className="group relative rounded-3xl glass-card border border-white/10 overflow-hidden cursor-pointer transition-all duration-300 ease-out shadow-xl hover:border-emerald-500/40 hover:shadow-emerald-500/10"
       style={{ transform, transformStyle: 'preserve-3d' }}
     >
-      {/* Sheen Overlay */}
       <div
         className="pointer-events-none absolute inset-0 z-30 transition-opacity duration-300"
         style={{
@@ -417,7 +481,6 @@ function TiltProjectCard({ project, onClick }: { project: ProjectItem; onClick: 
         }}
       />
 
-      {/* Image Thumbnail */}
       <div className="relative aspect-[16/10] overflow-hidden bg-black/40">
         <Image
           src={resolvedImageSrc}
@@ -429,7 +492,6 @@ function TiltProjectCard({ project, onClick }: { project: ProjectItem; onClick: 
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-transparent to-transparent opacity-80" />
 
-        {/* Category Pill */}
         <div className="absolute top-4 left-4 z-20">
           <span
             className="px-3.5 py-1 rounded-full text-xs font-mono font-medium backdrop-blur-md border border-white/20 text-white"
@@ -439,17 +501,15 @@ function TiltProjectCard({ project, onClick }: { project: ProjectItem; onClick: 
           </span>
         </div>
 
-        {/* Year Tag */}
         <div className="absolute top-4 right-4 z-20">
           <span className="px-3 py-1 rounded-full text-xs font-mono text-gray-300 bg-black/40 backdrop-blur-md">
             {project.year}
           </span>
         </div>
 
-        {/* Hover Overlay Icon */}
         <div className="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40 backdrop-blur-[2px]">
           <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-emerald-500 text-black font-semibold text-xs tracking-wider uppercase shadow-lg transform group-hover:scale-105 transition-transform">
-            Explore Gallery
+            Explore Case Study
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
             </svg>
@@ -457,7 +517,6 @@ function TiltProjectCard({ project, onClick }: { project: ProjectItem; onClick: 
         </div>
       </div>
 
-      {/* Meta Content */}
       <div className="p-6">
         <h3 className="text-xl md:text-2xl font-bold text-white group-hover:text-emerald-400 transition-colors duration-300 mb-2">
           {project.title}
@@ -492,6 +551,10 @@ export default function Home() {
   const [activeGalleryIndex, setActiveGalleryIndex] = useState(0);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState('');
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
+
+  // Estimator Form State
+  const [estimatorScope, setEstimatorScope] = useState('Branding & Identity');
 
   const heroRef = useRef<HTMLElement>(null);
   const manifestoRef = useRef<HTMLElement>(null);
@@ -500,7 +563,7 @@ export default function Home() {
 
   const emailScramble = useTextScramble('baldyas.albani@gmail.com');
 
-  // ── Realtime Jakarta Clock ──
+  // Realtime Jakarta Clock
   useEffect(() => {
     const updateTime = () => {
       const now = new Date();
@@ -518,7 +581,7 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  // ── Scroll Progress Tracking ──
+  // Scroll Tracking
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
@@ -529,7 +592,7 @@ export default function Home() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // ── Keyboard Escape for Modal ──
+  // Escape Key Listener
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setSelectedProject(null);
@@ -538,7 +601,7 @@ export default function Home() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // ── GSAP Scroll Trigger Animations ──
+  // GSAP Animations
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.from('.hero-badge-elem', { y: 30, opacity: 0, duration: 0.8, ease: 'power3.out', delay: 0.2 });
@@ -570,14 +633,6 @@ export default function Home() {
         duration: 1,
         ease: 'power3.out',
       });
-      gsap.from('.about-content-item', {
-        scrollTrigger: { trigger: aboutRef.current, start: 'top 70%', toggleActions: 'play none none reverse' },
-        y: 40,
-        opacity: 0,
-        stagger: 0.12,
-        duration: 0.8,
-        ease: 'power3.out',
-      });
     });
 
     return () => ctx.revert();
@@ -604,10 +659,10 @@ export default function Home() {
 
   return (
     <div className="relative min-h-screen bg-[#0a0a0f] text-[#f0f0f5] selection:bg-emerald-500/30 selection:text-white">
-      {/* ── 3D Floating WebGL Scene Background ── */}
+      {/* 3D WebGL Background Canvas */}
       <Scene3D scrollProgress={scrollProgress} onSelectProject={handleSelect3DProject} />
 
-      {/* ── Toast Notification ── */}
+      {/* Toast */}
       {toastMessage && (
         <div className="fixed bottom-8 right-8 z-[200] px-6 py-3 rounded-2xl bg-emerald-500 text-black font-semibold text-sm shadow-2xl flex items-center gap-3 animate-bounce">
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -622,7 +677,7 @@ export default function Home() {
           ═══════════════════════════════════════ */}
       <section ref={heroRef} className="relative z-10 min-h-screen flex flex-col justify-center px-6 md:px-12 pt-28 pb-16 overflow-hidden">
         <div className="max-w-7xl mx-auto w-full">
-          {/* Status & Clock Badges */}
+          {/* Status Badges */}
           <div className="hero-badge-elem flex flex-wrap items-center gap-3 md:gap-4 mb-8">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-emerald-500/30">
               <span className="relative flex h-2.5 w-2.5">
@@ -637,7 +692,7 @@ export default function Home() {
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-xs font-mono text-gray-400">
               <span>JAKARTA</span>
               <span className="text-gray-600">•</span>
-              <span className="text-white font-medium">{currentTime || '21:13 WIB'}</span>
+              <span className="text-white font-medium">{currentTime || '21:14 WIB'}</span>
             </div>
           </div>
 
@@ -722,7 +777,6 @@ export default function Home() {
           ═══════════════════════════════════════ */}
       <section ref={worksRef} id="works" className="relative z-10 py-24 md:py-36 px-6 md:px-12">
         <div className="max-w-7xl mx-auto">
-          {/* Controls */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
             <div>
               <span className="px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs uppercase tracking-widest block w-max mb-4">
@@ -733,7 +787,6 @@ export default function Home() {
               </h2>
             </div>
 
-            {/* Filter Pills */}
             <div className="flex flex-wrap items-center gap-2">
               {['ALL', 'UI/UX', 'BRANDING', 'SOFTWARE', 'EDITORIAL', 'PHOTOGRAPHY', 'PRINT'].map((cat) => (
                 <button
@@ -754,7 +807,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredProjects.map((project) => (
               <TiltProjectCard
@@ -771,7 +823,46 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════
-          SECTION 4 — INTERACTIVE CANVAS PLAYGROUND
+          NEW SECTION 4 — CREATIVE PROCESS WORKFLOW
+          ═══════════════════════════════════════ */}
+      <section id="process" className="relative z-10 py-28 px-6 md:px-12 border-t border-white/10">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-16">
+            <span className="px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs uppercase tracking-widest block w-max mb-4">
+              Methodology & Workflow
+            </span>
+            <h2 className="text-4xl md:text-6xl font-black text-white tracking-tight">
+              DESIGN PROCESS
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {WORKFLOW_STEPS.map((step) => (
+              <div
+                key={step.step}
+                onMouseEnter={() => playSynthSound(500, 'sine', 0.04)}
+                className="group relative rounded-3xl glass-card border border-white/10 p-8 hover:border-emerald-500/40 transition-all duration-300 shadow-xl hover:-translate-y-2"
+              >
+                <div
+                  className="w-12 h-12 rounded-2xl flex items-center justify-center font-mono font-bold text-lg mb-6 border"
+                  style={{ backgroundColor: `${step.accent}20`, borderColor: `${step.accent}55`, color: step.accent }}
+                >
+                  {step.step}
+                </div>
+                <h3 className="text-xl font-bold text-white mb-3 group-hover:text-emerald-400 transition-colors">
+                  {step.title}
+                </h3>
+                <p className="text-xs md:text-sm text-gray-400 leading-relaxed font-light">
+                  {step.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════
+          SECTION 5 — INTERACTIVE CANVAS PLAYGROUND
           ═══════════════════════════════════════ */}
       <section id="playground" className="relative z-10 py-20 px-6 md:px-12">
         <div className="max-w-7xl mx-auto">
@@ -780,7 +871,7 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════
-          SECTION 5 — KINETIC SKILLS MARQUEE
+          SECTION 6 — KINETIC SKILLS MARQUEE
           ═══════════════════════════════════════ */}
       <section id="skills" className="relative z-10 py-20 border-y border-white/10 overflow-hidden bg-black/40">
         <div className="mb-8 text-center">
@@ -789,7 +880,6 @@ export default function Home() {
           </span>
         </div>
 
-        {/* Row 1 */}
         <div className="flex animate-marquee whitespace-nowrap mb-6">
           {[...SKILLS, ...SKILLS].map((skill, idx) => (
             <span
@@ -802,7 +892,6 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Row 2 */}
         <div className="flex animate-marquee whitespace-nowrap" style={{ animationDirection: 'reverse', animationDuration: '30s' }}>
           {[...SKILLS.reverse(), ...SKILLS].map((skill, idx) => (
             <span
@@ -817,11 +906,10 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════
-          SECTION 6 — ABOUT & CAREER TIMELINE
+          SECTION 7 — ABOUT & CAREER TIMELINE
           ═══════════════════════════════════════ */}
       <section ref={aboutRef} id="about" className="relative z-10 py-28 md:py-40 px-6 md:px-12">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-          {/* Profile */}
           <div className="lg:col-span-5 about-card-img">
             <div className="relative aspect-[3/4] rounded-3xl overflow-hidden glass-card border border-white/10 shadow-2xl">
               <Image
@@ -843,9 +931,8 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Bio */}
           <div className="lg:col-span-7 space-y-8">
-            <div className="about-content-item">
+            <div>
               <span className="px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs uppercase tracking-widest inline-block mb-4">
                 Biography & Experience
               </span>
@@ -854,14 +941,13 @@ export default function Home() {
               </h2>
             </div>
 
-            <p className="about-content-item text-base md:text-lg text-gray-300 leading-relaxed font-light">
+            <p className="text-base md:text-lg text-gray-300 leading-relaxed font-light">
               I&apos;m <span className="text-white font-semibold">Baldyas Satrio Albani</span>, a creative designer based in Jakarta.
               Graduated from <span className="text-white font-medium">SMK Budhiwarman 1</span> (Visual Communication Design) and previously studied at <span className="text-white font-medium">Politeknik Negeri Media Kreatif</span>.
               My expertise bridges graphic design, corporate editorial print, UI/UX apps, motion graphics, and studio commercial photography.
             </p>
 
-            {/* Timeline */}
-            <div className="about-content-item space-y-4">
+            <div className="space-y-4">
               <h3 className="text-xs font-mono uppercase tracking-widest text-gray-400 mb-4">Career Milestones</h3>
               <div className="space-y-4">
                 <div className="p-4 rounded-2xl glass border border-emerald-500/30 flex items-start justify-between">
@@ -895,7 +981,113 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════
-          SECTION 7 — CONTACT & QUICK LINKS
+          NEW SECTION 8 — FAQ ACCORDION
+          ═══════════════════════════════════════ */}
+      <section id="faq" className="relative z-10 py-28 px-6 md:px-12 border-t border-white/10">
+        <div className="max-w-4xl mx-auto">
+          <div className="mb-16 text-center">
+            <span className="px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs uppercase tracking-widest inline-block mb-4">
+              Clear Answers
+            </span>
+            <h2 className="text-4xl md:text-6xl font-black text-white tracking-tight">
+              FREQUENTLY ASKED QUESTIONS
+            </h2>
+          </div>
+
+          <div className="space-y-4">
+            {FAQS.map((faq, idx) => (
+              <div
+                key={idx}
+                className="rounded-3xl glass-card border border-white/10 overflow-hidden transition-colors"
+              >
+                <button
+                  onClick={() => {
+                    playSynthSound(450 + idx * 30, 'sine', 0.05);
+                    setOpenFaq(openFaq === idx ? null : idx);
+                  }}
+                  className="w-full p-6 text-left flex items-center justify-between font-bold text-base md:text-lg text-white hover:text-emerald-400 transition-colors"
+                >
+                  <span>{faq.q}</span>
+                  <span className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-sm font-mono text-emerald-400 flex-shrink-0 ml-4">
+                    {openFaq === idx ? '−' : '+'}
+                  </span>
+                </button>
+                {openFaq === idx && (
+                  <div className="px-6 pb-6 text-xs md:text-sm text-gray-400 font-light leading-relaxed border-t border-white/5 pt-4">
+                    {faq.a}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════
+          NEW SECTION 9 — INTERACTIVE PROJECT ESTIMATOR
+          ═══════════════════════════════════════ */}
+      <section id="estimator" className="relative z-10 py-28 px-6 md:px-12 border-t border-white/10">
+        <div className="max-w-4xl mx-auto glass-card rounded-3xl border border-emerald-500/30 p-8 md:p-12 shadow-2xl">
+          <div className="text-center mb-10">
+            <span className="px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono text-xs uppercase tracking-widest inline-block mb-3">
+              Interactive Scope Builder
+            </span>
+            <h2 className="text-3xl md:text-5xl font-black text-white">
+              PROJECT ESTIMATOR
+            </h2>
+            <p className="text-xs md:text-sm text-gray-400 mt-2">
+              Select your required creative scope to generate a direct project brief.
+            </p>
+          </div>
+
+          <div className="space-y-6">
+            <div>
+              <label className="text-xs font-mono uppercase tracking-widest text-gray-400 block mb-3">
+                1. Select Creative Scope
+              </label>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {[
+                  'Branding & Identity',
+                  'UI/UX App Design',
+                  'Editorial Company Profile',
+                  'Commercial Photography',
+                  'Custom Software / Desktop',
+                  'Print & Packaging',
+                ].map((scope) => (
+                  <button
+                    key={scope}
+                    type="button"
+                    onClick={() => {
+                      playSynthSound(600, 'sine', 0.05);
+                      setEstimatorScope(scope);
+                    }}
+                    className={`p-3 rounded-2xl text-xs font-mono border transition-all text-center ${
+                      estimatorScope === scope
+                        ? 'bg-emerald-500 text-black font-bold border-emerald-400'
+                        : 'glass text-gray-300 border-white/10 hover:border-white/30'
+                    }`}
+                  >
+                    {scope}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="pt-6 border-t border-white/10 text-center">
+              <a
+                href={`mailto:baldyas.albani@gmail.com?subject=New%20Project%20Inquiry%20-%20${encodeURIComponent(estimatorScope)}&body=Hi%20Baldyas,%20I'd%20like%20to%20discuss%20a%20new%20project%20regarding%20${encodeURIComponent(estimatorScope)}.`}
+                onMouseEnter={() => playSynthSound(700, 'sine', 0.05)}
+                className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-emerald-500 text-black font-bold text-sm tracking-wider uppercase hover:bg-emerald-400 transition-all hover:scale-105 shadow-lg shadow-emerald-500/20"
+              >
+                Send Inquiry for &quot;{estimatorScope}&quot; 🚀
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════
+          SECTION 10 — CONTACT & FOOTER
           ═══════════════════════════════════════ */}
       <section id="contact" className="relative z-10 py-32 md:py-44 px-6 md:px-12 border-t border-white/10">
         <div className="max-w-4xl mx-auto text-center">
@@ -953,7 +1145,6 @@ export default function Home() {
       {selectedProject && (
         <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 md:p-8 bg-black/90 backdrop-blur-2xl animate-fadeIn">
           <div className="relative w-full max-w-5xl max-h-[90vh] glass-card rounded-3xl border border-white/20 overflow-y-auto p-6 md:p-10 text-white shadow-2xl">
-            {/* Close Button */}
             <button
               onClick={() => {
                 playSynthSound(300, 'sine', 0.1);
@@ -967,7 +1158,6 @@ export default function Home() {
               </svg>
             </button>
 
-            {/* Gallery Image Main View */}
             <div className="relative aspect-[16/10] w-full rounded-2xl overflow-hidden bg-black/60 mb-6">
               <Image
                 src={getAssetPath(selectedProject.gallery[activeGalleryIndex] || selectedProject.image)}
@@ -980,7 +1170,6 @@ export default function Home() {
               />
             </div>
 
-            {/* Gallery Thumbnails */}
             {selectedProject.gallery.length > 1 && (
               <div className="flex gap-3 overflow-x-auto pb-4 mb-6 scrollbar-hide">
                 {selectedProject.gallery.map((img, idx) => (
@@ -1000,7 +1189,6 @@ export default function Home() {
               </div>
             )}
 
-            {/* Metadata */}
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 border-t border-white/10 pt-6">
               <div className="md:col-span-8">
                 <span
@@ -1010,9 +1198,20 @@ export default function Home() {
                   {selectedProject.category} • {selectedProject.year}
                 </span>
                 <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{selectedProject.title}</h2>
-                <p className="text-gray-300 text-sm md:text-base leading-relaxed font-light">
+                <p className="text-gray-300 text-sm md:text-base leading-relaxed font-light mb-6">
                   {selectedProject.description}
                 </p>
+
+                {selectedProject.impactStats && (
+                  <div className="flex flex-wrap gap-4 pt-4 border-t border-white/10">
+                    {selectedProject.impactStats.map((st) => (
+                      <div key={st.label} className="px-4 py-2 rounded-xl bg-white/5 border border-white/5">
+                        <span className="text-xs text-gray-400 block">{st.label}</span>
+                        <span className="text-lg font-bold text-emerald-400">{st.value}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div className="md:col-span-4 space-y-4 text-xs font-mono border-l border-white/10 pl-0 md:pl-6">
