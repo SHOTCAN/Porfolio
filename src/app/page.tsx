@@ -12,7 +12,7 @@ gsap.registerPlugin(ScrollTrigger);
 const Scene3D = dynamic(() => import('@/components/Scene3D'), { ssr: false });
 
 /* ═══════════════════════════════════════════
-   TYPES & DATA
+   TYPES & PROJECT DATA
    ═══════════════════════════════════════════ */
 export interface ProjectItem {
   id: string;
@@ -46,7 +46,7 @@ const PROJECTS: ProjectItem[] = [
     role: 'Lead UI/UX & Desktop Developer',
     tools: ['Python', 'PyQt6', 'Photoshop', 'Figma'],
     description: 'Professional event photobooth desktop application featuring live camera feed integration, customizable layout templates, instant QR code sharing, and cloud gallery synchronization.',
-    accent: '#10b981',
+    accent: '#059669',
     impactStats: [
       { label: 'Event Captures', value: '50,000+' },
       { label: 'Instant Shares', value: '98.4%' },
@@ -72,7 +72,7 @@ const PROJECTS: ProjectItem[] = [
     role: 'Graphic Designer & Layout Artist',
     tools: ['InDesign', 'Illustrator', 'Photoshop'],
     description: 'Comprehensive 16-page editorial company profile for a major logistics provider. Designed with crisp grid structures, typography hierarchy, and high-impact fleet photography.',
-    accent: '#3b82f6',
+    accent: '#2563eb',
     impactStats: [
       { label: 'Pages Designed', value: '16 Pages' },
       { label: 'Print Quality', value: '300 DPI' },
@@ -99,7 +99,7 @@ const PROJECTS: ProjectItem[] = [
     role: 'Brand Designer',
     tools: ['Illustrator', 'Photoshop', 'Figma'],
     description: 'Versatile collection of brand identities, vector logos, mark designs, and visual guidelines created for retail, construction, F&B, and logistics businesses.',
-    accent: '#f59e0b',
+    accent: '#d97706',
     impactStats: [
       { label: 'Logos Crafted', value: '25+ Marks' },
       { label: 'Industries Served', value: '8 Sectors' },
@@ -121,7 +121,7 @@ const PROJECTS: ProjectItem[] = [
     role: 'Product UI Designer',
     tools: ['Figma', 'Prototyping', 'After Effects'],
     description: 'Next-gen mobile e-commerce interface featuring dark glassmorphic design system, smooth micro-interactions, seamless checkout flow, and custom icon sets.',
-    accent: '#8b5cf6',
+    accent: '#7c3aed',
     impactStats: [
       { label: 'Screens Designed', value: '40+ Views' },
       { label: 'User Rating', value: '4.9 / 5.0' },
@@ -146,7 +146,7 @@ const PROJECTS: ProjectItem[] = [
     role: 'Commercial Photographer & Art Director',
     tools: ['Camera Studio', 'Lightroom', 'Photoshop'],
     description: 'High-end commercial food photography paired with vibrant print and digital marketing poster designs tailored for culinary campaigns.',
-    accent: '#ef4444',
+    accent: '#dc2626',
   },
   {
     id: 'editorial-print',
@@ -167,7 +167,7 @@ const PROJECTS: ProjectItem[] = [
     role: 'Print & Layout Specialist',
     tools: ['InDesign', 'Photoshop', 'Illustrator'],
     description: 'Creative print collaterals including magazine covers, trifold menu brochures, merchandise packaging mockups, and corporate ID card branding.',
-    accent: '#6366f1',
+    accent: '#4f46e5',
   },
   {
     id: 'sticker-art',
@@ -186,7 +186,7 @@ const PROJECTS: ProjectItem[] = [
     role: 'Illustrator & Prepress Artist',
     tools: ['Illustrator', 'Photoshop', 'Vector Art'],
     description: 'Detailed character sticker illustrations, die-cut artwork, button pins, and custom merchandise items crafted for high-quality vinyl printing.',
-    accent: '#ec4899',
+    accent: '#db2777',
   },
   {
     id: 'product-shots',
@@ -205,7 +205,7 @@ const PROJECTS: ProjectItem[] = [
     role: 'Studio Photographer & Retoucher',
     tools: ['Studio Lighting', 'Lightroom', 'Photoshop'],
     description: 'Precision studio product photography with professional multi-point lighting, color grading, and texture retouching for consumer packaging and ads.',
-    accent: '#f97316',
+    accent: '#ea580c',
   },
 ];
 
@@ -221,25 +221,25 @@ const WORKFLOW_STEPS = [
     step: '01',
     title: 'Discovery & Creative Strategy',
     desc: 'Analyzing brand goals, researching market positioning, defining visual direction, and establishing design moodboards.',
-    accent: '#10b981',
+    accent: '#059669',
   },
   {
     step: '02',
     title: 'Brand Architecture & Design Systems',
     desc: 'Crafting precision vector logos, typography pairings, grid structures, and reusable component libraries.',
-    accent: '#3b82f6',
+    accent: '#2563eb',
   },
   {
     step: '03',
     title: 'Interactive Prototyping & Motion',
     desc: 'Building responsive UI/UX screen flows, 3D visual assets, fluid micro-interactions, and motion graphics previews.',
-    accent: '#8b5cf6',
+    accent: '#7c3aed',
   },
   {
     step: '04',
     title: 'Production, Prepress & Delivery',
     desc: 'Ensuring 300 DPI pre-press color accuracy, digital asset optimization, handoff guidelines, and live deployment.',
-    accent: '#f59e0b',
+    accent: '#d97706',
   },
 ];
 
@@ -316,7 +316,7 @@ function useTextScramble(text: string) {
 }
 
 /* ═══════════════════════════════════════════
-   INTERACTIVE CANVAS PLAYGROUND
+   INTERACTIVE CANVAS PLAYGROUND (LIGHT MODE)
    ═══════════════════════════════════════════ */
 function CanvasPlayground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -339,7 +339,7 @@ function CanvasPlayground() {
     window.addEventListener('resize', handleResize);
 
     const particles: Array<{ x: number; y: number; vx: number; vy: number; radius: number; color: string; alpha: number }> = [];
-    const colors = ['#10b981', '#34d399', '#6366f1', '#22d3ee', '#3b82f6'];
+    const colors = ['#059669', '#10b981', '#34d399', '#2563eb', '#0284c7'];
 
     const spawnParticles = (x: number, y: number) => {
       for (let i = 0; i < 4; i++) {
@@ -404,19 +404,19 @@ function CanvasPlayground() {
 
   return (
     <div
-      className="relative w-full h-[320px] md:h-[420px] rounded-3xl glass-card overflow-hidden border border-emerald-500/20 shadow-2xl cursor-crosshair group"
+      className="relative w-full h-[320px] md:h-[420px] rounded-3xl glass-card overflow-hidden border border-emerald-500/30 shadow-xl cursor-crosshair group"
       onMouseDown={() => setIsDrawing(true)}
       onMouseUp={() => setIsDrawing(false)}
     >
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full z-10" />
       <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-20 px-6 text-center">
-        <span className="px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono text-xs uppercase tracking-widest mb-3">
+        <span className="px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 font-mono text-xs uppercase tracking-widest mb-3">
           Interactive WebGL Lab
         </span>
-        <h3 className="text-2xl md:text-4xl font-bold text-white mb-2">
-          Paint neon energy on screen
+        <h3 className="text-2xl md:text-4xl font-bold text-slate-900 mb-2">
+          Paint emerald energy on screen
         </h3>
-        <p className="text-xs md:text-sm text-gray-400">
+        <p className="text-xs md:text-sm text-slate-500 font-light">
           {isDrawing ? '✨ Generating particle sparks...' : 'Drag or move cursor anywhere inside this zone'}
         </p>
       </div>
@@ -425,7 +425,7 @@ function CanvasPlayground() {
 }
 
 /* ═══════════════════════════════════════════
-   3D TILT CARD COMPONENT
+   3D TILT CARD COMPONENT (LIGHT MODE)
    ═══════════════════════════════════════════ */
 function TiltProjectCard({ project, onClick }: { project: ProjectItem; onClick: () => void }) {
   const cardRef = useRef<HTMLDivElement>(null);
@@ -442,14 +442,14 @@ function TiltProjectCard({ project, onClick }: { project: ProjectItem; onClick: 
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    const rotateX = ((y - centerY) / centerY) * -12;
-    const rotateY = ((x - centerX) / centerX) * 12;
+    const rotateX = ((y - centerY) / centerY) * -10;
+    const rotateY = ((x - centerX) / centerX) * 10;
 
     setTransform(`perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`);
     setSheen({
       x: (x / rect.width) * 100,
       y: (y / rect.height) * 100,
-      opacity: 0.35,
+      opacity: 0.25,
     });
   };
 
@@ -470,18 +470,18 @@ function TiltProjectCard({ project, onClick }: { project: ProjectItem; onClick: 
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onMouseEnter={() => playSynthSound(440, 'sine', 0.05)}
-      className="group relative rounded-3xl glass-card border border-white/10 overflow-hidden cursor-pointer transition-all duration-300 ease-out shadow-xl hover:border-emerald-500/40 hover:shadow-emerald-500/10"
+      className="group relative rounded-3xl glass-card border border-slate-200/80 overflow-hidden cursor-pointer transition-all duration-300 ease-out shadow-lg hover:border-emerald-500/50 hover:shadow-emerald-500/10"
       style={{ transform, transformStyle: 'preserve-3d' }}
     >
       <div
         className="pointer-events-none absolute inset-0 z-30 transition-opacity duration-300"
         style={{
-          background: `radial-gradient(circle at ${sheen.x}% ${sheen.y}%, rgba(255,255,255,0.4) 0%, transparent 60%)`,
+          background: `radial-gradient(circle at ${sheen.x}% ${sheen.y}%, rgba(255,255,255,0.8) 0%, transparent 60%)`,
           opacity: sheen.opacity,
         }}
       />
 
-      <div className="relative aspect-[16/10] overflow-hidden bg-black/40">
+      <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
         <Image
           src={resolvedImageSrc}
           alt={project.title}
@@ -490,25 +490,24 @@ function TiltProjectCard({ project, onClick }: { project: ProjectItem; onClick: 
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           unoptimized
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-transparent to-transparent opacity-80" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-60" />
 
         <div className="absolute top-4 left-4 z-20">
           <span
-            className="px-3.5 py-1 rounded-full text-xs font-mono font-medium backdrop-blur-md border border-white/20 text-white"
-            style={{ backgroundColor: `${project.accent}33`, borderColor: `${project.accent}66` }}
+            className="px-3.5 py-1 rounded-full text-xs font-mono font-medium backdrop-blur-md bg-white/90 border border-slate-200 text-slate-900 shadow-sm"
           >
             {project.category}
           </span>
         </div>
 
         <div className="absolute top-4 right-4 z-20">
-          <span className="px-3 py-1 rounded-full text-xs font-mono text-gray-300 bg-black/40 backdrop-blur-md">
+          <span className="px-3 py-1 rounded-full text-xs font-mono text-slate-800 bg-white/90 backdrop-blur-md shadow-sm">
             {project.year}
           </span>
         </div>
 
-        <div className="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40 backdrop-blur-[2px]">
-          <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-emerald-500 text-black font-semibold text-xs tracking-wider uppercase shadow-lg transform group-hover:scale-105 transition-transform">
+        <div className="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-slate-900/30 backdrop-blur-[2px]">
+          <span className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-emerald-600 text-white font-semibold text-xs tracking-wider uppercase shadow-xl transform group-hover:scale-105 transition-transform">
             Explore Case Study
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
@@ -518,20 +517,20 @@ function TiltProjectCard({ project, onClick }: { project: ProjectItem; onClick: 
       </div>
 
       <div className="p-6">
-        <h3 className="text-xl md:text-2xl font-bold text-white group-hover:text-emerald-400 transition-colors duration-300 mb-2">
+        <h3 className="text-xl md:text-2xl font-bold text-slate-900 group-hover:text-emerald-600 transition-colors duration-300 mb-2">
           {project.title}
         </h3>
-        <p className="text-xs md:text-sm text-gray-400 line-clamp-2 leading-relaxed mb-4">
+        <p className="text-xs md:text-sm text-slate-600 line-clamp-2 leading-relaxed mb-4 font-light">
           {project.description}
         </p>
         <div className="flex flex-wrap gap-2">
           {project.tools.slice(0, 3).map((tool) => (
-            <span key={tool} className="text-[10px] font-mono px-2.5 py-1 rounded-md bg-white/5 text-gray-300 border border-white/5">
+            <span key={tool} className="text-[10px] font-mono px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 border border-slate-200">
               {tool}
             </span>
           ))}
           {project.tools.length > 3 && (
-            <span className="text-[10px] font-mono px-2 py-1 rounded-md bg-white/5 text-gray-400">
+            <span className="text-[10px] font-mono px-2 py-1 rounded-md bg-slate-100 text-slate-500">
               +{project.tools.length - 3}
             </span>
           )}
@@ -542,7 +541,7 @@ function TiltProjectCard({ project, onClick }: { project: ProjectItem; onClick: 
 }
 
 /* ═══════════════════════════════════════════
-   MAIN PAGE COMPONENT
+   MAIN PAGE COMPONENT (LIGHT RADIANT THEME)
    ═══════════════════════════════════════════ */
 export default function Home() {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -552,8 +551,6 @@ export default function Home() {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState('');
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-
-  // Estimator Form State
   const [estimatorScope, setEstimatorScope] = useState('Branding & Identity');
 
   const heroRef = useRef<HTMLElement>(null);
@@ -620,8 +617,7 @@ export default function Home() {
               scrub: 0.5,
             },
             opacity: 1,
-            color: '#ffffff',
-            textShadow: '0 0 20px rgba(16, 185, 129, 0.5)',
+            color: '#059669',
           });
         });
       }
@@ -658,13 +654,13 @@ export default function Home() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#0a0a0f] text-[#f0f0f5] selection:bg-emerald-500/30 selection:text-white">
-      {/* 3D WebGL Background Canvas */}
+    <div className="relative min-h-screen bg-[#fbfbfd] text-[#0f172a] selection:bg-emerald-500/20 selection:text-emerald-900">
+      {/* 3D WebGL Background Canvas (Light Theme) */}
       <Scene3D scrollProgress={scrollProgress} onSelectProject={handleSelect3DProject} />
 
-      {/* Toast */}
+      {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-8 right-8 z-[200] px-6 py-3 rounded-2xl bg-emerald-500 text-black font-semibold text-sm shadow-2xl flex items-center gap-3 animate-bounce">
+        <div className="fixed bottom-8 right-8 z-[200] px-6 py-3 rounded-2xl bg-emerald-600 text-white font-semibold text-sm shadow-2xl flex items-center gap-3 animate-bounce">
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
@@ -673,42 +669,42 @@ export default function Home() {
       )}
 
       {/* ═══════════════════════════════════════
-          SECTION 1 — HERO SECTION
+          SECTION 1 — HERO SECTION (LIGHT RADIANT)
           ═══════════════════════════════════════ */}
       <section ref={heroRef} className="relative z-10 min-h-screen flex flex-col justify-center px-6 md:px-12 pt-28 pb-16 overflow-hidden">
         <div className="max-w-7xl mx-auto w-full">
           {/* Status Badges */}
           <div className="hero-badge-elem flex flex-wrap items-center gap-3 md:gap-4 mb-8">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-emerald-500/30">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-emerald-500/20">
               <span className="relative flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
               </span>
-              <span className="text-xs font-mono tracking-wider text-emerald-400">
+              <span className="text-xs font-mono tracking-wider text-emerald-700 font-semibold">
                 Available for Senior Roles & Freelance
               </span>
             </div>
 
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-xs font-mono text-gray-400">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-xs font-mono text-slate-500">
               <span>JAKARTA</span>
-              <span className="text-gray-600">•</span>
-              <span className="text-white font-medium">{currentTime || '21:14 WIB'}</span>
+              <span className="text-slate-300">•</span>
+              <span className="text-slate-900 font-semibold">{currentTime || '21:24 WIB'}</span>
             </div>
           </div>
 
           {/* Kinetic Headline */}
           <h1 className="text-4xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight leading-[0.95] mb-8 select-none">
-            <span className="block hero-headline-word text-white">BALDYAS</span>
+            <span className="block hero-headline-word text-slate-900">BALDYAS</span>
             <span className="block hero-headline-word text-gradient-emerald">SATRIO ALBANI</span>
           </h1>
 
           {/* Subtitle & Role */}
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-end mb-12">
             <div className="md:col-span-8 hero-sub-text">
-              <p className="text-lg md:text-2xl text-gray-300 font-light leading-relaxed max-w-3xl">
+              <p className="text-lg md:text-2xl text-slate-600 font-light leading-relaxed max-w-3xl">
                 Creative Designer & Digital Craftsman merging high-end graphic design,
                 brand systems, UI/UX architecture, and studio photography.
-                Currently leading visual design at <span className="text-emerald-400 font-medium">Anomali Digital</span>.
+                Currently leading visual design at <span className="text-emerald-700 font-semibold">Anomali Digital</span>.
               </p>
             </div>
           </div>
@@ -718,7 +714,7 @@ export default function Home() {
             <a
               href="#works"
               onMouseEnter={() => playSynthSound(523, 'sine', 0.05)}
-              className="hero-cta-btn group inline-flex items-center gap-3 px-8 py-4 rounded-full bg-emerald-500 text-black font-bold text-sm tracking-wider uppercase hover:bg-emerald-400 transition-all duration-300 shadow-[0_0_30px_rgba(16,185,129,0.3)] hover:scale-105"
+              className="hero-cta-btn group inline-flex items-center gap-3 px-8 py-4 rounded-full bg-emerald-600 text-white font-bold text-sm tracking-wider uppercase hover:bg-emerald-700 transition-all duration-300 shadow-xl shadow-emerald-500/20 hover:scale-105"
             >
               Explore Works Matrix
               <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -729,7 +725,7 @@ export default function Home() {
             <a
               href="#playground"
               onMouseEnter={() => playSynthSound(659, 'sine', 0.05)}
-              className="hero-cta-btn inline-flex items-center gap-2 px-8 py-4 rounded-full glass border border-white/20 text-white font-semibold text-sm tracking-wider uppercase hover:bg-white/10 transition-all duration-300 hover:border-emerald-400/50"
+              className="hero-cta-btn inline-flex items-center gap-2 px-8 py-4 rounded-full glass border border-slate-200 text-slate-800 font-semibold text-sm tracking-wider uppercase hover:bg-white hover:border-emerald-500/40 transition-all duration-300 shadow-sm"
             >
               🎮 WebGL Lab
             </a>
@@ -737,7 +733,7 @@ export default function Home() {
             <button
               onClick={handleCopyEmail}
               onMouseEnter={() => playSynthSound(783, 'sine', 0.05)}
-              className="hero-cta-btn inline-flex items-center gap-2 px-6 py-4 rounded-full glass text-gray-400 hover:text-white text-xs font-mono tracking-wider transition-colors"
+              className="hero-cta-btn inline-flex items-center gap-2 px-6 py-4 rounded-full glass text-slate-600 hover:text-slate-900 text-xs font-mono tracking-wider transition-colors"
             >
               <span>✉ Copy Email</span>
             </button>
@@ -746,9 +742,9 @@ export default function Home() {
 
         {/* Scroll Cue */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none">
-          <span className="text-[10px] font-mono uppercase tracking-[0.4em] text-gray-500">SCROLL TO FLY THROUGH 3D WORLD</span>
+          <span className="text-[10px] font-mono uppercase tracking-[0.4em] text-slate-400 font-medium">SCROLL TO FLY THROUGH 3D WORLD</span>
           <div className="w-[1px] h-10 bg-gradient-to-b from-emerald-500 to-transparent relative overflow-hidden">
-            <div className="absolute w-full h-3 bg-emerald-400 animate-[scrollLine_2s_ease-in-out_infinite]" />
+            <div className="absolute w-full h-3 bg-emerald-500 animate-[scrollLine_2s_ease-in-out_infinite]" />
           </div>
         </div>
       </section>
@@ -762,8 +758,7 @@ export default function Home() {
             {"I don't just design static visuals. I engineer immersive digital experiences that captivate attention and elevate brands. Every curve has intent. Every pixel tells a narrative.".split(' ').map((word, i) => (
               <span
                 key={i}
-                className="manifesto-word inline-block mr-[0.3em] opacity-10 transition-all duration-300 select-none"
-                style={{ color: '#8888a0' }}
+                className="manifesto-word inline-block mr-[0.3em] opacity-20 transition-all duration-300 select-none text-slate-400"
               >
                 {word}
               </span>
@@ -779,10 +774,10 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
             <div>
-              <span className="px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs uppercase tracking-widest block w-max mb-4">
+              <span className="px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 font-mono text-xs uppercase tracking-widest block w-max mb-4 font-semibold">
                 Selected Works Matrix
               </span>
-              <h2 className="text-4xl md:text-6xl font-black text-white tracking-tight">
+              <h2 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tight">
                 FEATURED PROJECTS
               </h2>
             </div>
@@ -797,8 +792,8 @@ export default function Home() {
                   }}
                   className={`px-4 py-2 rounded-full text-xs font-mono transition-all duration-300 ${
                     activeCategory === cat
-                      ? 'bg-emerald-500 text-black font-bold shadow-lg shadow-emerald-500/20'
-                      : 'glass text-gray-400 hover:text-white hover:border-white/20'
+                      ? 'bg-emerald-600 text-white font-bold shadow-md shadow-emerald-500/20'
+                      : 'glass text-slate-600 hover:text-slate-900 hover:border-slate-300'
                   }`}
                 >
                   {cat}
@@ -823,15 +818,15 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════
-          NEW SECTION 4 — CREATIVE PROCESS WORKFLOW
+          SECTION 4 — CREATIVE PROCESS WORKFLOW
           ═══════════════════════════════════════ */}
-      <section id="process" className="relative z-10 py-28 px-6 md:px-12 border-t border-white/10">
+      <section id="process" className="relative z-10 py-28 px-6 md:px-12 border-t border-slate-200/60">
         <div className="max-w-7xl mx-auto">
           <div className="mb-16">
-            <span className="px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs uppercase tracking-widest block w-max mb-4">
+            <span className="px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 font-mono text-xs uppercase tracking-widest block w-max mb-4 font-semibold">
               Methodology & Workflow
             </span>
-            <h2 className="text-4xl md:text-6xl font-black text-white tracking-tight">
+            <h2 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tight">
               DESIGN PROCESS
             </h2>
           </div>
@@ -841,18 +836,18 @@ export default function Home() {
               <div
                 key={step.step}
                 onMouseEnter={() => playSynthSound(500, 'sine', 0.04)}
-                className="group relative rounded-3xl glass-card border border-white/10 p-8 hover:border-emerald-500/40 transition-all duration-300 shadow-xl hover:-translate-y-2"
+                className="group relative rounded-3xl glass-card border border-slate-200/80 p-8 hover:border-emerald-500/50 transition-all duration-300 shadow-sm hover:-translate-y-2 hover:shadow-xl"
               >
                 <div
                   className="w-12 h-12 rounded-2xl flex items-center justify-center font-mono font-bold text-lg mb-6 border"
-                  style={{ backgroundColor: `${step.accent}20`, borderColor: `${step.accent}55`, color: step.accent }}
+                  style={{ backgroundColor: `${step.accent}15`, borderColor: `${step.accent}40`, color: step.accent }}
                 >
                   {step.step}
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3 group-hover:text-emerald-400 transition-colors">
+                <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-emerald-600 transition-colors">
                   {step.title}
                 </h3>
-                <p className="text-xs md:text-sm text-gray-400 leading-relaxed font-light">
+                <p className="text-xs md:text-sm text-slate-600 leading-relaxed font-light">
                   {step.desc}
                 </p>
               </div>
@@ -873,9 +868,9 @@ export default function Home() {
       {/* ═══════════════════════════════════════
           SECTION 6 — KINETIC SKILLS MARQUEE
           ═══════════════════════════════════════ */}
-      <section id="skills" className="relative z-10 py-20 border-y border-white/10 overflow-hidden bg-black/40">
+      <section id="skills" className="relative z-10 py-20 border-y border-slate-200/60 overflow-hidden bg-slate-50/50">
         <div className="mb-8 text-center">
-          <span className="text-xs font-mono uppercase tracking-[0.4em] text-gray-500">
+          <span className="text-xs font-mono uppercase tracking-[0.4em] text-slate-400 font-semibold">
             TECHNOLOGIES & CREATIVE DISCIPLINES
           </span>
         </div>
@@ -884,7 +879,7 @@ export default function Home() {
           {[...SKILLS, ...SKILLS].map((skill, idx) => (
             <span
               key={idx}
-              className="mx-6 text-3xl md:text-5xl font-black text-gray-600 hover:text-emerald-400 transition-colors duration-300 cursor-pointer select-none"
+              className="mx-6 text-3xl md:text-5xl font-black text-slate-400 hover:text-emerald-600 transition-colors duration-300 cursor-pointer select-none"
               onMouseEnter={() => playSynthSound(600 + (idx % 8) * 40, 'triangle', 0.04)}
             >
               {skill} <span className="text-emerald-500/50 mx-4">•</span>
@@ -896,10 +891,10 @@ export default function Home() {
           {[...SKILLS.reverse(), ...SKILLS].map((skill, idx) => (
             <span
               key={idx}
-              className="mx-6 text-2xl md:text-4xl font-light text-gray-700 hover:text-cyan-400 transition-colors duration-300 cursor-pointer select-none"
+              className="mx-6 text-2xl md:text-4xl font-light text-slate-300 hover:text-blue-600 transition-colors duration-300 cursor-pointer select-none"
               onMouseEnter={() => playSynthSound(400 + (idx % 8) * 30, 'sine', 0.04)}
             >
-              {skill} <span className="text-cyan-500/30 mx-4">/</span>
+              {skill} <span className="text-blue-500/30 mx-4">/</span>
             </span>
           ))}
         </div>
@@ -911,7 +906,7 @@ export default function Home() {
       <section ref={aboutRef} id="about" className="relative z-10 py-28 md:py-40 px-6 md:px-12">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
           <div className="lg:col-span-5 about-card-img">
-            <div className="relative aspect-[3/4] rounded-3xl overflow-hidden glass-card border border-white/10 shadow-2xl">
+            <div className="relative aspect-[3/4] rounded-3xl overflow-hidden glass-card border border-slate-200/80 shadow-xl">
               <Image
                 src={getAssetPath('/images/profile-new.png')}
                 alt="Baldyas Satrio Albani"
@@ -921,57 +916,57 @@ export default function Home() {
                 priority
                 unoptimized
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-transparent to-transparent opacity-80" />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-60" />
 
-              <div className="absolute bottom-6 left-6 right-6 p-4 rounded-2xl glass border border-white/10 backdrop-blur-xl">
-                <p className="text-[10px] font-mono uppercase tracking-widest text-emerald-400">Current Role</p>
-                <p className="text-lg font-bold text-white">Graphic Designer</p>
-                <p className="text-xs text-gray-400">Anomali Digital (Feb 2025 – Present)</p>
+              <div className="absolute bottom-6 left-6 right-6 p-4 rounded-2xl glass border border-white/40 backdrop-blur-xl bg-white/80">
+                <p className="text-[10px] font-mono uppercase tracking-widest text-emerald-700 font-bold">Current Role</p>
+                <p className="text-lg font-bold text-slate-900">Graphic Designer</p>
+                <p className="text-xs text-slate-600">Anomali Digital (Feb 2025 – Present)</p>
               </div>
             </div>
           </div>
 
           <div className="lg:col-span-7 space-y-8">
             <div>
-              <span className="px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs uppercase tracking-widest inline-block mb-4">
+              <span className="px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 font-mono text-xs uppercase tracking-widest inline-block mb-4 font-semibold">
                 Biography & Experience
               </span>
-              <h2 className="text-3xl md:text-5xl font-black text-white leading-tight">
+              <h2 className="text-3xl md:text-5xl font-black text-slate-900 leading-tight">
                 Crafting visual excellence across brand systems & digital products.
               </h2>
             </div>
 
-            <p className="text-base md:text-lg text-gray-300 leading-relaxed font-light">
-              I&apos;m <span className="text-white font-semibold">Baldyas Satrio Albani</span>, a creative designer based in Jakarta.
-              Graduated from <span className="text-white font-medium">SMK Budhiwarman 1</span> (Visual Communication Design) and previously studied at <span className="text-white font-medium">Politeknik Negeri Media Kreatif</span>.
+            <p className="text-base md:text-lg text-slate-600 leading-relaxed font-light">
+              I&apos;m <span className="text-slate-900 font-semibold">Baldyas Satrio Albani</span>, a creative designer based in Jakarta.
+              Graduated from <span className="text-slate-900 font-medium">SMK Budhiwarman 1</span> (Visual Communication Design) and previously studied at <span className="text-slate-900 font-medium">Politeknik Negeri Media Kreatif</span>.
               My expertise bridges graphic design, corporate editorial print, UI/UX apps, motion graphics, and studio commercial photography.
             </p>
 
             <div className="space-y-4">
-              <h3 className="text-xs font-mono uppercase tracking-widest text-gray-400 mb-4">Career Milestones</h3>
+              <h3 className="text-xs font-mono uppercase tracking-widest text-slate-400 font-semibold mb-4">Career Milestones</h3>
               <div className="space-y-4">
-                <div className="p-4 rounded-2xl glass border border-emerald-500/30 flex items-start justify-between">
+                <div className="p-4 rounded-2xl glass border border-emerald-500/30 flex items-start justify-between bg-emerald-50/40">
                   <div>
-                    <span className="text-xs font-mono text-emerald-400">FEB 2025 — PRESENT</span>
-                    <h4 className="text-base font-bold text-white">Graphic Designer</h4>
-                    <p className="text-xs text-gray-400">Anomali Digital • Full-time</p>
+                    <span className="text-xs font-mono text-emerald-700 font-bold">FEB 2025 — PRESENT</span>
+                    <h4 className="text-base font-bold text-slate-900">Graphic Designer</h4>
+                    <p className="text-xs text-slate-600">Anomali Digital • Full-time</p>
                   </div>
-                  <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-mono">ACTIVE</span>
+                  <span className="px-2.5 py-1 rounded-full bg-emerald-600 text-white text-[10px] font-mono font-bold">ACTIVE</span>
                 </div>
 
-                <div className="p-4 rounded-2xl glass border border-white/10 flex items-start justify-between">
+                <div className="p-4 rounded-2xl glass border border-slate-200/80 flex items-start justify-between">
                   <div>
-                    <span className="text-xs font-mono text-gray-400">2024</span>
-                    <h4 className="text-base font-bold text-white">Photography Student (1 Semester)</h4>
-                    <p className="text-xs text-gray-400">Politeknik Negeri Media Kreatif (Polmed)</p>
+                    <span className="text-xs font-mono text-slate-400">2024</span>
+                    <h4 className="text-base font-bold text-slate-900">Photography Student (1 Semester)</h4>
+                    <p className="text-xs text-slate-600">Politeknik Negeri Media Kreatif (Polmed)</p>
                   </div>
                 </div>
 
-                <div className="p-4 rounded-2xl glass border border-white/10 flex items-start justify-between">
+                <div className="p-4 rounded-2xl glass border border-slate-200/80 flex items-start justify-between">
                   <div>
-                    <span className="text-xs font-mono text-gray-400">2022 — 2025</span>
-                    <h4 className="text-base font-bold text-white">Visual Communication Design (DKV)</h4>
-                    <p className="text-xs text-gray-400">SMK Budhiwarman 1 Jakarta</p>
+                    <span className="text-xs font-mono text-slate-400">2022 — 2025</span>
+                    <h4 className="text-base font-bold text-slate-900">Visual Communication Design (DKV)</h4>
+                    <p className="text-xs text-slate-600">SMK Budhiwarman 1 Jakarta</p>
                   </div>
                 </div>
               </div>
@@ -981,15 +976,15 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════
-          NEW SECTION 8 — FAQ ACCORDION
+          SECTION 8 — FAQ ACCORDION
           ═══════════════════════════════════════ */}
-      <section id="faq" className="relative z-10 py-28 px-6 md:px-12 border-t border-white/10">
+      <section id="faq" className="relative z-10 py-28 px-6 md:px-12 border-t border-slate-200/60">
         <div className="max-w-4xl mx-auto">
           <div className="mb-16 text-center">
-            <span className="px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs uppercase tracking-widest inline-block mb-4">
+            <span className="px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 font-mono text-xs uppercase tracking-widest inline-block mb-4 font-semibold">
               Clear Answers
             </span>
-            <h2 className="text-4xl md:text-6xl font-black text-white tracking-tight">
+            <h2 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tight">
               FREQUENTLY ASKED QUESTIONS
             </h2>
           </div>
@@ -998,22 +993,22 @@ export default function Home() {
             {FAQS.map((faq, idx) => (
               <div
                 key={idx}
-                className="rounded-3xl glass-card border border-white/10 overflow-hidden transition-colors"
+                className="rounded-3xl glass-card border border-slate-200/80 overflow-hidden transition-colors"
               >
                 <button
                   onClick={() => {
                     playSynthSound(450 + idx * 30, 'sine', 0.05);
                     setOpenFaq(openFaq === idx ? null : idx);
                   }}
-                  className="w-full p-6 text-left flex items-center justify-between font-bold text-base md:text-lg text-white hover:text-emerald-400 transition-colors"
+                  className="w-full p-6 text-left flex items-center justify-between font-bold text-base md:text-lg text-slate-900 hover:text-emerald-600 transition-colors"
                 >
                   <span>{faq.q}</span>
-                  <span className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-sm font-mono text-emerald-400 flex-shrink-0 ml-4">
+                  <span className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-sm font-mono text-emerald-700 flex-shrink-0 ml-4 font-bold">
                     {openFaq === idx ? '−' : '+'}
                   </span>
                 </button>
                 {openFaq === idx && (
-                  <div className="px-6 pb-6 text-xs md:text-sm text-gray-400 font-light leading-relaxed border-t border-white/5 pt-4">
+                  <div className="px-6 pb-6 text-xs md:text-sm text-slate-600 font-light leading-relaxed border-t border-slate-100 pt-4">
                     {faq.a}
                   </div>
                 )}
@@ -1024,25 +1019,25 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════
-          NEW SECTION 9 — INTERACTIVE PROJECT ESTIMATOR
+          SECTION 9 — INTERACTIVE PROJECT ESTIMATOR
           ═══════════════════════════════════════ */}
-      <section id="estimator" className="relative z-10 py-28 px-6 md:px-12 border-t border-white/10">
-        <div className="max-w-4xl mx-auto glass-card rounded-3xl border border-emerald-500/30 p-8 md:p-12 shadow-2xl">
+      <section id="estimator" className="relative z-10 py-28 px-6 md:px-12 border-t border-slate-200/60">
+        <div className="max-w-4xl mx-auto glass-card rounded-3xl border border-emerald-500/30 p-8 md:p-12 shadow-xl bg-white">
           <div className="text-center mb-10">
-            <span className="px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono text-xs uppercase tracking-widest inline-block mb-3">
+            <span className="px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 font-mono text-xs uppercase tracking-widest inline-block mb-3 font-semibold">
               Interactive Scope Builder
             </span>
-            <h2 className="text-3xl md:text-5xl font-black text-white">
+            <h2 className="text-3xl md:text-5xl font-black text-slate-900">
               PROJECT ESTIMATOR
             </h2>
-            <p className="text-xs md:text-sm text-gray-400 mt-2">
+            <p className="text-xs md:text-sm text-slate-500 font-light mt-2">
               Select your required creative scope to generate a direct project brief.
             </p>
           </div>
 
           <div className="space-y-6">
             <div>
-              <label className="text-xs font-mono uppercase tracking-widest text-gray-400 block mb-3">
+              <label className="text-xs font-mono uppercase tracking-widest text-slate-400 font-semibold block mb-3">
                 1. Select Creative Scope
               </label>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
@@ -1063,8 +1058,8 @@ export default function Home() {
                     }}
                     className={`p-3 rounded-2xl text-xs font-mono border transition-all text-center ${
                       estimatorScope === scope
-                        ? 'bg-emerald-500 text-black font-bold border-emerald-400'
-                        : 'glass text-gray-300 border-white/10 hover:border-white/30'
+                        ? 'bg-emerald-600 text-white font-bold border-emerald-600 shadow-md'
+                        : 'glass text-slate-700 border-slate-200 hover:border-emerald-300'
                     }`}
                   >
                     {scope}
@@ -1073,11 +1068,11 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="pt-6 border-t border-white/10 text-center">
+            <div className="pt-6 border-t border-slate-100 text-center">
               <a
                 href={`mailto:baldyas.albani@gmail.com?subject=New%20Project%20Inquiry%20-%20${encodeURIComponent(estimatorScope)}&body=Hi%20Baldyas,%20I'd%20like%20to%20discuss%20a%20new%20project%20regarding%20${encodeURIComponent(estimatorScope)}.`}
                 onMouseEnter={() => playSynthSound(700, 'sine', 0.05)}
-                className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-emerald-500 text-black font-bold text-sm tracking-wider uppercase hover:bg-emerald-400 transition-all hover:scale-105 shadow-lg shadow-emerald-500/20"
+                className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-emerald-600 text-white font-bold text-sm tracking-wider uppercase hover:bg-emerald-700 transition-all hover:scale-105 shadow-xl shadow-emerald-500/20"
               >
                 Send Inquiry for &quot;{estimatorScope}&quot; 🚀
               </a>
@@ -1089,18 +1084,18 @@ export default function Home() {
       {/* ═══════════════════════════════════════
           SECTION 10 — CONTACT & FOOTER
           ═══════════════════════════════════════ */}
-      <section id="contact" className="relative z-10 py-32 md:py-44 px-6 md:px-12 border-t border-white/10">
+      <section id="contact" className="relative z-10 py-32 md:py-44 px-6 md:px-12 border-t border-slate-200/60">
         <div className="max-w-4xl mx-auto text-center">
-          <span className="px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-xs uppercase tracking-widest inline-block mb-6">
+          <span className="px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 font-mono text-xs uppercase tracking-widest inline-block mb-6 font-semibold">
             Let&apos;s Build Together
           </span>
 
-          <h2 className="text-4xl md:text-7xl font-black text-white leading-tight mb-8">
+          <h2 className="text-4xl md:text-7xl font-black text-slate-900 leading-tight mb-8">
             READY TO START A <br />
             <span className="text-gradient-emerald">PROJECT?</span>
           </h2>
 
-          <p className="text-base md:text-xl text-gray-400 max-w-xl mx-auto font-light mb-12">
+          <p className="text-base md:text-xl text-slate-600 max-w-xl mx-auto font-light mb-12">
             Whether you need a brand redesign, UI/UX product architecture, or commercial photography, let&apos;s make it extraordinary.
           </p>
 
@@ -1109,7 +1104,7 @@ export default function Home() {
               onClick={handleCopyEmail}
               onMouseEnter={emailScramble.scramble}
               onMouseLeave={emailScramble.reset}
-              className="group inline-flex items-center gap-3 px-8 py-5 rounded-full glass border border-emerald-500/40 text-lg md:text-2xl font-mono text-white hover:bg-emerald-500 hover:text-black hover:border-emerald-400 transition-all duration-300 shadow-2xl"
+              className="group inline-flex items-center gap-3 px-8 py-5 rounded-full glass border border-emerald-500/40 text-lg md:text-2xl font-mono text-slate-900 hover:bg-emerald-600 hover:text-white hover:border-emerald-600 transition-all duration-300 shadow-xl"
             >
               <span>{emailScramble.display}</span>
               <svg className="w-5 h-5 transition-transform group-hover:scale-125" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1130,7 +1125,7 @@ export default function Home() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onMouseEnter={() => playSynthSound(700, 'sine', 0.04)}
-                className="text-xs font-mono uppercase tracking-widest text-gray-400 hover:text-emerald-400 transition-colors"
+                className="text-xs font-mono uppercase tracking-widest text-slate-500 hover:text-emerald-600 transition-colors font-semibold"
               >
                 {s.name} ↗
               </a>
@@ -1143,14 +1138,14 @@ export default function Home() {
           FULL-SCREEN PROJECT LIGHTBOX MODAL
           ═══════════════════════════════════════ */}
       {selectedProject && (
-        <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 md:p-8 bg-black/90 backdrop-blur-2xl animate-fadeIn">
-          <div className="relative w-full max-w-5xl max-h-[90vh] glass-card rounded-3xl border border-white/20 overflow-y-auto p-6 md:p-10 text-white shadow-2xl">
+        <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 md:p-8 bg-slate-900/80 backdrop-blur-2xl animate-fadeIn">
+          <div className="relative w-full max-w-5xl max-h-[90vh] glass-card rounded-3xl border border-slate-200 overflow-y-auto p-6 md:p-10 text-slate-900 shadow-2xl bg-white">
             <button
               onClick={() => {
                 playSynthSound(300, 'sine', 0.1);
                 setSelectedProject(null);
               }}
-              className="absolute top-6 right-6 z-50 p-3 rounded-full glass hover:bg-white/20 text-gray-300 hover:text-white transition-colors"
+              className="absolute top-6 right-6 z-50 p-3 rounded-full glass hover:bg-slate-100 text-slate-600 hover:text-slate-900 transition-colors"
               aria-label="Close modal"
             >
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1158,7 +1153,7 @@ export default function Home() {
               </svg>
             </button>
 
-            <div className="relative aspect-[16/10] w-full rounded-2xl overflow-hidden bg-black/60 mb-6">
+            <div className="relative aspect-[16/10] w-full rounded-2xl overflow-hidden bg-slate-100 mb-6">
               <Image
                 src={getAssetPath(selectedProject.gallery[activeGalleryIndex] || selectedProject.image)}
                 alt={selectedProject.title}
@@ -1180,7 +1175,7 @@ export default function Home() {
                       setActiveGalleryIndex(idx);
                     }}
                     className={`relative w-20 h-16 rounded-xl overflow-hidden border-2 transition-all flex-shrink-0 ${
-                      activeGalleryIndex === idx ? 'border-emerald-400 scale-105' : 'border-transparent opacity-50 hover:opacity-100'
+                      activeGalleryIndex === idx ? 'border-emerald-600 scale-105 shadow-md' : 'border-transparent opacity-50 hover:opacity-100'
                     }`}
                   >
                     <Image src={getAssetPath(img)} alt={`Thumb ${idx}`} fill className="object-cover" sizes="80px" unoptimized />
@@ -1189,45 +1184,44 @@ export default function Home() {
               </div>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 border-t border-white/10 pt-6">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 border-t border-slate-100 pt-6">
               <div className="md:col-span-8">
                 <span
-                  className="px-3.5 py-1 rounded-full text-xs font-mono font-semibold uppercase tracking-wider inline-block mb-3"
-                  style={{ backgroundColor: `${selectedProject.accent}33`, color: selectedProject.accent }}
+                  className="px-3.5 py-1 rounded-full text-xs font-mono font-semibold uppercase tracking-wider inline-block mb-3 bg-emerald-50 text-emerald-700 border border-emerald-200"
                 >
                   {selectedProject.category} • {selectedProject.year}
                 </span>
-                <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{selectedProject.title}</h2>
-                <p className="text-gray-300 text-sm md:text-base leading-relaxed font-light mb-6">
+                <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">{selectedProject.title}</h2>
+                <p className="text-slate-600 text-sm md:text-base leading-relaxed font-light mb-6">
                   {selectedProject.description}
                 </p>
 
                 {selectedProject.impactStats && (
-                  <div className="flex flex-wrap gap-4 pt-4 border-t border-white/10">
+                  <div className="flex flex-wrap gap-4 pt-4 border-t border-slate-100">
                     {selectedProject.impactStats.map((st) => (
-                      <div key={st.label} className="px-4 py-2 rounded-xl bg-white/5 border border-white/5">
-                        <span className="text-xs text-gray-400 block">{st.label}</span>
-                        <span className="text-lg font-bold text-emerald-400">{st.value}</span>
+                      <div key={st.label} className="px-4 py-2 rounded-xl bg-slate-50 border border-slate-200">
+                        <span className="text-xs text-slate-500 block font-mono">{st.label}</span>
+                        <span className="text-lg font-bold text-emerald-700">{st.value}</span>
                       </div>
                     ))}
                   </div>
                 )}
               </div>
 
-              <div className="md:col-span-4 space-y-4 text-xs font-mono border-l border-white/10 pl-0 md:pl-6">
+              <div className="md:col-span-4 space-y-4 text-xs font-mono border-l border-slate-100 pl-0 md:pl-6">
                 <div>
-                  <span className="text-gray-500 uppercase block">Client</span>
-                  <span className="text-white font-medium">{selectedProject.client}</span>
+                  <span className="text-slate-400 uppercase block font-semibold">Client</span>
+                  <span className="text-slate-900 font-medium">{selectedProject.client}</span>
                 </div>
                 <div>
-                  <span className="text-gray-500 uppercase block">Role</span>
-                  <span className="text-white font-medium">{selectedProject.role}</span>
+                  <span className="text-slate-400 uppercase block font-semibold">Role</span>
+                  <span className="text-slate-900 font-medium">{selectedProject.role}</span>
                 </div>
                 <div>
-                  <span className="text-gray-500 uppercase block mb-1">Tools & Tech</span>
+                  <span className="text-slate-400 uppercase block font-semibold mb-1">Tools & Tech</span>
                   <div className="flex flex-wrap gap-1.5">
                     {selectedProject.tools.map((t) => (
-                      <span key={t} className="px-2 py-0.5 rounded bg-white/10 text-emerald-300">
+                      <span key={t} className="px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 font-medium">
                         {t}
                       </span>
                     ))}

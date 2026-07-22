@@ -10,38 +10,36 @@ interface Scene3DProps {
   onSelectProject?: (index: number) => void;
 }
 
-// ─── STAGE 1: Morphing Liquid Chrome Blob (Hero Stage: 0.0 - 0.18) ────────────
+// ─── STAGE 1: Morphing Liquid Glass & Emerald Crystal Sphere (Hero Stage) ────
 
-function LiquidChromeBlob({ scrollProgress }: { scrollProgress: number }) {
+function LiquidGlassSphere({ scrollProgress }: { scrollProgress: number }) {
   const meshRef = useRef<THREE.Mesh>(null);
-  const materialRef = useRef<THREE.MeshStandardMaterial>(null);
 
   useFrame((state) => {
     if (!meshRef.current) return;
     const time = state.clock.getElapsedTime();
 
-    // Scale and opacity fade out when moving to Stage 2
-    const visibility = Math.max(0, 1 - scrollProgress * 5); // Visible during 0.0 - 0.2
-    meshRef.current.scale.setScalar(visibility * (1.8 + Math.sin(time * 1.5) * 0.1));
+    // Scale and opacity fade out when moving past Hero
+    const visibility = Math.max(0, 1 - scrollProgress * 4.5);
+    meshRef.current.scale.setScalar(visibility * (1.7 + Math.sin(time * 1.5) * 0.08));
 
-    meshRef.current.rotation.x = time * 0.3;
-    meshRef.current.rotation.y = time * 0.4;
+    meshRef.current.rotation.x = time * 0.25;
+    meshRef.current.rotation.y = time * 0.35;
 
-    // Mouse tilt attraction
+    // Mouse tilt tracking
     const pointer = state.pointer;
-    meshRef.current.rotation.z = THREE.MathUtils.lerp(meshRef.current.rotation.z, pointer.x * 0.5, 0.1);
+    meshRef.current.rotation.z = THREE.MathUtils.lerp(meshRef.current.rotation.z, pointer.x * 0.4, 0.1);
   });
 
   return (
     <mesh ref={meshRef} position={[0, 0, 0]}>
-      <icosahedronGeometry args={[1.6, 32]} />
+      <icosahedronGeometry args={[1.5, 32]} />
       <meshStandardMaterial
-        ref={materialRef}
         color="#10b981"
-        roughness={0.15}
-        metalness={0.9}
-        emissive="#047857"
-        emissiveIntensity={0.3}
+        roughness={0.1}
+        metalness={0.8}
+        emissive="#059669"
+        emissiveIntensity={0.25}
         wireframe={false}
       />
     </mesh>
@@ -52,26 +50,24 @@ function LiquidChromeBlob({ scrollProgress }: { scrollProgress: number }) {
 
 function CyberMatrixTunnel({ scrollProgress }: { scrollProgress: number }) {
   const groupRef = useRef<THREE.Group>(null);
-  const ringCount = 12;
+  const ringCount = 10;
 
   useFrame((state) => {
     if (!groupRef.current) return;
     const time = state.clock.getElapsedTime();
 
-    // Fade in during 0.15-0.25, fade out during 0.35-0.45
     let opacity = 0;
     if (scrollProgress >= 0.12 && scrollProgress <= 0.40) {
       opacity = Math.sin(((scrollProgress - 0.12) / 0.28) * Math.PI);
     }
 
-    groupRef.current.rotation.z = time * 0.1 + scrollProgress * 4;
-    groupRef.current.position.z = (scrollProgress - 0.25) * 20;
+    groupRef.current.rotation.z = time * 0.08 + scrollProgress * 3;
+    groupRef.current.position.z = (scrollProgress - 0.25) * 18;
 
-    // Update children line opacity
     groupRef.current.children.forEach((child, i) => {
       const line = child as THREE.LineSegments;
       if (line.material && line.material instanceof THREE.LineBasicMaterial) {
-        line.material.opacity = opacity * (1 - (i / ringCount) * 0.5);
+        line.material.opacity = opacity * (1 - (i / ringCount) * 0.4);
       }
     });
   });
@@ -80,8 +76,8 @@ function CyberMatrixTunnel({ scrollProgress }: { scrollProgress: number }) {
     <group ref={groupRef} position={[0, 0, -5]}>
       {Array.from({ length: ringCount }).map((_, i) => (
         <lineSegments key={i} position={[0, 0, -i * 2.5]}>
-          <wireframeGeometry args={[new THREE.TorusGeometry(3.5 + i * 0.2, 0.05, 8, 24)]} />
-          <lineBasicMaterial color={i % 2 === 0 ? '#10b981' : '#6366f1'} transparent opacity={0} />
+          <wireframeGeometry args={[new THREE.TorusGeometry(3.5 + i * 0.2, 0.04, 8, 24)]} />
+          <lineBasicMaterial color={i % 2 === 0 ? '#059669' : '#10b981'} transparent opacity={0} />
         </lineSegments>
       ))}
     </group>
@@ -121,10 +117,8 @@ function FloatingCard3D({
     const ctx = canvas.getContext('2d');
 
     if (ctx) {
-      const grad = ctx.createLinearGradient(0, 0, 512, 340);
-      grad.addColorStop(0, '#13131a');
-      grad.addColorStop(1, '#1a1a24');
-      ctx.fillStyle = grad;
+      // Pure white card background with green border
+      ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, 512, 340);
 
       ctx.strokeStyle = color;
@@ -135,15 +129,15 @@ function FloatingCard3D({
       ctx.font = 'bold 20px monospace';
       ctx.fillText(`// ${category.toUpperCase()}`, 36, 65);
 
-      ctx.fillStyle = '#ffffff';
+      ctx.fillStyle = '#0f172a';
       ctx.font = 'bold 36px sans-serif';
       ctx.fillText(title, 36, 140);
 
-      ctx.fillStyle = 'rgba(255,255,255,0.15)';
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.15)';
       ctx.font = 'bold 90px monospace';
       ctx.fillText(`0${index + 1}`, 360, 280);
 
-      ctx.fillStyle = 'rgba(255,255,255,0.7)';
+      ctx.fillStyle = color;
       ctx.font = 'bold 16px monospace';
       ctx.fillText('CLICK TO EXPLORE 3D CASE STUDY ↗', 36, 295);
     }
@@ -157,7 +151,6 @@ function FloatingCard3D({
     if (!meshRef.current) return;
     const time = state.clock.getElapsedTime();
 
-    // Visibility window during works section
     let cardOpacity = 0;
     if (scrollProgress >= 0.30 && scrollProgress <= 0.75) {
       cardOpacity = Math.sin(((scrollProgress - 0.30) / 0.45) * Math.PI);
@@ -169,7 +162,6 @@ function FloatingCard3D({
       mat.transparent = true;
     }
 
-    // Otsuka Air float drift
     const floatY = Math.sin(time * 1.5 + index * 0.9) * 0.3;
     const scrollDolly = (scrollProgress - 0.45) * 20;
 
@@ -196,22 +188,22 @@ function FloatingCard3D({
       <meshStandardMaterial
         map={texture}
         roughness={0.2}
-        metalness={0.8}
+        metalness={0.1}
         side={THREE.DoubleSide}
-        emissive={hovered ? color : '#000000'}
-        emissiveIntensity={hovered ? 0.5 : 0}
+        emissive={hovered ? color : '#ffffff'}
+        emissiveIntensity={hovered ? 0.3 : 0}
       />
     </mesh>
   );
 }
 
 const FLOATING_PROJECTS = [
-  { title: 'Fotobooth Pro', category: 'Software', color: '#10b981', pos: [-5, 3, -1] as [number, number, number], rot: [0.1, 0.2, -0.05] as [number, number, number] },
-  { title: 'BNC Express', category: 'Editorial', color: '#3b82f6', pos: [5, 2, -3] as [number, number, number], rot: [-0.1, -0.25, 0.05] as [number, number, number] },
-  { title: 'Brand Systems', category: 'Branding', color: '#f59e0b', pos: [-4.5, -2.5, -4] as [number, number, number], rot: [0.15, 0.3, -0.1] as [number, number, number] },
-  { title: 'Aura App', category: 'UI/UX', color: '#8b5cf6', pos: [4.8, -3, -2] as [number, number, number], rot: [-0.1, -0.2, 0.08] as [number, number, number] },
-  { title: 'Culinary Photography', category: 'Photography', color: '#ef4444', pos: [0, 4.5, -6] as [number, number, number], rot: [0.2, 0, 0] as [number, number, number] },
-  { title: 'Print & Packaging', category: 'Print', color: '#6366f1', pos: [0, -4.5, -5] as [number, number, number], rot: [-0.2, 0, 0] as [number, number, number] },
+  { title: 'Fotobooth Pro', category: 'Software', color: '#059669', pos: [-5, 3, -1] as [number, number, number], rot: [0.1, 0.2, -0.05] as [number, number, number] },
+  { title: 'BNC Express', category: 'Editorial', color: '#2563eb', pos: [5, 2, -3] as [number, number, number], rot: [-0.1, -0.25, 0.05] as [number, number, number] },
+  { title: 'Brand Systems', category: 'Branding', color: '#d97706', pos: [-4.5, -2.5, -4] as [number, number, number], rot: [0.15, 0.3, -0.1] as [number, number, number] },
+  { title: 'Aura App', category: 'UI/UX', color: '#7c3aed', pos: [4.8, -3, -2] as [number, number, number], rot: [-0.1, -0.2, 0.08] as [number, number, number] },
+  { title: 'Culinary Photography', category: 'Photography', color: '#dc2626', pos: [0, 4.5, -6] as [number, number, number], rot: [0.2, 0, 0] as [number, number, number] },
+  { title: 'Print & Packaging', category: 'Print', color: '#4f46e5', pos: [0, -4.5, -5] as [number, number, number], rot: [-0.2, 0, 0] as [number, number, number] },
 ];
 
 // ─── STAGE 4: Orbital Atomic System (Process Stage: 0.70 - 0.85) ─────────────
@@ -228,8 +220,8 @@ function OrbitalAtomicSystem({ scrollProgress }: { scrollProgress: number }) {
       opacity = Math.sin(((scrollProgress - 0.65) / 0.23) * Math.PI);
     }
 
-    groupRef.current.rotation.x = time * 0.4;
-    groupRef.current.rotation.y = time * 0.6;
+    groupRef.current.rotation.x = time * 0.3;
+    groupRef.current.rotation.y = time * 0.5;
     groupRef.current.position.y = (scrollProgress - 0.75) * 8;
 
     groupRef.current.children.forEach((child) => {
@@ -242,41 +234,39 @@ function OrbitalAtomicSystem({ scrollProgress }: { scrollProgress: number }) {
 
   return (
     <group ref={groupRef} position={[0, 0, -3]}>
-      {/* 3 Orbital Rings */}
       <mesh rotation={[Math.PI / 3, 0, 0]}>
         <torusGeometry args={[3, 0.03, 16, 64]} />
-        <meshBasicMaterial color="#10b981" />
+        <meshBasicMaterial color="#059669" />
       </mesh>
       <mesh rotation={[-Math.PI / 3, Math.PI / 4, 0]}>
         <torusGeometry args={[3.6, 0.03, 16, 64]} />
-        <meshBasicMaterial color="#3b82f6" />
+        <meshBasicMaterial color="#10b981" />
       </mesh>
       <mesh rotation={[0, Math.PI / 2, Math.PI / 6]}>
         <torusGeometry args={[4.2, 0.03, 16, 64]} />
-        <meshBasicMaterial color="#8b5cf6" />
+        <meshBasicMaterial color="#3b82f6" />
       </mesh>
-      {/* Center Core Node */}
       <mesh>
         <sphereGeometry args={[0.8, 32, 32]} />
-        <meshStandardMaterial color="#34d399" emissive="#10b981" emissiveIntensity={0.6} />
+        <meshStandardMaterial color="#10b981" emissive="#059669" emissiveIntensity={0.4} />
       </mesh>
     </group>
   );
 }
 
-// ─── STAGE 5: Supernova Particle Tunnel (Contact Stage: 0.85 - 1.0) ───────────
+// ─── STAGE 5: Supernova Particle Wave (Contact Stage: 0.85 - 1.0) ────────────
 
 function SupernovaParticleTunnel({ scrollProgress }: { scrollProgress: number }) {
   const pointsRef = useRef<THREE.Points>(null);
-  const count = 3000;
+  const count = 2500;
 
   const [positions, colors] = useMemo(() => {
     const pos = new Float32Array(count * 3);
     const col = new Float32Array(count * 3);
 
-    const c1 = new THREE.Color('#10b981');
-    const c2 = new THREE.Color('#6366f1');
-    const c3 = new THREE.Color('#22d3ee');
+    const c1 = new THREE.Color('#059669');
+    const c2 = new THREE.Color('#10b981');
+    const c3 = new THREE.Color('#3b82f6');
 
     for (let i = 0; i < count; i++) {
       pos[i * 3] = (Math.random() - 0.5) * 50;
@@ -296,10 +286,9 @@ function SupernovaParticleTunnel({ scrollProgress }: { scrollProgress: number })
     if (!pointsRef.current) return;
     const time = state.clock.getElapsedTime();
 
-    // Accelerate particle swirl on deep scroll
-    const speed = scrollProgress > 0.8 ? 0.3 : 0.05;
-    pointsRef.current.rotation.y = time * speed + scrollProgress * 3;
-    pointsRef.current.rotation.x = Math.sin(time * 0.1) * 0.2;
+    const speed = scrollProgress > 0.8 ? 0.25 : 0.04;
+    pointsRef.current.rotation.y = time * speed + scrollProgress * 2;
+    pointsRef.current.rotation.x = Math.sin(time * 0.1) * 0.15;
   });
 
   return (
@@ -309,10 +298,10 @@ function SupernovaParticleTunnel({ scrollProgress }: { scrollProgress: number })
         <bufferAttribute attach="attributes-color" args={[colors, 3]} />
       </bufferGeometry>
       <pointsMaterial
-        size={0.09}
+        size={0.08}
         vertexColors
         transparent
-        opacity={0.7}
+        opacity={0.6}
         sizeAttenuation
         depthWrite={false}
       />
@@ -328,7 +317,7 @@ function CameraRig({ scrollProgress }: { scrollProgress: number }) {
   useFrame(() => {
     const targetZ = 10 - scrollProgress * 14;
     const targetY = (scrollProgress - 0.5) * -8;
-    const targetX = pointer.x * 3;
+    const targetX = pointer.x * 2.5;
 
     camera.position.x = THREE.MathUtils.lerp(camera.position.x, targetX, 0.06);
     camera.position.y = THREE.MathUtils.lerp(camera.position.y, targetY, 0.06);
@@ -369,17 +358,19 @@ export default function Scene3D({ scrollProgress, onSelectProject }: Scene3DProp
         gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
         style={{ pointerEvents: 'auto' }}
       >
-        <color attach="background" args={['#0a0a0f']} />
+        {/* Porcelain Light Background */}
+        <color attach="background" args={['#fbfbfd']} />
 
-        <ambientLight intensity={0.5} />
+        {/* Ambient & Directional Lighting for Light Theme */}
+        <ambientLight intensity={0.7} />
         <pointLight position={[10, 10, 10]} intensity={1.8} color="#10b981" />
-        <pointLight position={[-10, -10, -10]} intensity={1.2} color="#6366f1" />
-        <directionalLight position={[0, 10, 5]} intensity={1.5} />
+        <pointLight position={[-10, -10, -10]} intensity={1.2} color="#059669" />
+        <directionalLight position={[0, 10, 5]} intensity={1.8} />
 
         <CameraRig scrollProgress={scrollProgress} />
 
-        {/* 5 Distinct Morphing 3D Environments */}
-        <LiquidChromeBlob scrollProgress={scrollProgress} />
+        {/* 5 Distinct Light-Themed WebGL Stages */}
+        <LiquidGlassSphere scrollProgress={scrollProgress} />
         <CyberMatrixTunnel scrollProgress={scrollProgress} />
         <OrbitalAtomicSystem scrollProgress={scrollProgress} />
         <SupernovaParticleTunnel scrollProgress={scrollProgress} />

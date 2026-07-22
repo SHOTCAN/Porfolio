@@ -18,7 +18,6 @@ export default function CustomCursor() {
   }, []);
 
   useEffect(() => {
-    // Detect touch/mobile
     const checkMobile = () => {
       setIsMobile(
         'ontouchstart' in window ||
@@ -29,7 +28,6 @@ export default function CustomCursor() {
 
     checkMobile();
     window.addEventListener('resize', checkMobile);
-
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
@@ -41,13 +39,8 @@ export default function CustomCursor() {
       if (!isVisible) setIsVisible(true);
     };
 
-    const handleMouseLeave = () => {
-      setIsVisible(false);
-    };
-
-    const handleMouseEnter = () => {
-      setIsVisible(true);
-    };
+    const handleMouseLeave = () => setIsVisible(false);
+    const handleMouseEnter = () => setIsVisible(true);
 
     window.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseleave', handleMouseLeave);
@@ -60,7 +53,6 @@ export default function CustomCursor() {
     };
   }, [isMobile, isVisible]);
 
-  // RAF animation loop
   useEffect(() => {
     if (isMobile) return;
 
@@ -69,11 +61,9 @@ export default function CustomCursor() {
       const ring = ringRef.current;
 
       if (dot && ring) {
-        // Dot follows faster (more responsive)
         dotPos.current.x = lerp(dotPos.current.x, mouse.current.x, 0.35);
         dotPos.current.y = lerp(dotPos.current.y, mouse.current.y, 0.35);
 
-        // Ring follows slower (trailing effect)
         ringPos.current.x = lerp(ringPos.current.x, mouse.current.x, 0.15);
         ringPos.current.y = lerp(ringPos.current.y, mouse.current.y, 0.15);
 
@@ -85,11 +75,9 @@ export default function CustomCursor() {
     };
 
     rafId.current = requestAnimationFrame(animate);
-
     return () => cancelAnimationFrame(rafId.current);
   }, [isMobile, isHovering, lerp]);
 
-  // Interactive element hover detection
   useEffect(() => {
     if (isMobile) return;
 
@@ -122,34 +110,31 @@ export default function CustomCursor() {
 
   return (
     <>
-      {/* Dot — small, sharp center point */}
       <div
         ref={dotRef}
         className="fixed top-0 left-0 z-[9999] pointer-events-none"
         style={{
-          width: '6px',
-          height: '6px',
+          width: '7px',
+          height: '7px',
           borderRadius: '50%',
-          backgroundColor: '#f0f0f5',
+          backgroundColor: '#059669',
           opacity: isVisible ? 1 : 0,
           transition: 'opacity 0.3s ease, background-color 0.3s ease',
           willChange: 'transform',
-          mixBlendMode: 'difference',
         }}
       />
 
-      {/* Ring — larger trailing circle */}
       <div
         ref={ringRef}
         className="fixed top-0 left-0 z-[9998] pointer-events-none"
         style={{
-          width: '36px',
-          height: '36px',
+          width: '38px',
+          height: '38px',
           borderRadius: '50%',
-          border: `1.5px solid ${isHovering ? 'rgba(99, 102, 241, 0.8)' : 'rgba(240, 240, 245, 0.4)'}`,
-          backgroundColor: isHovering ? 'rgba(99, 102, 241, 0.08)' : 'transparent',
+          border: `1.5px solid ${isHovering ? 'rgba(5, 150, 105, 0.9)' : 'rgba(16, 185, 129, 0.4)'}`,
+          backgroundColor: isHovering ? 'rgba(16, 185, 129, 0.1)' : 'transparent',
           opacity: isVisible ? 1 : 0,
-          transition: 'opacity 0.3s ease, border-color 0.4s ease, background-color 0.4s ease, width 0.4s cubic-bezier(0.16,1,0.3,1), height 0.4s cubic-bezier(0.16,1,0.3,1)',
+          transition: 'opacity 0.3s ease, border-color 0.4s ease, background-color 0.4s ease',
           willChange: 'transform',
         }}
       />

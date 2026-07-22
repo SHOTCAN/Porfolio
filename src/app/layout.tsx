@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from 'next';
 import { Space_Grotesk, Inter } from 'next/font/google';
 import './globals.css';
 import SmoothScroll from '@/components/SmoothScroll';
+import CustomCursor from '@/components/CustomCursor';
+import Navbar from '@/components/Navbar';
 
 // ─── Font Configuration ───
 
@@ -24,7 +26,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: 'Baldyas Satrio Albani | Creative Designer & Digital Craftsman',
   description:
-    'Portfolio of Baldyas Satrio Albani — Graphic Designer at Anomali Digital. Specializing in visual communication design, branding, and digital experiences that merge art with technology.',
+    'Portfolio of Baldyas Satrio Albani — Graphic Designer at Anomali Digital. Specializing in visual communication design, branding, UI/UX, editorial print, and commercial photography.',
   keywords: [
     'Baldyas Satrio Albani',
     'Graphic Designer',
@@ -60,15 +62,12 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#fafaf8',
+  themeColor: '#fbfbfd',
   width: 'device-width',
   initialScale: 1,
 };
 
 // ─── Root Layout ───
-
-import CustomCursor from '@/components/CustomCursor';
-import Navbar from '@/components/Navbar';
 
 export default function RootLayout({
   children,
@@ -81,7 +80,7 @@ export default function RootLayout({
       className={`${spaceGrotesk.variable} ${inter.variable}`}
       suppressHydrationWarning
     >
-      <body className="min-h-screen antialiased bg-[#0a0a0f] text-[#f0f0f5]">
+      <body className="min-h-screen antialiased bg-[#fbfbfd] text-[#0f172a]">
         <SmoothScroll>
           <CustomCursor />
           <Navbar />

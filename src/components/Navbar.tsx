@@ -9,9 +9,13 @@ interface NavLink {
 }
 
 const NAV_LINKS: NavLink[] = [
-  { label: 'About', href: '#about' },
   { label: 'Works', href: '#works' },
+  { label: 'Process', href: '#process' },
+  { label: 'Playground', href: '#playground' },
   { label: 'Skills', href: '#skills' },
+  { label: 'About', href: '#about' },
+  { label: 'FAQ', href: '#faq' },
+  { label: 'Estimator', href: '#estimator' },
   { label: 'Contact', href: '#contact' },
 ];
 
@@ -25,31 +29,21 @@ export default function Navbar() {
   const [activeSection, setActiveSection] = useState<string>('');
   const [hasScrolled, setHasScrolled] = useState(false);
 
-  // ─── Scroll Show/Hide Logic ───
+  // Scroll Show/Hide Logic
   useEffect(() => {
     const handleScroll = () => {
       const currentY = window.scrollY;
       const nav = navRef.current;
       if (!nav) return;
 
-      setHasScrolled(currentY > 50);
+      setHasScrolled(currentY > 40);
 
-      if (currentY > lastScrollY.current && currentY > 100) {
-        // Scrolling down — hide
+      if (currentY > lastScrollY.current && currentY > 120) {
         if (tween.current) tween.current.kill();
-        tween.current = gsap.to(nav, {
-          y: -120,
-          duration: 0.5,
-          ease: 'power3.inOut',
-        });
+        tween.current = gsap.to(nav, { y: -120, duration: 0.4, ease: 'power3.inOut' });
       } else {
-        // Scrolling up — show
         if (tween.current) tween.current.kill();
-        tween.current = gsap.to(nav, {
-          y: 0,
-          duration: 0.5,
-          ease: 'power3.out',
-        });
+        tween.current = gsap.to(nav, { y: 0, duration: 0.4, ease: 'power3.out' });
       }
 
       lastScrollY.current = currentY;
@@ -59,12 +53,9 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // ─── Active Section Detection ───
+  // Active Section Detection
   useEffect(() => {
-    const sections = NAV_LINKS.map((link) =>
-      document.querySelector(link.href)
-    ).filter(Boolean) as Element[];
-
+    const sections = NAV_LINKS.map((link) => document.querySelector(link.href)).filter(Boolean) as Element[];
     if (sections.length === 0) return;
 
     const observer = new IntersectionObserver(
@@ -75,168 +66,112 @@ export default function Navbar() {
           }
         });
       },
-      {
-        rootMargin: '-40% 0px -40% 0px',
-        threshold: 0,
-      }
+      { rootMargin: '-40% 0px -40% 0px', threshold: 0 }
     );
 
-    sections.forEach((section) => observer.observe(section));
+    sections.forEach((s) => observer.observe(s));
     return () => observer.disconnect();
   }, []);
 
-  // ─── Mobile Menu Animation ───
+  // Mobile Menu Animation
   useEffect(() => {
     const menu = mobileMenuRef.current;
     if (!menu) return;
 
     if (isOpen) {
       gsap.set(menu, { display: 'flex', opacity: 0 });
-      gsap.to(menu, {
-        opacity: 1,
-        duration: 0.4,
-        ease: 'power2.out',
-      });
-
-      // Stagger links
+      gsap.to(menu, { opacity: 1, duration: 0.3, ease: 'power2.out' });
       const links = menu.querySelectorAll('.mobile-nav-link');
       gsap.fromTo(
         links,
-        { y: 30, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.5,
-          stagger: 0.08,
-          ease: 'power3.out',
-          delay: 0.15,
-        }
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.4, stagger: 0.05, ease: 'power3.out', delay: 0.1 }
       );
     } else {
       gsap.to(menu, {
         opacity: 0,
-        duration: 0.3,
+        duration: 0.25,
         ease: 'power2.in',
         onComplete: () => gsap.set(menu, { display: 'none' }),
       });
     }
   }, [isOpen]);
 
-  // ─── Smooth Scroll to Section ───
-  const handleNavClick = useCallback(
-    (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-      e.preventDefault();
-      setIsOpen(false);
-
-      const target = document.querySelector(href);
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    },
-    []
-  );
+  const handleNavClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    setIsOpen(false);
+    const target = document.querySelector(href);
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, []);
 
   return (
     <nav
       ref={navRef}
-      className={`fixed top-0 left-0 right-0 z-[100] transition-colors duration-500 ${
-        hasScrolled ? 'glass-strong' : 'bg-transparent'
+      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${
+        hasScrolled ? 'bg-white/85 backdrop-blur-xl border-b border-slate-200/80 shadow-sm py-3' : 'bg-transparent py-5'
       }`}
       role="navigation"
-      aria-label="Main navigation"
     >
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="flex h-20 items-center justify-between">
-          {/* ─── Logo ─── */}
-          <a
-            href="#"
-            className="group relative z-10 flex items-center"
-            onClick={(e) => {
-              e.preventDefault();
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-          >
-            <span
-              className="font-heading text-2xl font-bold tracking-tight text-text transition-colors duration-300 group-hover:text-accent"
-              style={{ fontFamily: 'var(--font-heading)' }}
-            >
-              BSA
-            </span>
-            <span className="text-accent text-2xl font-bold">.</span>
-          </a>
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 flex items-center justify-between">
+        {/* Logo */}
+        <a
+          href="#"
+          className="group flex items-center gap-1 text-xl font-bold tracking-tight text-slate-900"
+          onClick={(e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+        >
+          <span>BSA</span>
+          <span className="text-emerald-600 font-extrabold text-2xl">.</span>
+        </a>
 
-          {/* ─── Desktop Links ─── */}
-          <div className="hidden items-center gap-1 md:flex">
-            {NAV_LINKS.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={(e) => handleNavClick(e, link.href)}
-                className={`nav-link group relative px-5 py-2.5 text-sm font-medium transition-colors duration-300 ${
-                  activeSection === link.href
-                    ? 'text-text'
-                    : 'text-text-secondary hover:text-text'
-                }`}
-              >
-                {link.label}
-
-                {/* Animated Underline */}
-                <span
-                  className={`absolute bottom-1 left-1/2 h-[2px] -translate-x-1/2 rounded-full bg-accent transition-all duration-500 ease-[var(--ease-out-expo)] ${
-                    activeSection === link.href
-                      ? 'w-5 opacity-100'
-                      : 'w-0 opacity-0 group-hover:w-5 group-hover:opacity-100'
-                  }`}
-                />
-              </a>
-            ))}
-
-            {/* CTA Button */}
+        {/* Desktop Navigation Links */}
+        <div className="hidden md:flex items-center gap-1">
+          {NAV_LINKS.map((link) => (
             <a
-              href="#contact"
-              onClick={(e) => handleNavClick(e, '#contact')}
-              className="ml-4 rounded-full border border-accent/30 bg-accent/10 px-5 py-2 text-sm font-medium text-accent transition-all duration-300 hover:border-accent/60 hover:bg-accent/20 hover:shadow-[0_0_20px_rgba(99,102,241,0.15)]"
+              key={link.href}
+              href={link.href}
+              onClick={(e) => handleNavClick(e, link.href)}
+              className={`px-3.5 py-2 text-xs font-mono font-medium rounded-full transition-colors ${
+                activeSection === link.href
+                  ? 'text-emerald-700 bg-emerald-50 font-bold'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+              }`}
             >
-              Let&apos;s Talk
+              {link.label}
             </a>
-          </div>
+          ))}
 
-          {/* ─── Mobile Hamburger ─── */}
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="relative z-10 flex h-10 w-10 items-center justify-center md:hidden"
-            aria-label={isOpen ? 'Close menu' : 'Open menu'}
-            aria-expanded={isOpen}
+          <a
+            href="#contact"
+            onClick={(e) => handleNavClick(e, '#contact')}
+            className="ml-3 rounded-full bg-emerald-600 px-5 py-2 text-xs font-semibold text-white shadow-md shadow-emerald-500/20 hover:bg-emerald-700 transition-all hover:scale-105"
           >
-            <div className="flex w-6 flex-col items-end gap-1.5">
-              <span
-                className={`block h-[1.5px] rounded-full bg-text transition-all duration-500 ease-[var(--ease-out-expo)] ${
-                  isOpen
-                    ? 'w-6 translate-y-[4.5px] rotate-45'
-                    : 'w-6'
-                }`}
-              />
-              <span
-                className={`block h-[1.5px] rounded-full bg-text transition-all duration-500 ease-[var(--ease-out-expo)] ${
-                  isOpen ? 'w-0 opacity-0' : 'w-4'
-                }`}
-              />
-              <span
-                className={`block h-[1.5px] rounded-full bg-text transition-all duration-500 ease-[var(--ease-out-expo)] ${
-                  isOpen
-                    ? 'w-6 -translate-y-[4.5px] -rotate-45'
-                    : 'w-5'
-                }`}
-              />
-            </div>
-          </button>
+            Let&apos;s Talk
+          </a>
         </div>
+
+        {/* Mobile Hamburger */}
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="relative z-10 flex h-10 w-10 items-center justify-center md:hidden"
+          aria-label={isOpen ? 'Close menu' : 'Open menu'}
+        >
+          <div className="flex w-6 flex-col items-end gap-1.5">
+            <span className={`block h-[2px] rounded-full bg-slate-900 transition-all ${isOpen ? 'w-6 translate-y-[5px] rotate-45' : 'w-6'}`} />
+            <span className={`block h-[2px] rounded-full bg-slate-900 transition-all ${isOpen ? 'w-0 opacity-0' : 'w-4'}`} />
+            <span className={`block h-[2px] rounded-full bg-slate-900 transition-all ${isOpen ? 'w-6 -translate-y-[5px] -rotate-45' : 'w-5'}`} />
+          </div>
+        </button>
       </div>
 
-      {/* ─── Mobile Menu ─── */}
+      {/* Mobile Menu Overlay */}
       <div
         ref={mobileMenuRef}
-        className="fixed inset-0 z-[99] hidden flex-col items-center justify-center gap-8 bg-bg/95 backdrop-blur-2xl md:hidden"
+        className="fixed inset-0 z-[99] hidden flex-col items-center justify-center gap-6 bg-white/95 backdrop-blur-2xl md:hidden p-6"
         style={{ display: 'none' }}
       >
         {NAV_LINKS.map((link) => (
@@ -244,21 +179,17 @@ export default function Navbar() {
             key={link.href}
             href={link.href}
             onClick={(e) => handleNavClick(e, link.href)}
-            className={`mobile-nav-link text-3xl font-bold tracking-tight transition-colors duration-300 ${
-              activeSection === link.href
-                ? 'text-gradient'
-                : 'text-text-secondary hover:text-text'
+            className={`mobile-nav-link text-2xl font-bold tracking-tight transition-colors ${
+              activeSection === link.href ? 'text-emerald-600' : 'text-slate-700 hover:text-slate-900'
             }`}
-            style={{ fontFamily: 'var(--font-heading)' }}
           >
             {link.label}
           </a>
         ))}
-
         <a
           href="#contact"
           onClick={(e) => handleNavClick(e, '#contact')}
-          className="mobile-nav-link mt-4 rounded-full border border-accent/40 bg-accent/10 px-8 py-3 text-lg font-semibold text-accent transition-all duration-300 hover:bg-accent/20"
+          className="mobile-nav-link mt-4 rounded-full bg-emerald-600 px-8 py-3 text-base font-semibold text-white shadow-lg"
         >
           Let&apos;s Talk
         </a>
