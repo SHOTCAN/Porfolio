@@ -1,1 +1,0 @@
-(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push(["object"==typeof document?document.currentScript:void 0,5530,t=>{"use strict";t.s(["getAssetPath",0,function(t){if(!t)return"";if(t.startsWith("http://")||t.startsWith("https://"))return t;let s=t.startsWith("/")?t:`/${t}`;return`/Porfolio${s}`}])}]);
